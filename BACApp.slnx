@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BACApp.Api/BACApp.Api.csproj" />
+  <Project Path="BACApp.App/BACApp.App.csproj">
+    <Deploy Solution="Debug|Any CPU" />
+  </Project>
+  <Project Path="BACApp.Core/BACApp.Core.csproj" />
+</Solution>

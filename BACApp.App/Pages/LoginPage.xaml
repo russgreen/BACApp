@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BACApp.App.Pages.LoginPage"
+             Title="Sign In">
+    <VerticalStackLayout Padding="24" Spacing="12">
+        <Label Text="Welcome" FontSize="24"/>
+        <Entry Placeholder="Email or username" Text="{Binding Username}" Keyboard="Email"/>
+        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+        <Button Text="Sign in" Command="{Binding LoginCommand}"/>
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+        <Label TextColor="Red" Text="{Binding Error}"/>
+    </VerticalStackLayout>
+</ContentPage>
