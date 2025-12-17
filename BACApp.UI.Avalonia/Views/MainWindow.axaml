@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BACApp.UI.Avalonia.ViewModels"
+        x:Class="BACApp.UI.Avalonia.Views.MainWindow"        
+        x:DataType="vm:MainWindowViewModel"
+        x:CompileBindings="True"
+        Title="{Binding WindowTitle}"
+        Width="900" Height="600">
+
+  <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+    <TextBlock Margin="12" FontSize="20" Text="Hello from Avalonia on Windows/Linux" />
+  </Grid>
+
+</Window>
