@@ -5,6 +5,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="BACApp.App/BACApp.App.csproj">
+    <Build Solution="Release|Any CPU" Project="false" />
     <Deploy Solution="Debug|Any CPU" />
   </Project>
   <Project Path="BACApp.Core/BACApp.Core.csproj" />

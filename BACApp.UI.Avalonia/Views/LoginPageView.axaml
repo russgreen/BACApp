@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BACApp.UI.Avalonia.ViewModels"
+             x:Class="BACApp.UI.Avalonia.Views.LoginPageView"
+             x:DataType="vm:LoginPageViewModel"
+             x:CompileBindings="True">
+
+  <Border Padding="16">
+    <StackPanel Spacing="12" HorizontalAlignment="Center" Width="360">
+      <TextBlock Text="Login" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+
+      <StackPanel Spacing="4">
+        <TextBlock Text="Username" />
+        <TextBox Text="{Binding Username, Mode=TwoWay}" Watermark="Enter email address" />
+      </StackPanel>
+
+      <StackPanel Spacing="4">
+        <TextBlock Text="Password" />
+        <TextBox Text="{Binding Password, Mode=TwoWay}" Watermark="Enter password" PasswordChar="*"/>
+      </StackPanel>
+
+      <Button Content="Login"
+              IsEnabled="{Binding LoginEnabled}"
+              HorizontalAlignment="Stretch"
+              Command="{Binding LoginCommand}" />
+
+      <TextBlock Text="{Binding Message}"
+                 Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                 TextWrapping="Wrap" />
+    </StackPanel>
+  </Border>
+</UserControl>

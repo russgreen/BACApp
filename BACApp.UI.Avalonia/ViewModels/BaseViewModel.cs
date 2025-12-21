@@ -3,7 +3,7 @@ using System;
 
 namespace BACApp.UI.Avalonia.ViewModels;
 
-internal class BaseViewModel : ObservableValidator
+internal partial class BaseViewModel : ObservableValidator
 {
     public event EventHandler ClosingRequest;
 

@@ -1,9 +1,13 @@
-﻿using BACApp.Core.Services;
+﻿using BACApp.Core.Abstractions;
+using BACApp.Core.Services;
+using BACApp.UI.Avalonia.Services;
+using BACApp.UI.Avalonia.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using System;
 using System.Threading.Tasks;
 
 namespace BACApp.UI.Avalonia;
@@ -14,6 +18,8 @@ internal static class Host
 
     public static async Task StartHost()
     {
+        var apiBase = new Uri("https://v1.cbga-api.com");
+
         //TODO how to set cross platform log storage paths
         var logPath = "log.json"; //System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "BACApp", "Log.json");
 
@@ -39,12 +45,37 @@ internal static class Host
 
         _host = Microsoft.Extensions.Hosting.Host
             .CreateDefaultBuilder()
-            .UseSerilog()
+            .UseSerilog()            
             .ConfigureServices((_, services) =>
             {
+                services.AddTransient<AuthHeaderHandler>();
+                services.AddHttpClient<IApiClient, ApiClient>(client =>
+                {
+                    client.BaseAddress = apiBase;
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                })
+                .AddHttpMessageHandler<AuthHeaderHandler>();
+
+                services.AddSingleton<ITokenStore, TokenStore>();    
                 services.AddSingleton<IAuthService, AuthService>();
 
-                services.AddSingleton<ViewModels.MainWindowViewModel>();
+                services.AddSingleton<Func<Type, PageViewModel>>(x => type => type switch
+                {
+                    _ when type == typeof(LoginPageViewModel) => x.GetRequiredService<LoginPageViewModel>(),
+                    _ when type == typeof(CalendarPageViewModel) => x.GetRequiredService<CalendarPageViewModel>(),
+                    _ when type == typeof(LogsPageViewModel) => x.GetRequiredService<LogsPageViewModel>(),
+                    _ when type == typeof(ReportsPageViewModel) => x.GetRequiredService<ReportsPageViewModel>(),
+                    _ => throw new InvalidOperationException($"Page of type {type?.FullName} has no view model"),
+                });
+
+                services.AddSingleton<PageFactory>();
+
+                services.AddSingleton<MainWindowViewModel>();
+
+                services.AddTransient<LoginPageViewModel>();
+                services.AddTransient<CalendarPageViewModel>();
+                services.AddTransient<LogsPageViewModel>();
+                services.AddTransient<ReportsPageViewModel>();
             })
             .Build();
 
