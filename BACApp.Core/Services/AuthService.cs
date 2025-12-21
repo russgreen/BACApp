@@ -9,13 +9,15 @@ public class AuthService : IAuthService
     private readonly IApiClient _apiClient;
     private readonly ITokenStore _tokenStore;
 
+    public LoginResponse? CurrentLogin { get; private set; }
+
     public AuthService(IApiClient apiClient, ITokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
     }
 
-    public async Task<bool> LoginAsync(string usernameOrEmail, string password, CancellationToken ct = default)
+    public async Task<LoginResponse> LoginAsync(string usernameOrEmail, string password, CancellationToken ct = default)
     {
         // Build Basic auth header: base64(username:password)
         var credentials = $"{usernameOrEmail}:{password}";
@@ -24,26 +26,29 @@ public class AuthService : IAuthService
 
         // Request authentication; expect strongly-typed JSON response.
         var result = await _apiClient.PostAsync<object?, LoginResponse>(
-            "/user/authenticate",
+            "/user/authenticate", 
             null,
             new Dictionary<string, string>
             {
                 ["Authorization"] = authorizationValue,
-                ["Accept"] = "application/json"
+                ["accept"] = "application/json"
             },
             ct);
 
         if (result is null || string.IsNullOrWhiteSpace(result.Token))
         {
-            return false;
+            CurrentLogin = null;
+            return null;
         }
 
         await _tokenStore.SetTokenAsync(result.Token);
-        return true;
+        CurrentLogin = result;
+        return result;
     }
 
     public async Task LogoutAsync()
     {
+        CurrentLogin = null;
         await _tokenStore.ClearAsync();
     }
 

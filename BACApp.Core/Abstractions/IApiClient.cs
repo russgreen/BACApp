@@ -38,8 +38,7 @@ public class ApiClient : IApiClient
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string path, TRequest body, CancellationToken ct = default)
     {
-        var json = JsonSerializer.Serialize(body, JsonOptions);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        using var content = CreateContent(body);
         using var response = await _httpClient.PostAsync(path, content, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
@@ -48,10 +47,9 @@ public class ApiClient : IApiClient
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string path, TRequest body, IDictionary<string, string>? headers, CancellationToken ct = default)
     {
-        var json = JsonSerializer.Serialize(body, JsonOptions);
         using var request = new HttpRequestMessage(HttpMethod.Post, path)
         {
-            Content = new StringContent(json, Encoding.UTF8, "application/json")
+            Content = CreateContent(body)
         };
 
         if (headers is { Count: > 0 })
@@ -78,5 +76,18 @@ public class ApiClient : IApiClient
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
         return await JsonSerializer.DeserializeAsync<TResponse>(stream, JsonOptions, ct);
+    }
+
+    private static StringContent CreateContent<TRequest>(TRequest body)
+    {
+        // If no body is required (e.g., Swagger shows -d ''), send truly empty content.
+        if (body is null)
+        {
+            return new StringContent(string.Empty, Encoding.UTF8, "application/json");
+        }
+
+        // Otherwise serialize the request as JSON.
+        var json = JsonSerializer.Serialize(body, JsonOptions);
+        return new StringContent(json, Encoding.UTF8, "application/json");
     }
 }
