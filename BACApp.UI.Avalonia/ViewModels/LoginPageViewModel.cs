@@ -1,7 +1,9 @@
 using BACApp.Core.Services;
 using BACApp.UI.Avalonia.Enums;
+using BACApp.UI.Avalonia.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Threading.Tasks;
 
@@ -58,6 +60,8 @@ internal partial class LoginPageViewModel : PageViewModel
             else
             {
                 Message = $"Logged in : {response.First_Name} {response.Last_Name}";
+
+                WeakReferenceMessenger.Default.Send(new LoggedInMessage(true));
             }
         }
         catch (Exception ex)

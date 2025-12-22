@@ -1,6 +1,8 @@
-﻿using BACApp.UI.Avalonia.Services;
+﻿using BACApp.UI.Avalonia.Messages;
+using BACApp.UI.Avalonia.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,9 @@ internal partial class MainWindowViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool _isPaneOpen = true;
+
+    [ObservableProperty]
+    private bool _isLoggedIn = false;
 
     [ObservableProperty]
     private PageViewModel _currentPage;
@@ -39,6 +44,12 @@ internal partial class MainWindowViewModel : BaseViewModel
         _logger.LogDebug(WindowTitle);
 
         CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
+
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (r, m) =>
+        {
+            CurrentPage = _pageFactory.GetPageViewModel<CalendarPageViewModel>();
+            IsLoggedIn = true;
+        });
 
     }
 

@@ -29,7 +29,8 @@
                     IsChecked="{Binding IsPaneOpen, ElementName=MainSplitView, Mode=TwoWay}" />
 
 
-            <Button Command="{Binding GoToLoginCommand}" HorizontalAlignment="Stretch">
+            <Button Command="{Binding GoToLoginCommand}" HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding !IsLoggedIn}">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="🔐" Margin="0,0,10,0"/>
                 <TextBlock Text="Login"/>
