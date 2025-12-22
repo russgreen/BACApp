@@ -9,21 +9,9 @@
         Title="{Binding WindowTitle}"
         Width="900" Height="600">
 
-  <Grid RowDefinitions="Auto,*">
-    <!-- Top bar -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,4">
-      <ToggleButton Width="40" Height="32" Margin="8,4"
-                    Content="☰"
-                    ToolTip.Tip="Toggle menu"
-                    IsChecked="{Binding IsPaneOpen, ElementName=MainSplitView, Mode=TwoWay}" />
-      <TextBlock Grid.Column="1"
-                 Margin="8,0"
-                 VerticalAlignment="Center"
-                 FontSize="16"
-                 Text="{Binding WindowTitle}" />
-    </Grid>
+  <Grid >
 
-          <!-- Main layout with collapsible side panel -->
+    <!-- Main layout with collapsible side panel -->
     <SplitView x:Name="MainSplitView"
                Grid.Row="1"
                IsPaneOpen="True"
@@ -33,31 +21,38 @@
                PanePlacement="Left">
 
       <SplitView.Pane>
-        <StackPanel>
-            <Button Command="{Binding GoToLoginCommand}">
-              <StackPanel Orientation="Horizontal" Margin="8,4">
-                <TextBlock Text="🔐" Margin="0,0,8,0"/>
+        <StackPanel Margin="5" Spacing="5" >
+            <ToggleButton
+                    HorizontalAlignment="Stretch"
+                    Content="☰"
+                    ToolTip.Tip="Toggle menu"
+                    IsChecked="{Binding IsPaneOpen, ElementName=MainSplitView, Mode=TwoWay}" />
+
+
+            <Button Command="{Binding GoToLoginCommand}" HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🔐" Margin="0,0,10,0"/>
                 <TextBlock Text="Login"/>
               </StackPanel>
             </Button>
 
-            <Button Command="{Binding GoToCalendarCommand}">
-              <StackPanel Orientation="Horizontal" Margin="8,4">
-                <TextBlock Text="📅" Margin="0,0,8,0"/>
+            <Button Command="{Binding GoToCalendarCommand}" HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📅" Margin="0,0,10,0"/>
                 <TextBlock Text="Calendar"/>
               </StackPanel>
             </Button>
 
-            <Button Command="{Binding GoToLogsCommand}">
-              <StackPanel Orientation="Horizontal" Margin="8,4">
-                <TextBlock Text="🗒️" Margin="0,0,8,0"/>
+            <Button Command="{Binding GoToLogsCommand}" HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🗒️" Margin="0,0,10,0"/>
                 <TextBlock Text="Logs"/>
               </StackPanel>
             </Button>
 
-            <Button Command="{Binding GoToReportsCommand}">
-              <StackPanel Orientation="Horizontal" Margin="8,4">
-                <TextBlock Text="📊" Margin="0,0,8,0"/>
+            <Button Command="{Binding GoToReportsCommand}" HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📊" Margin="0,0,10,0"/>
                 <TextBlock Text="Reports"/>
               </StackPanel> 
               </Button>
