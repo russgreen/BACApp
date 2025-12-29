@@ -16,9 +16,27 @@ internal class AuthHeaderHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
     {
-        var token = await _tokenStore.GetTokenAsync();
+        // Ensure Accept header
+        if (!request.Headers.Contains("Accept"))
+        {
+            request.Headers.TryAddWithoutValidation("Accept", "application/json");
+        }
+
+        // Add required API headers: user-token and company-id
+        var token = await _tokenStore.GetTokenAsync().ConfigureAwait(false);
         if (!string.IsNullOrWhiteSpace(token))
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        {
+            if (request.Headers.Contains("Authorization"))
+            {
+                request.Headers.Remove("Authorization");
+            }
+
+            // API requires 'user-token' not 'Authorization'
+            if (!request.Headers.Contains("user-token"))
+            {
+                request.Headers.TryAddWithoutValidation("user-token", token);
+            }
+        }
 
         return await base.SendAsync(request, ct);
     }
