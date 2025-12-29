@@ -14,7 +14,40 @@ public class ApiClient : IApiClient
         _httpClient = httpClient;
     }
 
-    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string?>? query = null, CancellationToken ct = default)
+    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string>? headers = null, CancellationToken ct = default)
+    {
+        var url = new StringBuilder(path);
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, url.ToString());
+
+        if (headers is { Count: > 0 })
+        {
+            foreach (var kv in headers)
+            {
+                if (string.Equals(kv.Key, "Authorization", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.Headers.Authorization = AuthenticationHeaderValue.Parse(kv.Value);
+                }
+                else if (string.Equals(kv.Key, "Accept", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.Headers.Accept.Clear();
+                    request.Headers.Accept.ParseAdd(kv.Value);
+                }
+                else
+                {
+                    request.Headers.TryAddWithoutValidation(kv.Key, kv.Value);
+                }
+            }
+        }
+
+        using var response = await _httpClient.SendAsync(request, ct);
+        response.EnsureSuccessStatusCode();
+        var stream = await response.Content.ReadAsStreamAsync(ct);
+        return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, ct);
+    }
+
+    // New: GET with headers (per-request control, e.g., company-id)
+    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string?>? query, IDictionary<string, string> headers, CancellationToken ct )
     {
         var url = new StringBuilder(path);
         if (query is { Count: > 0 })
@@ -23,7 +56,29 @@ public class ApiClient : IApiClient
             url.Append(string.Join('&', query.Where(kv => kv.Value != null).Select(kv => $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value!)}")));
         }
 
-        using var response = await _httpClient.GetAsync(url.ToString(), ct);
+        using var request = new HttpRequestMessage(HttpMethod.Get, url.ToString());
+
+        if (headers is { Count: > 0 })
+        {
+            foreach (var kv in headers)
+            {
+                if (string.Equals(kv.Key, "Authorization", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.Headers.Authorization = AuthenticationHeaderValue.Parse(kv.Value);
+                }
+                else if (string.Equals(kv.Key, "Accept", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.Headers.Accept.Clear();
+                    request.Headers.Accept.ParseAdd(kv.Value);
+                }
+                else
+                {
+                    request.Headers.TryAddWithoutValidation(kv.Key, kv.Value);
+                }
+            }
+        }
+
+        using var response = await _httpClient.SendAsync(request, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
         return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, ct);
