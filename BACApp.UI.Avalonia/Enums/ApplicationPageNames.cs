@@ -6,5 +6,6 @@ internal enum ApplicationPageNames
     Login = 1,
     Calendar = 2,
     Logs = 3,
-    Reports = 4
+    Reports = 4,
+    TechLogs = 5,
 }

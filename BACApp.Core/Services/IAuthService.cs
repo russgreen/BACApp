@@ -10,4 +10,6 @@ public interface IAuthService
 
     // Expose current session details
     LoginResponse? CurrentLogin { get; }
+
+    CompanyDto UserCompany { get; }
 }

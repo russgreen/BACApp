@@ -56,6 +56,15 @@
               </StackPanel>
             </Button>
 
+             <Button Command="{Binding GoToTechLogsCommand}" 
+                    IsEnabled="{Binding IsLoggedIn}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🗒️" Margin="0,0,10,0"/>
+                <TextBlock Text="Tech Logs"/>
+              </StackPanel>
+            </Button>
+
             <Button Command="{Binding GoToReportsCommand}" 
                     IsEnabled="{Binding IsLoggedIn}"
                     HorizontalAlignment="Stretch">

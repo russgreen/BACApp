@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace BACApp.UI.Avalonia.ViewModels;
@@ -14,9 +15,11 @@ internal partial class LoginPageViewModel : PageViewModel
     private readonly IAuthService _authService;
 
     [ObservableProperty]
+    [EmailAddress]
     private string _username = string.Empty;
 
     [ObservableProperty]
+    [Required]
     private string _password = string.Empty;
 
     [ObservableProperty]

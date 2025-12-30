@@ -4,9 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BACApp.UI.Avalonia.ViewModels;
 
@@ -65,5 +62,7 @@ internal partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
 
+    [RelayCommand]
+    private void GoToTechLogs() => CurrentPage = _pageFactory.GetPageViewModel<TechLogsPageViewModel>();
 
 }

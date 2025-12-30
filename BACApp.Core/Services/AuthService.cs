@@ -11,6 +11,8 @@ public class AuthService : IAuthService
 
     public LoginResponse? CurrentLogin { get; private set; }
 
+    public CompanyDto UserCompany { get; private set; }
+
     public AuthService(IApiClient apiClient, ITokenStore tokenStore)
     {
         _apiClient = apiClient;
@@ -42,7 +44,10 @@ public class AuthService : IAuthService
         }
 
         await _tokenStore.SetTokenAsync(result.Token);
+
         CurrentLogin = result;
+        UserCompany = CurrentLogin.Companies.First(); //TODO handle multi-company logins
+
         return result;
     }
 
