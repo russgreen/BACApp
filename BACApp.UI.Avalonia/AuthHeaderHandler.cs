@@ -22,10 +22,11 @@ internal class AuthHeaderHandler : DelegatingHandler
             request.Headers.TryAddWithoutValidation("Accept", "application/json");
         }
 
-        // Add required API headers: user-token and company-id
+        // Add required API headers: user-token
         var token = await _tokenStore.GetTokenAsync().ConfigureAwait(false);
         if (!string.IsNullOrWhiteSpace(token))
         {
+            //we have a token so we've already authorised.
             if (request.Headers.Contains("Authorization"))
             {
                 request.Headers.Remove("Authorization");
