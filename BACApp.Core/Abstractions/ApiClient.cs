@@ -1,20 +1,26 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BACApp.Core.Abstractions;
 
 public class ApiClient : IApiClient
 {
     private readonly HttpClient _httpClient;
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    private readonly JsonSerializerOptions _jsonOptions;
 
     public ApiClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
+
+        _jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
     }
 
-    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string>? headers = null, CancellationToken ct = default)
+    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string>? headers, CancellationToken ct = default)
     {
         var url = new StringBuilder(path);
 
@@ -43,11 +49,11 @@ public class ApiClient : IApiClient
         using var response = await _httpClient.SendAsync(request, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
-        return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, ct);
+        return await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct);
     }
 
     // New: GET with headers (per-request control, e.g., company-id)
-    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string?>? query, IDictionary<string, string> headers, CancellationToken ct )
+    public async Task<T?> GetAsync<T>(string path, IDictionary<string, string?> query, IDictionary<string, string>? headers, CancellationToken ct = default)
     {
         var url = new StringBuilder(path);
         if (query is { Count: > 0 })
@@ -81,7 +87,7 @@ public class ApiClient : IApiClient
         using var response = await _httpClient.SendAsync(request, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
-        return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, ct);
+        return await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct);
     }
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string path, TRequest body, CancellationToken ct = default)
@@ -90,7 +96,7 @@ public class ApiClient : IApiClient
         using var response = await _httpClient.PostAsync(path, content, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
-        return await JsonSerializer.DeserializeAsync<TResponse>(stream, JsonOptions, ct);
+        return await JsonSerializer.DeserializeAsync<TResponse>(stream, _jsonOptions, ct);
     }
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string path, TRequest body, IDictionary<string, string>? headers, CancellationToken ct = default)
@@ -123,10 +129,10 @@ public class ApiClient : IApiClient
         using var response = await _httpClient.SendAsync(request, ct);
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync(ct);
-        return await JsonSerializer.DeserializeAsync<TResponse>(stream, JsonOptions, ct);
+        return await JsonSerializer.DeserializeAsync<TResponse>(stream, _jsonOptions, ct);
     }
 
-    private static StringContent CreateContent<TRequest>(TRequest body)
+    private  StringContent CreateContent<TRequest>(TRequest body)
     {
         // If no body is required (e.g., Swagger shows -d ''), send truly empty content.
         if (body is null)
@@ -135,7 +141,7 @@ public class ApiClient : IApiClient
         }
 
         // Otherwise serialize the request as JSON.
-        var json = JsonSerializer.Serialize(body, JsonOptions);
+        var json = JsonSerializer.Serialize(body, _jsonOptions);
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 }
