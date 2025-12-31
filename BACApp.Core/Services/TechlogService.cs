@@ -14,16 +14,38 @@ public class TechlogService : ITechlogService
         _apiClient = apiClient;
     }
 
-    public async Task<IReadOnlyList<TechLog>> GetTechLogsAsync(string aircraftId, DateOnly from, DateOnly to, CancellationToken ct = default)
+    public async Task<IReadOnlyList<TechLog>> GetTechLogsAsync(int companyId, string registration, DateOnly from, DateOnly to, CancellationToken ct = default)
     {
-        var query = new Dictionary<string, string?>
+        var headers = new Dictionary<string, string>
         {
-            ["aircraft_id"] = aircraftId,
-            ["from"] = from.ToString("yyyy-MM-dd"),
-            ["to"] = to.ToString("yyyy-MM-dd")
+            ["company-id"] = companyId.ToString()
         };
 
-        var result = await _apiClient.GetAsync<List<TechLog>>("/techlog/list/GetDTLFlightsByAircraft", query, ct);
+        var query = new Dictionary<string, string?>
+        {
+            ["registration"] = registration,
+            ["dateFrom"] = from.ToString("yyyy-MM-dd"),
+            ["dateTo"] = to.ToString("yyyy-MM-dd")
+        };
+
+        var result = await _apiClient.GetAsync<List<TechLog>>("/techlog/list/GetDTLFlightsByAircraft", headers, query, ct);
         return result ?? new List<TechLog>();
+    }
+
+    public async Task<MaintenanceData> GetMaintenanceDataAsync(int companyId, string registration, DateOnly date, CancellationToken ct = default)
+    {
+        var headers = new Dictionary<string, string>
+        {
+            ["company-id"] = companyId.ToString()
+        };
+
+        var query = new Dictionary<string, string?>
+        {
+            ["registration"] = registration,
+            ["date_from"] = date.ToString("yyyy-MM-dd"),
+        };
+
+        var result = await _apiClient.GetAsync<MaintenanceData>("/techlog/maintenance/data", headers, query, ct);
+        return result;
     }
 }
