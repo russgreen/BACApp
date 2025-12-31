@@ -9,13 +9,13 @@ public class FlightLog
     public int FlightLogId { get; set; }
 
     [JsonPropertyName("flight_record")]
-    public long FlightRecord { get; set; } 
+    public long? FlightRecord { get; set; } 
 
     [JsonPropertyName("aircraft")]
     public string? Aircraft { get; set; }
 
     [JsonPropertyName("flight_id")]
-    public int FlightId { get; set; }
+    public int? FlightId { get; set; }
 
     [JsonPropertyName("latitude")]
     public double? Latitude { get; set; }
