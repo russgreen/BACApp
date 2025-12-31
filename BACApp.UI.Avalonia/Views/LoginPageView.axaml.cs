@@ -8,4 +8,8 @@ public partial class LoginPageView : UserControl
     {
         InitializeComponent();
     }
+
+    private void ComboBox_ActualThemeVariantChanged(object? sender, System.EventArgs e)
+    {
+    }
 }

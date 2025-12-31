@@ -28,6 +28,20 @@
       <TextBlock Text="{Binding Message}"
                  Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
                  TextWrapping="Wrap" />
+
+
+      <StackPanel Spacing="4" IsVisible="{Binding SelectCompanyVisible}">
+        <ComboBox HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Companies}"
+                  DisplayMemberBinding="{CompiledBinding CompanyName}"
+                  SelectedValue="{Binding SelectedCompany}"/>
+      </StackPanel>
+
+      <Button Content="Select company"  
+              IsVisible="{Binding SelectCompanyVisible}"
+              HorizontalAlignment="Stretch"
+              Command="{Binding SelectCompanyCommand}" />
+
     </StackPanel>
   </Border>
 </UserControl>

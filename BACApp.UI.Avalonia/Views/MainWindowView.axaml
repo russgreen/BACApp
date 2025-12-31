@@ -17,7 +17,7 @@
                IsPaneOpen="True"
                DisplayMode="CompactInline"
                OpenPaneLength="240"
-               CompactPaneLength="48"
+               CompactPaneLength="45"
                PanePlacement="Left">
 
       <SplitView.Pane>
@@ -33,7 +33,7 @@
                     IsEnabled="{Binding !IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="🔐" Margin="0,0,10,0"/>
+                <TextBlock Text="🔐" Margin="0,0,15,0"/>
                 <TextBlock Text="Login"/>
               </StackPanel>
             </Button>
@@ -42,7 +42,7 @@
                     IsEnabled="{Binding IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="📅" Margin="0,0,10,0"/>
+                <TextBlock Text="📅" Margin="0,0,15,0"/>
                 <TextBlock Text="Calendar"/>
               </StackPanel>
             </Button>
@@ -51,7 +51,7 @@
                     IsEnabled="{Binding IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="🗒️" Margin="0,0,10,0"/>
+                <TextBlock Text="🗒️" Margin="0,0,15,0"/>
                 <TextBlock Text="Logs"/>
               </StackPanel>
             </Button>
@@ -60,7 +60,7 @@
                     IsEnabled="{Binding IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="🗒️" Margin="0,0,10,0"/>
+                <TextBlock Text="🗒️" Margin="0,0,15,0"/>
                 <TextBlock Text="Tech Logs"/>
               </StackPanel>
             </Button>
@@ -69,7 +69,7 @@
                     IsEnabled="{Binding IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="📊" Margin="0,0,10,0"/>
+                <TextBlock Text="📊" Margin="0,0,15,0"/>
                 <TextBlock Text="Reports"/>
               </StackPanel> 
               </Button>

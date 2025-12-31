@@ -1,6 +1,8 @@
 using System.Text;
 using BACApp.Core.Abstractions;
 using BACApp.Core.DTO;
+using BACApp.Core.Messages;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace BACApp.Core.Services;
 
@@ -17,6 +19,13 @@ public class AuthService : IAuthService
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
+
+        WeakReferenceMessenger.Default.Register<SelectedCompanyMessage>(this, (r, m) =>
+        {
+            UserCompany = m.Value;
+
+            WeakReferenceMessenger.Default.Send(new LoggedInMessage(true));
+        });
     }
 
     public async Task<LoginResponse> LoginAsync(string usernameOrEmail, string password, CancellationToken ct = default)
@@ -46,7 +55,6 @@ public class AuthService : IAuthService
         await _tokenStore.SetTokenAsync(result.Token);
 
         CurrentLogin = result;
-        UserCompany = CurrentLogin.Companies.First(); //TODO handle multi-company logins
 
         return result;
     }

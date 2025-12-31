@@ -1,10 +1,12 @@
+using BACApp.Core.DTO;
 using BACApp.Core.Services;
+using BACApp.Core.Messages;
 using BACApp.UI.Avalonia.Enums;
-using BACApp.UI.Avalonia.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -27,6 +29,15 @@ internal partial class LoginPageViewModel : PageViewModel
 
     [ObservableProperty]
     private bool _loginEnabled = true;
+
+    [ObservableProperty]
+    private bool _selectCompanyVisible = false;
+
+    [ObservableProperty]
+    private ObservableCollection<CompanyDto> _companies;
+
+    [ObservableProperty]
+    private CompanyDto _selectedCompany;
 
     [ObservableProperty]
     private string _message = string.Empty;
@@ -64,7 +75,21 @@ internal partial class LoginPageViewModel : PageViewModel
             {
                 Message = $"Logged in : {response.First_Name} {response.Last_Name}";
 
-                WeakReferenceMessenger.Default.Send(new LoggedInMessage(true));
+                if(response.Companies is not null && response.Companies.Length > 1)
+                {
+                    Companies = new ObservableCollection<CompanyDto>(response.Companies);
+                    SelectCompanyVisible = true;
+                    Message = "Please select a company.";
+                    return;
+                }
+
+                if(response.Companies is not null && response.Companies.Length == 1)
+                {
+                    WeakReferenceMessenger.Default.Send(new SelectedCompanyMessage(response.Companies[0]));
+
+                   //WeakReferenceMessenger.Default.Send(new LoggedInMessage(true));
+                }
+                
             }
         }
         catch (Exception ex)
@@ -76,5 +101,11 @@ internal partial class LoginPageViewModel : PageViewModel
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private void SelectCompany()
+    {
+        WeakReferenceMessenger.Default.Send(new SelectedCompanyMessage(SelectedCompany));
     }
 }
