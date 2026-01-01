@@ -4,10 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="BACApp.App/BACApp.App.csproj">
-    <Build Solution="Release|Any CPU" Project="false" />
-    <Deploy Solution="Debug|Any CPU" />
-  </Project>
   <Project Path="BACApp.Core/BACApp.Core.csproj" />
   <Project Path="BACApp.UI.Avalonia/BACApp.UI.Avalonia.csproj" Id="cda049cd-69ff-4ce7-bb2a-3e2b09c184e3" />
 </Solution>
