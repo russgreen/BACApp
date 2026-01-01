@@ -9,11 +9,10 @@
         Title="{Binding WindowTitle}"
         Width="900" Height="600">
 
-  <Grid >
+  <Grid RowDefinitions="*">
 
     <!-- Main layout with collapsible side panel -->
     <SplitView x:Name="MainSplitView"
-               Grid.Row="1"
                IsPaneOpen="True"
                DisplayMode="CompactInline"
                OpenPaneLength="240"
