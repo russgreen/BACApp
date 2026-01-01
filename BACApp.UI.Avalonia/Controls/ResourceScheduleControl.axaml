@@ -73,7 +73,11 @@
             <ScrollViewer x:Name="PART_ScrollViewer"
                           Grid.Column="1"
                           HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Disabled">
+                          VerticalScrollBarVisibility="Disabled"
+                          VerticalAlignment="Top"
+                          VerticalContentAlignment="Top"
+                          HorizontalAlignment="Left"
+                          HorizontalContentAlignment="Left">
               <Canvas x:Name="PART_TimelineCanvas"
                       Background="{DynamicResource ThemeBackgroundBrush}" />
             </ScrollViewer>
