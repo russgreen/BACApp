@@ -42,30 +42,39 @@
                 ColumnDefinitions="Auto,*"
                 RowDefinitions="*">
 
-                        <!-- Left header column with resource names -->
-            <Border Background="{DynamicResource ThemeBackgroundBrush}">
+            <!-- Left header column with resource names -->
+           <Border Background="{DynamicResource ThemeBackgroundBrush}"
+                    VerticalAlignment="Top">
               <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                             VerticalScrollBarVisibility="Hidden">
-                <ItemsControl x:Name="PART_ResourceList"
-                              ItemsSource="{TemplateBinding Resources}">
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate x:CompileBindings="False">
-                      <Border Height="{TemplateBinding RowHeight}"
-                              BorderBrush="{DynamicResource ThemeBorderLowBrush}"
-                              BorderThickness="0,0,0,1"
-                              Width="{TemplateBinding HeaderWidth}">
-                        <TextBlock Text="{Binding Name}"
-                                   Margin="8,0"
-                                   VerticalAlignment="Center" />
-                      </Border>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <StackPanel Orientation="Vertical">
+                  <!-- Spacer to align with TimeHeaderHeight -->
+                  <Border Height="{TemplateBinding TimeHeaderHeight}" />
+                  
+                  <!-- Resource name list -->
+                  <ItemsControl x:Name="PART_ResourceList"
+                                ItemsSource="{TemplateBinding Resources}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:CompileBindings="False">
+                         <Border Height="{Binding $parent[t:ResourceScheduleControl].RowHeight}"
+                                 Background="Red"
+                                 BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                                 BorderThickness="0,0,0,1"
+                                 Width="{Binding $parent[t:ResourceScheduleControl].HeaderWidth}">
+                          <TextBlock Text="{Binding Name}"
+                                     Margin="8,0"
+                                     Foreground="White"
+                                     VerticalAlignment="Center" />
+                        </Border>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
               </ScrollViewer>
             </Border>
 
