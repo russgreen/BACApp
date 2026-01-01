@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:t="clr-namespace:BACApp.UI.Avalonia.Controls">
+
+  <Style Selector="t|ResourceScheduleControl">
+
+    <!-- Design-time preview -->
+    <Design.PreviewWith>
+      <Border Padding="20" Background="LightGray">
+        <t:ResourceScheduleControl BackgroundBrush="White"
+                                   HeaderWidth="200"
+                                   RowHeight="40"
+                                   HourWidth="60"
+                                   Day="2025-01-01">
+          <t:ResourceScheduleControl.Resources>
+            <t:Resource Id="1" Name="Aircraft A"/>
+            <t:Resource Id="2" Name="Aircraft B"/>
+            <t:Resource Id="3" Name="Aircraft C"/>
+          </t:ResourceScheduleControl.Resources>
+
+          <t:ResourceScheduleControl.Events>
+            <t:ResourceEvent ResourceId="1"
+                             Start="2025-01-01T08:00:00+00:00"
+                             End="2025-01-01T10:00:00+00:00"
+                             Title="Flight 101"
+                             Brush="ForestGreen"/>
+            <t:ResourceEvent ResourceId="2"
+                             Start="2025-01-01T09:00:00+00:00"
+                             End="2025-01-01T12:00:00+00:00"
+                             Title="Maintenance"
+                             Brush="CornflowerBlue"/>
+          </t:ResourceScheduleControl.Events>
+        </t:ResourceScheduleControl>
+      </Border>
+    </Design.PreviewWith>
+
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid Background="{TemplateBinding BackgroundBrush}"
+                ColumnDefinitions="Auto,*"
+                RowDefinitions="*">
+
+                        <!-- Left header column with resource names -->
+            <Border Background="{DynamicResource ThemeBackgroundBrush}">
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="PART_ResourceList"
+                              ItemsSource="{TemplateBinding Resources}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:CompileBindings="False">
+                      <Border Height="{TemplateBinding RowHeight}"
+                              BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                              BorderThickness="0,0,0,1"
+                              Width="{TemplateBinding HeaderWidth}">
+                        <TextBlock Text="{Binding Name}"
+                                   Margin="8,0"
+                                   VerticalAlignment="Center" />
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Border>
+
+            <!-- Timeline area -->
+            <ScrollViewer x:Name="PART_ScrollViewer"
+                          Grid.Column="1"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled">
+              <Canvas x:Name="PART_TimelineCanvas"
+                      Background="{DynamicResource ThemeBackgroundBrush}" />
+            </ScrollViewer>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>
