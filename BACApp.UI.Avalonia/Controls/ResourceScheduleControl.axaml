@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:t="clr-namespace:BACApp.UI.Avalonia.Controls">
+        xmlns:t="clr-namespace:BACApp.UI.Avalonia.Controls"
+        xmlns:i="https://github.com/avaloniaui"
+        xmlns:ia="using:Avalonia.Xaml.Interactivity"
+        xmlns:iac="using:Avalonia.Xaml.Interactions.Core">
 
   <Style Selector="t|ResourceScheduleControl">
 
@@ -65,7 +68,15 @@
                                  Background="Red"
                                  BorderBrush="{DynamicResource ThemeBorderLowBrush}"
                                  BorderThickness="0,0,0,1"
-                                 Width="{Binding $parent[t:ResourceScheduleControl].HeaderWidth}">
+                                 Width="{Binding $parent[t:ResourceScheduleControl].HeaderWidth}"
+                                 Cursor="Hand">
+                          <ia:Interaction.Behaviors>
+                            <iac:EventTriggerBehavior EventName="Tapped">
+                              <iac:InvokeCommandAction 
+                                  Command="{Binding $parent[t:ResourceScheduleControl].ResourceClickCommand}"
+                                  CommandParameter="{Binding}" />
+                            </iac:EventTriggerBehavior>
+                          </ia:Interaction.Behaviors>
                           <TextBlock Text="{Binding Name}"
                                      Margin="8,0"
                                      Foreground="White"

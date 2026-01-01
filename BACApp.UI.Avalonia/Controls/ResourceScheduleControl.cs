@@ -2,10 +2,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Input;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace BACApp.UI.Avalonia.Controls
 {
@@ -47,6 +49,12 @@ namespace BACApp.UI.Avalonia.Controls
 
         public static readonly StyledProperty<double> MinHourWidthProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, double>(nameof(MinHourWidth), 40);
+
+        public static readonly StyledProperty<ICommand?> ResourceClickCommandProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, ICommand?>(nameof(ResourceClickCommand));
+
+        public static readonly StyledProperty<ICommand?> EventClickCommandProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, ICommand?>(nameof(EventClickCommand));
 
         public IEnumerable<Resource>? Resources
         {
@@ -118,6 +126,18 @@ namespace BACApp.UI.Avalonia.Controls
         {
             get => GetValue(MinHourWidthProperty);
             set => SetValue(MinHourWidthProperty, value);
+        }
+
+        public ICommand? ResourceClickCommand
+        {
+            get => GetValue(ResourceClickCommandProperty);
+            set => SetValue(ResourceClickCommandProperty, value);
+        }
+
+        public ICommand? EventClickCommand
+        {
+            get => GetValue(EventClickCommandProperty);
+            set => SetValue(EventClickCommandProperty, value);
         }
 
         private ScrollViewer? _scrollViewer;
@@ -296,10 +316,10 @@ namespace BACApp.UI.Avalonia.Controls
             var dayEnd = dayStart.AddDays(1);
 
             var byResource = events
-                .Select(e => ClipToDay(e, dayStart, dayEnd))
-                .Where(e => e != null)
-                .GroupBy(e => e!.ResourceId)
-                .ToDictionary(g => g.Key, g => g!.ToList()!);
+                .Select(e => new { Original = e, Clipped = ClipToDay(e, dayStart, dayEnd) })
+                .Where(x => x.Clipped != null)
+                .GroupBy(x => x.Clipped!.ResourceId)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
             var visibleStart = dayStart.AddHours(startHour);
             var visibleEnd = dayStart.AddHours(endHour);
@@ -312,9 +332,9 @@ namespace BACApp.UI.Avalonia.Controls
                     continue;
                 }
 
-                foreach (var ev in resEvents)
+                foreach (var item in resEvents)
                 {
-                    var clipped = ClipToWindow(ev!, visibleStart, visibleEnd);
+                    var clipped = ClipToWindow(item.Clipped!, visibleStart, visibleEnd);
                     if (clipped == null)
                     {
                         continue;
@@ -326,23 +346,34 @@ namespace BACApp.UI.Avalonia.Controls
                     var x = Math.Max(0, startSpan.TotalHours * hourWidth);
                     var width = Math.Max(2, (endSpan - startSpan).TotalHours * hourWidth);
 
-                    // Row r: vertical origin is header band + r * RowHeight.
                     var rowTop = TimeHeaderHeight + r * RowHeight;
                     var heightRect = Math.Max(4, RowHeight - 8);
-                    var y = rowTop + (RowHeight - heightRect) / 2; // center bar within row.
+                    var y = rowTop + (RowHeight - heightRect) / 2;
 
-                    var rect = new Rectangle
+                    // Create a border container for the event
+                    var eventBorder = new Border
                     {
-                        Fill = clipped.Brush ?? Brushes.SteelBlue,
-                        Stroke = Brushes.Transparent,
-                        RadiusX = 4,
-                        RadiusY = 4,
+                        Background = clipped.Brush ?? Brushes.SteelBlue,
+                        CornerRadius = new CornerRadius(4),
                         Width = width,
-                        Height = heightRect
+                        Height = heightRect,
+                        Cursor = new Cursor(StandardCursorType.Hand)
                     };
-                    Canvas.SetLeft(rect, x);
-                    Canvas.SetTop(rect, y);
-                    canvas.Children.Add(rect);
+
+                    // Store reference to the ORIGINAL event, not the clipped one
+                    var originalEvent = item.Original;
+
+                    eventBorder.PointerPressed += (_, e) =>
+                    {
+                        if (EventClickCommand?.CanExecute(originalEvent) == true)
+                        {
+                            EventClickCommand.Execute(originalEvent);
+                            e.Handled = true;
+                        }
+                    };
+
+                    Canvas.SetLeft(eventBorder, x);
+                    Canvas.SetTop(eventBorder, y);
 
                     if (!string.IsNullOrWhiteSpace(clipped.Title))
                     {
@@ -350,14 +381,14 @@ namespace BACApp.UI.Avalonia.Controls
                         {
                             Text = clipped.Title,
                             Foreground = Brushes.White,
-                            Margin = new Thickness(6, 0, 6, 0)
+                            Margin = new Thickness(6, 0, 6, 0),
+                            VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center,
+                            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left
                         };
-                        tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                        var desired = tb.DesiredSize;
-                        Canvas.SetLeft(tb, x + 4);
-                        Canvas.SetTop(tb, y + (heightRect - desired.Height) / 2);
-                        canvas.Children.Add(tb);
+                        eventBorder.Child = tb;
                     }
+
+                    canvas.Children.Add(eventBorder);
                 }
             }
         }

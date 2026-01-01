@@ -25,7 +25,9 @@
                   HeaderWidth="220"
                   RowHeight="40"
                   HourWidth="50"
-                  TimeHeaderHeight="24"/>
+                  TimeHeaderHeight="24"
+                  ResourceClickCommand="{Binding ResourceClickCommand}"
+                  EventClickCommand="{Binding EventClickCommand}"/>
 
     </Grid>
 

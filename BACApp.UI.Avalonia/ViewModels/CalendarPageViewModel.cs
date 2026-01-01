@@ -3,8 +3,10 @@ using BACApp.Core.Models;
 using BACApp.UI.Avalonia.Controls;
 using BACApp.UI.Avalonia.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BACApp.UI.Avalonia.ViewModels;
 
@@ -47,7 +49,7 @@ internal partial class CalendarPageViewModel : PageViewModel
         {
             ResourceId = 3,
             Start = day.AddHours(5),
-            End = day.AddHours(21),
+            End = day.AddHours(22),
             Brush = Brushes.Gray,
             Title = "Maintenance"
         });
@@ -60,7 +62,33 @@ internal partial class CalendarPageViewModel : PageViewModel
             Title = "Flight 103"
         });
 
-
-
     }
+
+    [RelayCommand]
+    private void ResourceClick(Resource resource)
+    {
+        if (resource == null)
+        {
+            return;
+        }
+
+        // Handle resource click
+        System.Diagnostics.Debug.WriteLine($"Resource clicked: {resource.Name}");
+        // e.g., navigate to resource details, show dialog, etc.
+    }
+
+    [RelayCommand]
+    private void EventClick(ResourceEvent resourceEvent)
+    {
+        if (resourceEvent == null)
+        {
+            return;
+        }
+
+        // Handle event click
+        System.Diagnostics.Debug.WriteLine($"Event clicked: {resourceEvent.Title}");
+        // e.g., show event details, edit event, etc.
+    }
+
+
 }
