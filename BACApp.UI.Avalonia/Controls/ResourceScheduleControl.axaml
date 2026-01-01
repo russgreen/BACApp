@@ -84,9 +84,7 @@
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Disabled"
                           VerticalAlignment="Top"
-                          VerticalContentAlignment="Top"
-                          HorizontalAlignment="Left"
-                          HorizontalContentAlignment="Left">
+                          VerticalContentAlignment="Top">
               <Canvas x:Name="PART_TimelineCanvas"
                       Background="{DynamicResource ThemeBackgroundBrush}" />
             </ScrollViewer>

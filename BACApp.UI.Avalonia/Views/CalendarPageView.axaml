@@ -21,6 +21,7 @@
                   Day="{Binding SelectedDay}"
                   StartHour="6"
                   EndHour="21"
+                  MinHourWidth="60"
                   HeaderWidth="220"
                   RowHeight="40"
                   HourWidth="50"

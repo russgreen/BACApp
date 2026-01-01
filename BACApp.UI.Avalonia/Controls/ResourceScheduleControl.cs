@@ -45,6 +45,9 @@ namespace BACApp.UI.Avalonia.Controls
         public static readonly StyledProperty<double> TimeHeaderHeightProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, double>(nameof(TimeHeaderHeight), 20);
 
+        public static readonly StyledProperty<double> MinHourWidthProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, double>(nameof(MinHourWidth), 40);
+
         public IEnumerable<Resource>? Resources
         {
             get => GetValue(ResourcesProperty);
@@ -111,6 +114,12 @@ namespace BACApp.UI.Avalonia.Controls
             set => SetValue(TimeHeaderHeightProperty, value);
         }
 
+        public double MinHourWidth
+        {
+            get => GetValue(MinHourWidthProperty);
+            set => SetValue(MinHourWidthProperty, value);
+        }
+
         private ScrollViewer? _scrollViewer;
         private ItemsControl? _resourceList;
         private Canvas? _timelineCanvas;
@@ -127,6 +136,7 @@ namespace BACApp.UI.Avalonia.Controls
             StartHourProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
             EndHourProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
             TimeHeaderHeightProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
+            MinHourWidthProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
 
             PropertyChanged += (_, e) =>
             {
@@ -182,8 +192,17 @@ namespace BACApp.UI.Avalonia.Controls
             var resources = Resources?.ToList() ?? new List<Resource>();
             var events = Events?.ToList() ?? new List<ResourceEvent>();
 
-            // Width is based on hours; height is header band + rows.
-            var width = HourWidth * visibleHours;
+            // Calculate available width from ScrollViewer
+            var availableWidth = _scrollViewer?.Viewport.Width ?? Bounds.Width;
+            if (availableWidth <= 0)
+            {
+                availableWidth = HourWidth * visibleHours; // fallback
+            }
+
+            // Compute actual hour width: expand to fill, but respect minimum
+            var computedHourWidth = Math.Max(MinHourWidth, availableWidth / visibleHours);
+
+            var width = computedHourWidth * visibleHours;
             var height = Math.Max(TimeHeaderHeight + resources.Count * RowHeight, 1);
 
             if (!DoubleEquals(_timelineCanvas.Width, width))
@@ -198,13 +217,13 @@ namespace BACApp.UI.Avalonia.Controls
 
             _timelineCanvas.Children.Clear();
 
-            DrawGrid(_timelineCanvas, resources.Count, startHour, endHour);
-            DrawEvents(_timelineCanvas, resources, events, startHour, endHour);
+            DrawGrid(_timelineCanvas, resources.Count, startHour, endHour, computedHourWidth);
+            DrawEvents(_timelineCanvas, resources, events, startHour, endHour, computedHourWidth);
         }
 
         private static bool DoubleEquals(double a, double b) => Math.Abs(a - b) < 0.0001;
 
-        private void DrawGrid(Canvas canvas, int rows, int startHour, int endHour)
+        private void DrawGrid(Canvas canvas, int rows, int startHour, int endHour, double hourWidth)
         {
             var totalMinutes = (endHour - startHour) * 60;
 
@@ -212,7 +231,7 @@ namespace BACApp.UI.Avalonia.Controls
             for (int minute = 0; minute <= totalMinutes; minute += 15)
             {
                 var hours = minute / 60.0;
-                var x = hours * HourWidth;
+                var x = hours * hourWidth;
                 var isHourMark = minute % 60 == 0;
 
                 var line = new Line
@@ -230,7 +249,7 @@ namespace BACApp.UI.Avalonia.Controls
             // Draw hour labels (only for hour marks)
             for (var h = startHour; h < endHour; h++)
             {
-                var x = (h - startHour) * HourWidth;
+                var x = (h - startHour) * hourWidth;
                 var text = new TextBlock
                 {
                     Text = $"{h:00}:00",
@@ -265,7 +284,8 @@ namespace BACApp.UI.Avalonia.Controls
             List<Resource> resources,
             List<ResourceEvent> events,
             int startHour,
-            int endHour)
+            int endHour,
+            double hourWidth)
         {
             if (resources.Count == 0 || events.Count == 0)
             {
@@ -303,8 +323,8 @@ namespace BACApp.UI.Avalonia.Controls
                     var startSpan = clipped.Start - visibleStart;
                     var endSpan = clipped.End - visibleStart;
 
-                    var x = Math.Max(0, startSpan.TotalHours * HourWidth);
-                    var width = Math.Max(2, (endSpan - startSpan).TotalHours * HourWidth);
+                    var x = Math.Max(0, startSpan.TotalHours * hourWidth);
+                    var width = Math.Max(2, (endSpan - startSpan).TotalHours * hourWidth);
 
                     // Row r: vertical origin is header band + r * RowHeight.
                     var rowTop = TimeHeaderHeight + r * RowHeight;
