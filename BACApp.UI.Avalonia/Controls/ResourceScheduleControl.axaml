@@ -65,7 +65,7 @@
                     <ItemsControl.ItemTemplate>
                       <DataTemplate x:CompileBindings="False">
                          <Border Height="{Binding $parent[t:ResourceScheduleControl].RowHeight}"
-                                 Background="Red"
+                                 Background="LightGray"
                                  BorderBrush="{DynamicResource ThemeBorderLowBrush}"
                                  BorderThickness="0,0,0,1"
                                  Width="{Binding $parent[t:ResourceScheduleControl].HeaderWidth}"
@@ -77,10 +77,16 @@
                                   CommandParameter="{Binding}" />
                             </iac:EventTriggerBehavior>
                           </ia:Interaction.Behaviors>
-                          <TextBlock Text="{Binding Name}"
-                                     Margin="8,0"
-                                     Foreground="White"
-                                     VerticalAlignment="Center" />
+                          
+                             <StackPanel Orientation="Horizontal"
+                                         Margin="10,0">
+								<TextBlock Text="{Binding Name}"
+                                           VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Comment}" 
+                                           Margin="10,0"
+                                           VerticalAlignment="Center" />
+                             </StackPanel>
+  
                         </Border>
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>

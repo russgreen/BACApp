@@ -19,13 +19,16 @@ internal partial class CalendarPageViewModel : PageViewModel
     private ObservableCollection<ResourceEvent> _events = new();
 
     [ObservableProperty]
-    private DateOnly _selectedDay = DateOnly.FromDateTime(DateTime.Now);
+    [NotifyPropertyChangedFor(nameof(SelectedDay))]
+    private DateTime _selectedDate = DateTime.Today;
+
+    public DateOnly SelectedDay => DateOnly.FromDateTime(SelectedDate);
 
     public CalendarPageViewModel() : base(ApplicationPageNames.Calendar)
     {
-        Resources.Add(new Resource { Id = 1, Name = "Aircraft A" });
-        Resources.Add(new Resource { Id = 2, Name = "Aircraft B" });
-        Resources.Add(new Resource { Id = 3, Name = "Aircraft C" });
+        Resources.Add(new Resource { Id = 1, Name = "Aircraft A", Comment="[8.5 hrs]"});
+        Resources.Add(new Resource { Id = 2, Name = "Aircraft B", Comment="[33.5 hrs]" });
+        Resources.Add(new Resource { Id = 3, Name = "Aircraft C", Comment="[50 hrs]" });
 
 
         var day = new DateTimeOffset(DateTime.Today, TimeSpan.Zero);
@@ -35,7 +38,7 @@ internal partial class CalendarPageViewModel : PageViewModel
             Start = day.AddHours(8),
             End = day.AddHours(10),
             Brush = Brushes.ForestGreen,
-            Title = "Flight 101"
+            Title = "Member Name"
         });
         Events.Add(new ResourceEvent
         {
@@ -43,7 +46,7 @@ internal partial class CalendarPageViewModel : PageViewModel
             Start = day.AddHours(9),
             End = day.AddHours(12),
             Brush = Brushes.CornflowerBlue,
-            Title = "Flight 102"
+            Title = "Member Name"
         });
         Events.Add(new ResourceEvent
         {
@@ -59,7 +62,7 @@ internal partial class CalendarPageViewModel : PageViewModel
             Start = day.AddHours(12),
             End = day.AddHours(14),
             Brush = Brushes.CornflowerBlue,
-            Title = "Flight 103"
+            Title = "Member Name"
         });
 
     }
@@ -90,5 +93,9 @@ internal partial class CalendarPageViewModel : PageViewModel
         // e.g., show event details, edit event, etc.
     }
 
+    partial void OnSelectedDateChanged(DateTime oldValue, DateTime newValue)
+    {
+        System.Diagnostics.Debug.WriteLine($"Date changed: {newValue.ToShortDateString()}");
+    }
 
 }
