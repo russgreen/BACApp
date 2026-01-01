@@ -206,38 +206,45 @@ namespace BACApp.UI.Avalonia.Controls
 
         private void DrawGrid(Canvas canvas, int rows, int startHour, int endHour)
         {
-            // Vertical hour lines + labels.
-            for (var h = startHour; h <= endHour; h++)
+            var totalMinutes = (endHour - startHour) * 60;
+
+            // Draw vertical lines for every 15 minutes
+            for (int minute = 0; minute <= totalMinutes; minute += 15)
             {
-                var x = (h - startHour) * HourWidth;
+                var hours = minute / 60.0;
+                var x = hours * HourWidth;
+                var isHourMark = minute % 60 == 0;
+
                 var line = new Line
                 {
-                    StartPoint = new Point(x, 0),
+                    // Start below the header to avoid obscuring hour labels
+                    StartPoint = new Point(x, TimeHeaderHeight),
                     EndPoint = new Point(x, canvas.Height),
                     Stroke = GridLineBrush,
-                    StrokeThickness = h % 6 == 0 ? 1.5 : 0.75,
-                    Opacity = h % 6 == 0 ? 0.75 : 0.4
+                    StrokeThickness = isHourMark ? 1.5 : 0.5,
+                    Opacity = isHourMark ? 0.75 : 0.3
                 };
                 canvas.Children.Add(line);
-
-                if (h < endHour)
-                {
-                    var text = new TextBlock
-                    {
-                        Text = $"{h:00}:00",
-                        Foreground = GridLineBrush,
-                        Margin = new Thickness(0)
-                    };
-                    text.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                    Canvas.SetLeft(text, x + 2);
-                    // Center the label vertically inside the header band.
-                    var headerY = (TimeHeaderHeight - text.DesiredSize.Height) / 2;
-                    Canvas.SetTop(text, headerY);
-                    canvas.Children.Add(text);
-                }
             }
 
-            // Horizontal row dividers: start AFTER the header band.
+            // Draw hour labels (only for hour marks)
+            for (var h = startHour; h < endHour; h++)
+            {
+                var x = (h - startHour) * HourWidth;
+                var text = new TextBlock
+                {
+                    Text = $"{h:00}:00",
+                    Foreground = GridLineBrush,
+                    Margin = new Thickness(0)
+                };
+                text.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                Canvas.SetLeft(text, x + 2);
+                var headerY = (TimeHeaderHeight - text.DesiredSize.Height) / 2;
+                Canvas.SetTop(text, headerY);
+                canvas.Children.Add(text);
+            }
+
+            // Horizontal row dividers: start AFTER the header band
             for (var r = 1; r <= rows; r++)
             {
                 var y = TimeHeaderHeight + r * RowHeight;
