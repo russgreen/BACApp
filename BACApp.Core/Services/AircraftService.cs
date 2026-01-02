@@ -21,16 +21,16 @@ public class AircraftService : IAircraftService
 
     public async Task LoadAllCompanyAircraftAsync(CancellationToken ct = default)
     {
-        var aircraft = await GetByCompanyIdAsync(_authService.UserCompany.CompanyId, ct);
+        var aircraft = await GetByCompanyIdAsync(ct);
         AllCompanyAircraft = aircraft?.ToList() ?? new List<Aircraft>();
     }
 
-    public Task<IReadOnlyList<Models.Aircraft>?> GetByCompanyIdAsync(int companyId, CancellationToken ct = default)
+    public Task<IReadOnlyList<Models.Aircraft>?> GetByCompanyIdAsync(CancellationToken ct = default)
     {
         // API expects company-id as a header, not as a query parameter.
         var headers = new Dictionary<string, string>
         {
-            ["company-id"] = companyId.ToString()
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
         return _apiClient.GetAsync<IReadOnlyList<Models.Aircraft>>("/aircraft/list/GetAircraftCompanyId", headers, ct);

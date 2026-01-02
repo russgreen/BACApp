@@ -19,8 +19,7 @@ public interface IAircraftService
     /// <summary>
     /// Get a list of aircraft for the specified company.
     /// </summary>
-    /// <param name="companyId"></param>
     /// <param name="ct"></param>
     /// <returns>The full list of aircraft for the specified company.</returns>
-    Task<IReadOnlyList<Models.Aircraft>> GetByCompanyIdAsync(int companyId, CancellationToken ct = default);
+    Task<IReadOnlyList<Models.Aircraft>> GetByCompanyIdAsync(CancellationToken ct = default);
 }
