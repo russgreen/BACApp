@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
+using BACApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace BACApp.UI.Avalonia.Controls
         public static readonly StyledProperty<IEnumerable<Resource>?> ResourcesProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<Resource>?>(nameof(Resources));
 
-        public static readonly StyledProperty<IEnumerable<ResourceEvent>?> EventsProperty =
-            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<ResourceEvent>?>(nameof(Events));
+        public static readonly StyledProperty<IEnumerable<Event>?> EventsProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<Event>?>(nameof(Events));
 
         public static readonly StyledProperty<DateOnly> DayProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, DateOnly>(nameof(Day), DateOnly.FromDateTime(DateTime.Today));
@@ -62,7 +63,7 @@ namespace BACApp.UI.Avalonia.Controls
             set => SetValue(ResourcesProperty, value);
         }
 
-        public IEnumerable<ResourceEvent>? Events
+        public IEnumerable<Event>? Events
         {
             get => GetValue(EventsProperty);
             set => SetValue(EventsProperty, value);
@@ -210,7 +211,7 @@ namespace BACApp.UI.Avalonia.Controls
             var visibleHours = endHour - startHour;
 
             var resources = Resources?.ToList() ?? new List<Resource>();
-            var events = Events?.ToList() ?? new List<ResourceEvent>();
+            var events = Events?.ToList() ?? new List<Event>();
 
             // Calculate available width from ScrollViewer
             var availableWidth = _scrollViewer?.Viewport.Width ?? Bounds.Width;
@@ -302,7 +303,7 @@ namespace BACApp.UI.Avalonia.Controls
         private void DrawEvents(
             Canvas canvas,
             List<Resource> resources,
-            List<ResourceEvent> events,
+            List<Event> events,
             int startHour,
             int endHour,
             double hourWidth)
@@ -340,8 +341,8 @@ namespace BACApp.UI.Avalonia.Controls
                         continue;
                     }
 
-                    var startSpan = clipped.Start - visibleStart;
-                    var endSpan = clipped.End - visibleStart;
+                    var startSpan = clipped.StartTime - visibleStart;
+                    var endSpan = clipped.EndTime - visibleStart;
 
                     var x = Math.Max(0, startSpan.TotalHours * hourWidth);
                     var width = Math.Max(2, (endSpan - startSpan).TotalHours * hourWidth);
@@ -353,7 +354,7 @@ namespace BACApp.UI.Avalonia.Controls
                     // Create a border container for the event
                     var eventBorder = new Border
                     {
-                        Background = clipped.Brush ?? Brushes.SteelBlue,
+                        Background = clipped.BackgroundBrush ?? Brushes.SteelBlue,
                         CornerRadius = new CornerRadius(4),
                         Width = width,
                         Height = heightRect,
@@ -393,40 +394,40 @@ namespace BACApp.UI.Avalonia.Controls
             }
         }
 
-        private static ResourceEvent? ClipToDay(ResourceEvent ev, DateTimeOffset dayStart, DateTimeOffset dayEnd)
+        private static Event? ClipToDay(Event ev, DateTimeOffset dayStart, DateTimeOffset dayEnd)
         {
-            var start = ev.Start < dayStart ? dayStart : ev.Start;
-            var end = ev.End > dayEnd ? dayEnd : ev.End;
+            var start = ev.StartTime < dayStart ? dayStart : ev.StartTime;
+            var end = ev.EndTime > dayEnd ? dayEnd : ev.EndTime;
             if (end <= dayStart || start >= dayEnd)
             {
                 return null;
             }
 
-            return new ResourceEvent
+            return new Event
             {
                 ResourceId = ev.ResourceId,
-                Start = start,
-                End = end,
-                Brush = ev.Brush,
+                Start = start.ToString(),
+                End = end.ToString(),
+                //BackgroundColor = ev.BackgroundBrush,
                 Title = ev.Title
             };
         }
 
-        private static ResourceEvent? ClipToWindow(ResourceEvent ev, DateTimeOffset windowStart, DateTimeOffset windowEnd)
+        private static Event? ClipToWindow(Event ev, DateTimeOffset windowStart, DateTimeOffset windowEnd)
         {
-            var start = ev.Start < windowStart ? windowStart : ev.Start;
-            var end = ev.End > windowEnd ? windowEnd : ev.End;
+            var start = ev.StartTime < windowStart ? windowStart : ev.StartTime;
+            var end = ev.EndTime > windowEnd ? windowEnd : ev.EndTime;
             if (end <= windowStart || start >= windowEnd)
             {
                 return null;
             }
 
-            return new ResourceEvent
+            return new Event
             {
                 ResourceId = ev.ResourceId,
-                Start = start,
-                End = end,
-                Brush = ev.Brush,
+                Start = start.ToString(),
+                End = end.ToString(),
+                //BackgroundBrush = ev.BackgroundBrush,
                 Title = ev.Title
             };
         }
