@@ -46,41 +46,6 @@ internal partial class CalendarPageViewModel : PageViewModel
         // Defer async work; do not block constructor
         _ = LoadAsync();
 
-        //Resources.Add(new Resource { Id = 1, Title = "Aircraft A", Comment = "[8.5 hrs]" });
-        //Resources.Add(new Resource { Id = 2, Title = "Aircraft B", Comment = "[33.5 hrs]" });
-        //Resources.Add(new Resource { Id = 3, Title = "Aircraft C", Comment = "[50 hrs]" });
-
-
-        //var day = new DateTimeOffset(DateTime.Today, TimeSpan.Zero);
-        //Events.Add(new Event
-        //{
-        //    ResourceId = 1,
-        //    Start = day.AddHours(8).ToString(),
-        //    End = day.AddHours(10).ToString(),
-        //    Title = "Member Name"
-        //});
-        //Events.Add(new Event
-        //{
-        //    ResourceId = 2,
-        //    Start = day.AddHours(9).ToString(),
-        //    End = day.AddHours(12).ToString(),
-        //    Title = "Member Name"
-        //});
-        //Events.Add(new Event
-        //{
-        //    ResourceId = 3,
-        //    Start = day.AddHours(5).ToString(),
-        //    End = day.AddHours(22).ToString(),
-        //    Title = "Maintenance"
-        //});
-        //Events.Add(new Event
-        //{
-        //    ResourceId = 1,
-        //    Start = day.AddHours(12).ToString(),
-        //    End = day.AddHours(14).ToString(),
-        //    Title = "Member Name"
-        //});
-
     }
 
     private async Task LoadAsync(CancellationToken ct = default)
