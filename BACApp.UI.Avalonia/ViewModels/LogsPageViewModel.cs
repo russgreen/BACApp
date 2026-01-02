@@ -135,9 +135,7 @@ internal partial class LogsPageViewModel : PageViewModel
         try
         {
             var logs = await _flightLogsService.GetFlightLogsAsync(
-                _authService.UserCompany.CompanyId,
-                SelectedAircraft.Registration,
-                ct);
+                 SelectedAircraft.Registration, ct);
 
             AllFlightLogs = logs
                 .OrderByDescending(x => x.FlightDate)

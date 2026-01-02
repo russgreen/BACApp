@@ -1,21 +1,25 @@
+using BACApp.Core.Abstractions;
 using BACApp.Core.Models;
 
 namespace BACApp.Core.Services;
 
 public class FlightLogsService : IFlightLogsService
 {
-    private readonly Abstractions.IApiClient _apiClient;
+    private readonly IApiClient _apiClient;
+    private readonly IAuthService _authService;
 
-    public FlightLogsService(Abstractions.IApiClient apiClient)
+    public FlightLogsService(IApiClient apiClient,
+        IAuthService authService)
     {
         _apiClient = apiClient;
+        _authService = authService;
     }
 
-    public async Task<IReadOnlyList<FlightLog>> GetFlightLogsAsync(int companyId, string registration, CancellationToken ct = default)
+    public async Task<IReadOnlyList<FlightLog>> GetFlightLogsAsync(string registration, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
-            ["company-id"] = companyId.ToString()
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
         var query = new Dictionary<string, string?>
@@ -23,15 +27,15 @@ public class FlightLogsService : IFlightLogsService
             ["registration"] = registration
         };
 
-        var result = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters", query, headers, ct);
-        return result ?? new List<FlightLog>();
+        var data = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters", query, headers, ct);
+        return data ?? new List<FlightLog>();
     }
 
-    public async Task<IReadOnlyList<FlightLog>> GetFlightLogsAsync(int companyId, string registration, DateOnly from, DateOnly to, CancellationToken ct = default)
+    public async Task<IReadOnlyList<FlightLog>> GetFlightLogsAsync(string registration, DateOnly from, DateOnly to, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
-            ["company-id"] = companyId.ToString()
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
         var query = new Dictionary<string, string?>
@@ -41,8 +45,8 @@ public class FlightLogsService : IFlightLogsService
             ["date_to"] = to.ToString("yyyy-MM-dd")
         };
 
-        var result = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters",  query, headers, ct);
-        return result ?? new List<FlightLog>();
+        var data = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters",  query, headers, ct);
+        return data ?? new List<FlightLog>();
     }
 
 
