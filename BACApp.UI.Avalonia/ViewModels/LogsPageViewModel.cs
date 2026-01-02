@@ -4,6 +4,7 @@ using BACApp.Core.Services;
 using BACApp.UI.Avalonia.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,12 +20,12 @@ namespace BACApp.UI.Avalonia.ViewModels;
 
 internal partial class LogsPageViewModel : PageViewModel
 {
+    private readonly ILogger<LogsPageViewModel> _logger;
     private readonly IAuthService _authService;
     private readonly IAircraftService _aircraftService;
     private readonly IFlightLogsService _flightLogsService;
     private readonly ICsvExportService _csvExportService;
 
-    private CompanyDto _currentCompany;
     private CancellationTokenSource? _flightLogsCts;
 
     [ObservableProperty]
@@ -51,18 +52,18 @@ internal partial class LogsPageViewModel : PageViewModel
 
     public bool HasLogsSelected => SelectedFlightLogs != null && SelectedFlightLogs.Count > 0;
 
-    public LogsPageViewModel(IAuthService authService,
+    public LogsPageViewModel(ILogger<LogsPageViewModel>logger,
+        IAuthService authService,
         IAircraftService aircraftService,
         IFlightLogsService flightLogsService,
         ICsvExportService csvExportService) 
         : base(ApplicationPageNames.Logs)
     {
+        _logger = logger;
         _authService = authService;
         _aircraftService = aircraftService;
         _flightLogsService = flightLogsService;
         _csvExportService = csvExportService;
-
-        _currentCompany = _authService.UserCompany;
 
         FromDate = DateTime.Now.AddMonths(-1);
         ToDate = DateTime.Now;
@@ -72,7 +73,7 @@ internal partial class LogsPageViewModel : PageViewModel
         AllFlightLogs = new List<FlightLog>();
 
         // Defer async work; do not block constructor
-        _ = LoadAsync();
+        LoadAsync().ConfigureAwait(false);
     }
 
     [RelayCommand]
@@ -91,13 +92,14 @@ internal partial class LogsPageViewModel : PageViewModel
 
     private async Task LoadAsync(CancellationToken ct = default)
     {
-        if (_currentCompany is null)
+        if (_authService.UserCompany is null)
         {
             return;
         }
 
-        var aircraft = await _aircraftService.GetByCompanyIdAsync(_currentCompany.CompanyId, ct);
-        AllAircraftList = aircraft is List<Aircraft> list ? list : aircraft?.ToList() ?? new List<Aircraft>();
+        AllAircraftList = _aircraftService.AllCompanyAircraft
+            .OrderBy(a => a.Registration)
+            .ToList();
 
         if (AllAircraftList != null && AllAircraftList.Count > 0)
         {
@@ -123,7 +125,7 @@ internal partial class LogsPageViewModel : PageViewModel
 
     private async Task LoadAllFlightLogsAsync(CancellationToken ct = default)
     {
-        if (_currentCompany is null || SelectedAircraft is null)
+        if (_authService.UserCompany is null || SelectedAircraft is null)
         {
             AllFlightLogs = new List<FlightLog>();
             ApplyFilter();
@@ -133,7 +135,7 @@ internal partial class LogsPageViewModel : PageViewModel
         try
         {
             var logs = await _flightLogsService.GetFlightLogsAsync(
-                _currentCompany.CompanyId,
+                _authService.UserCompany.CompanyId,
                 SelectedAircraft.Registration,
                 ct);
 

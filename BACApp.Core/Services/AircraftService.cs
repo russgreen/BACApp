@@ -1,16 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BACApp.Core.Abstractions;
+using BACApp.Core.Models;
 
 namespace BACApp.Core.Services;
 
 public class AircraftService : IAircraftService
 {
-    private readonly Abstractions.IApiClient _apiClient;
+    private readonly IApiClient _apiClient;    
+    private readonly IAuthService _authService;
 
-    public AircraftService(Abstractions.IApiClient apiClient)
+    public List<Aircraft> AllCompanyAircraft { get; private set; }
+
+    public AircraftService(IApiClient apiClient,
+        IAuthService authService)
     {
         _apiClient = apiClient;
+        _authService = authService;
+
+        LoadAllCompanyAircraftAsync().ConfigureAwait(false);
+    }
+
+    public async Task LoadAllCompanyAircraftAsync(CancellationToken ct = default)
+    {
+        var aircraft = await GetByCompanyIdAsync(_authService.UserCompany.CompanyId, ct);
+        AllCompanyAircraft = aircraft?.ToList() ?? new List<Aircraft>();
     }
 
     public Task<IReadOnlyList<Models.Aircraft>?> GetByCompanyIdAsync(int companyId, CancellationToken ct = default)
