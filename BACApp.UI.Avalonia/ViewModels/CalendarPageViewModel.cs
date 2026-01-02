@@ -18,6 +18,7 @@ internal partial class CalendarPageViewModel : PageViewModel
     private readonly ILogger<LogsPageViewModel> _logger;
     private readonly IAuthService _authService;
     private readonly IAircraftService _aircraftService;
+    private readonly ICalendarService _calendarService;
 
     [ObservableProperty]
     private ObservableCollection<Resource> _resources = new();
@@ -33,56 +34,62 @@ internal partial class CalendarPageViewModel : PageViewModel
 
     public CalendarPageViewModel(ILogger<LogsPageViewModel> logger,
         IAuthService authService,
-        IAircraftService aircraftService) 
+        IAircraftService aircraftService,
+        ICalendarService calendarService) 
         : base(ApplicationPageNames.Calendar)
     {
         _logger = logger;
         _authService = authService;
         _aircraftService = aircraftService;
+        _calendarService = calendarService;
 
         // Defer async work; do not block constructor
         _ = LoadAsync();
 
-        Resources.Add(new Resource { Id = 1, Title = "Aircraft A", Comment = "[8.5 hrs]" });
-        Resources.Add(new Resource { Id = 2, Title = "Aircraft B", Comment = "[33.5 hrs]" });
-        Resources.Add(new Resource { Id = 3, Title = "Aircraft C", Comment = "[50 hrs]" });
+        //Resources.Add(new Resource { Id = 1, Title = "Aircraft A", Comment = "[8.5 hrs]" });
+        //Resources.Add(new Resource { Id = 2, Title = "Aircraft B", Comment = "[33.5 hrs]" });
+        //Resources.Add(new Resource { Id = 3, Title = "Aircraft C", Comment = "[50 hrs]" });
 
 
-        var day = new DateTimeOffset(DateTime.Today, TimeSpan.Zero);
-        Events.Add(new Event
-        {
-            ResourceId = 1,
-            Start = day.AddHours(8).ToString(),
-            End = day.AddHours(10).ToString(),
-            Title = "Member Name"
-        });
-        Events.Add(new Event
-        {
-            ResourceId = 2,
-            Start = day.AddHours(9).ToString(),
-            End = day.AddHours(12).ToString(),
-            Title = "Member Name"
-        });
-        Events.Add(new Event
-        {
-            ResourceId = 3,
-            Start = day.AddHours(5).ToString(),
-            End = day.AddHours(22).ToString(),
-            Title = "Maintenance"
-        });
-        Events.Add(new Event
-        {
-            ResourceId = 1,
-            Start = day.AddHours(12).ToString(),
-            End = day.AddHours(14).ToString(),
-            Title = "Member Name"
-        });
+        //var day = new DateTimeOffset(DateTime.Today, TimeSpan.Zero);
+        //Events.Add(new Event
+        //{
+        //    ResourceId = 1,
+        //    Start = day.AddHours(8).ToString(),
+        //    End = day.AddHours(10).ToString(),
+        //    Title = "Member Name"
+        //});
+        //Events.Add(new Event
+        //{
+        //    ResourceId = 2,
+        //    Start = day.AddHours(9).ToString(),
+        //    End = day.AddHours(12).ToString(),
+        //    Title = "Member Name"
+        //});
+        //Events.Add(new Event
+        //{
+        //    ResourceId = 3,
+        //    Start = day.AddHours(5).ToString(),
+        //    End = day.AddHours(22).ToString(),
+        //    Title = "Maintenance"
+        //});
+        //Events.Add(new Event
+        //{
+        //    ResourceId = 1,
+        //    Start = day.AddHours(12).ToString(),
+        //    End = day.AddHours(14).ToString(),
+        //    Title = "Member Name"
+        //});
 
     }
 
     private async Task LoadAsync(CancellationToken ct = default)
     {
+         var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
+         Resources = new ObservableCollection<Resource>(resources);
 
+         var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
+         Events = new ObservableCollection<Event>(events);
     }
 
     [RelayCommand]
@@ -114,6 +121,8 @@ internal partial class CalendarPageViewModel : PageViewModel
     partial void OnSelectedDateChanged(DateTime oldValue, DateTime newValue)
     {
         _logger.LogDebug("Date changed {date}", newValue);
+
+        _ = LoadAsync();
     }
 
 }
