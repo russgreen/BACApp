@@ -18,7 +18,7 @@ internal partial class MainWindowViewModel : BaseViewModel
     private string _windowTitle;
 
     [ObservableProperty]
-    private bool _isPaneOpen = true;
+    private bool _isPaneOpen = false;
 
     [ObservableProperty]
     private bool _isLoggedIn = false;

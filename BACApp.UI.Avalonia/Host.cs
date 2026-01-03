@@ -74,14 +74,16 @@ internal static class Host
                 services.AddSingleton<MainWindowViewModel>();
 
                 services.AddSingleton<IAircraftService, AircraftService>();
+                services.AddSingleton<ICalendarService, CalendarService>();
 
                 services.AddTransient<IFlightLogsService, FlightLogsService>();
-                services.AddTransient<ICalendarService, CalendarService>();
                 services.AddTransient<ICsvExportService, CsvExportService>();
 
                 services.AddTransient<LoginPageViewModel>();
+
                 services.AddTransient<CalendarPageViewModel>();
                 services.AddTransient<LogsPageViewModel>();
+
                 services.AddTransient<TechLogsPageViewModel>();
                 services.AddTransient<ReportsPageViewModel>();
             })

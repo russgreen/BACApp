@@ -7,13 +7,14 @@
         x:DataType="vm:MainWindowViewModel"
         x:CompileBindings="True"
         Title="{Binding WindowTitle}"
-        Width="900" Height="600">
+        Width="900" Height="600"
+        WindowState="Maximized">
 
   <Grid RowDefinitions="*">
 
     <!-- Main layout with collapsible side panel -->
     <SplitView x:Name="MainSplitView"
-               IsPaneOpen="True"
+               IsPaneOpen="{Binding IsPaneOpen}"
                DisplayMode="CompactInline"
                OpenPaneLength="240"
                CompactPaneLength="45"

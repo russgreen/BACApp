@@ -1,13 +1,19 @@
 using BACApp.Core.DTO;
-using BACApp.Core.Services;
 using BACApp.Core.Messages;
+using BACApp.Core.Services;
 using BACApp.UI.Avalonia.Enums;
+using BACApp.UI.Avalonia.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BACApp.UI.Avalonia.ViewModels;
@@ -15,6 +21,7 @@ namespace BACApp.UI.Avalonia.ViewModels;
 internal partial class LoginPageViewModel : PageViewModel
 {
     private readonly IAuthService _authService;
+    private readonly ILogger<LoginPageViewModel> _logger;
 
     [ObservableProperty]
     [EmailAddress]
@@ -42,11 +49,49 @@ internal partial class LoginPageViewModel : PageViewModel
     [ObservableProperty]
     private string _message = string.Empty;
 
-    public LoginPageViewModel(IAuthService authService) : base(ApplicationPageNames.Login)
+    public LoginPageViewModel(IAuthService authService,
+        ILogger<LoginPageViewModel> logger)  : base(ApplicationPageNames.Login)
     {
         _authService = authService;
+        _logger = logger;
+
+        AutoLogin();
     }
 
+    private void AutoLogin()
+    {
+        //check for saved credentials in a autologin.json file
+        var autoLoginFile = System.IO.Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "autologin.json");
+
+        if (System.IO.File.Exists(autoLoginFile))
+        {
+            var autologinJson = File.ReadAllText(autoLoginFile, Encoding.UTF8);
+
+            if (autologinJson is not null)
+            {
+                try
+                {
+                    var autoLogin = System.Text.Json.JsonSerializer.Deserialize<AutoLogin>(autologinJson)!;
+
+                    _logger.LogDebug("Optional autologin settings loaded successfully.");
+
+                    if(autoLogin.Username is not null && autoLogin.Password is not null)
+                    {
+                        Username =  autoLogin.Username;
+                        Password =  autoLogin.Password;
+                        Debug.WriteLine("Auto login with saved credentials.");
+                        LoginCommand.Execute(null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                   _logger.LogDebug(ex, "Error deserializing settings file.");
+                }
+            }
+        }
+
+
+    }
 
     [RelayCommand]
     private async Task Login()
