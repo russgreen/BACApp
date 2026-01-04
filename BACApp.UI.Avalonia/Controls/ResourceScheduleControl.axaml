@@ -8,7 +8,7 @@
 
   <Style Selector="t|ResourceScheduleControl">
 
-    <!-- Design-time preview -->
+    <!-- Design-time preview
     <Design.PreviewWith>
       <Border Padding="20" Background="LightGray">
         <t:ResourceScheduleControl BackgroundBrush="White"
@@ -16,27 +16,10 @@
                                    RowHeight="40"
                                    HourWidth="60"
                                    Day="2025-01-01">
-          <t:ResourceScheduleControl.Resources>
-            <t:Resource Id="1" Name="Aircraft A"/>
-            <t:Resource Id="2" Name="Aircraft B"/>
-            <t:Resource Id="3" Name="Aircraft C"/>
-          </t:ResourceScheduleControl.Resources>
 
-          <t:ResourceScheduleControl.Events>
-            <t:ResourceEvent ResourceId="1"
-                             Start="2025-01-01T08:00:00+00:00"
-                             End="2025-01-01T10:00:00+00:00"
-                             Title="Flight 101"
-                             Brush="ForestGreen"/>
-            <t:ResourceEvent ResourceId="2"
-                             Start="2025-01-01T09:00:00+00:00"
-                             End="2025-01-01T12:00:00+00:00"
-                             Title="Maintenance"
-                             Brush="CornflowerBlue"/>
-          </t:ResourceScheduleControl.Events>
         </t:ResourceScheduleControl>
       </Border>
-    </Design.PreviewWith>
+    </Design.PreviewWith> -->
 
     <Setter Property="Template">
       <Setter.Value>

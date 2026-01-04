@@ -318,7 +318,6 @@ namespace BACApp.UI.Avalonia.Controls
 
             var byResource = events
                 .Select(e => new { Original = e, Clipped = ClipToDay(e, dayStart, dayEnd) })
-                .Where(e => e.Original.Rendering != "background") // Exclude background-rendered events 
                 .Where(x => x.Clipped != null)
                 .GroupBy(x => x.Clipped!.ResourceId)
                 .ToDictionary(g => g.Key, g => g.ToList());
@@ -334,7 +333,10 @@ namespace BACApp.UI.Avalonia.Controls
                     continue;
                 }
 
-                foreach (var item in resEvents)
+                // Draw background events first (behind), then normal events.
+                foreach (var item in resEvents
+                    .OrderBy(x => string.Equals(x.Original.Rendering, "background", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+                    .ThenBy(x => x.Original.StartTime))
                 {
                     var clipped = ClipToWindow(item.Clipped!, visibleStart, visibleEnd);
                     if (clipped == null)
@@ -349,37 +351,43 @@ namespace BACApp.UI.Avalonia.Controls
                     var width = Math.Max(2, (endSpan - startSpan).TotalHours * hourWidth);
 
                     var rowTop = TimeHeaderHeight + r * RowHeight;
-                    var heightRect = Math.Max(4, RowHeight - 8);
-                    var y = rowTop + (RowHeight - heightRect) / 2;
+                    var isBackground = string.Equals(item.Original.Rendering, "background", StringComparison.OrdinalIgnoreCase);
+                    var heightRect = isBackground ? Math.Max(1, RowHeight - 2) : Math.Max(4, RowHeight - 8);
+                    var y = isBackground ? rowTop + 1 : rowTop + (RowHeight - heightRect) / 2;
 
                     // Create a border container for the event
                     var eventBorder = new Border
                     {
                         Background = item.Original.BackgroundBrush ?? Brushes.WhiteSmoke,
                         BorderBrush = item.Original.BorderBrush ?? Brushes.Black,
-                        BorderThickness = new Thickness(1),
-                        CornerRadius = new CornerRadius(4),
+                        BorderThickness = isBackground ? new Thickness(0) : new Thickness(1),
+                        CornerRadius = isBackground ? new CornerRadius(0) : new CornerRadius(4),
                         Width = width,
                         Height = heightRect,
-                        Cursor = new Cursor(StandardCursorType.Hand)
+                        Cursor = new Cursor(StandardCursorType.Hand),
+                        Opacity = isBackground ? 0.35 : 1.0,
+                        IsHitTestVisible = !isBackground
                     };
 
                     // Store reference to the ORIGINAL event, not the clipped one
                     var originalEvent = item.Original;
 
-                    eventBorder.PointerPressed += (_, e) =>
+                    if (!isBackground)
                     {
-                        if (EventClickCommand?.CanExecute(originalEvent) == true)
+                        eventBorder.PointerPressed += (_, e) =>
                         {
-                            EventClickCommand.Execute(originalEvent);
-                            e.Handled = true;
-                        }
-                    };
+                            if (EventClickCommand?.CanExecute(originalEvent) == true)
+                            {
+                                EventClickCommand.Execute(originalEvent);
+                                e.Handled = true;
+                            }
+                        };
+                    }
 
                     Canvas.SetLeft(eventBorder, x);
                     Canvas.SetTop(eventBorder, y);
 
-                    if (!string.IsNullOrWhiteSpace(clipped.Title))
+                    if (!isBackground && !string.IsNullOrWhiteSpace(clipped.Title))
                     {
                         var tb = new TextBlock
                         {
