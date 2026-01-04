@@ -36,8 +36,8 @@ public class Event
     public DateTimeOffset StartTime => DateTimeOffset.Parse(Start);
     public DateTimeOffset EndTime => DateTimeOffset.Parse(End);
 
-    public IBrush? BackgroundBrush => BackgroundColor != null ? Brush.Parse(BackgroundColor) : null;
-    public IBrush? TextBrush => TextColor != null ? Brush.Parse(TextColor) : null;
-    public IBrush? BorderBrush => BorderColor != null ? Brush.Parse(BorderColor) : null;
+    public IBrush? BackgroundBrush => !string.IsNullOrEmpty(BackgroundColor) ? Brush.Parse(BackgroundColor) : null;
+    public IBrush? TextBrush => !string.IsNullOrEmpty(TextColor) ? Brush.Parse(TextColor) : null;
+    public IBrush? BorderBrush => !string.IsNullOrEmpty(BorderColor) ? Brush.Parse(BorderColor) : null;
 
 }

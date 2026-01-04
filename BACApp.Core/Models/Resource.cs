@@ -17,16 +17,16 @@ public class Resource
     [JsonIgnore]
     public string? Comment { get; set; }
 
-    [JsonPropertyName("color")]
+    [JsonPropertyName("colour")]
     public string? Color { get; set; }
 
-    [JsonPropertyName("background_color")]
+    [JsonPropertyName("background_colour")]
     public string? BackgroundColor { get; set; }
 
     [JsonIgnore]
-    public IBrush? BackgroundBrush => BackgroundColor != null ? Brush.Parse(BackgroundColor) : null;
+    public IBrush? BackgroundBrush => !string.IsNullOrEmpty(BackgroundColor) ? Brush.Parse(BackgroundColor) : Brushes.LightGray;
 
     [JsonIgnore]
-    public IBrush? ForegroundBrush => Color != null ? Brush.Parse(Color) : null;
+    public IBrush? ForegroundBrush => !string.IsNullOrEmpty(Color) ? Brush.Parse(Color) : Brushes.Black;
 
 }
