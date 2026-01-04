@@ -318,6 +318,7 @@ namespace BACApp.UI.Avalonia.Controls
 
             var byResource = events
                 .Select(e => new { Original = e, Clipped = ClipToDay(e, dayStart, dayEnd) })
+                .Where(e => e.Original.Rendering != "background") // Exclude background-rendered events 
                 .Where(x => x.Clipped != null)
                 .GroupBy(x => x.Clipped!.ResourceId)
                 .ToDictionary(g => g.Key, g => g.ToList());
@@ -327,8 +328,8 @@ namespace BACApp.UI.Avalonia.Controls
 
             for (var r = 0; r < resources.Count; r++)
             {
-                var res = resources[r];
-                if (!byResource.TryGetValue(res.Id, out var resEvents))
+                var resource = resources[r];
+                if (!byResource.TryGetValue(resource.Id, out var resEvents))
                 {
                     continue;
                 }
@@ -354,7 +355,9 @@ namespace BACApp.UI.Avalonia.Controls
                     // Create a border container for the event
                     var eventBorder = new Border
                     {
-                        Background = clipped.BackgroundBrush ?? Brushes.SteelBlue,
+                        Background = item.Original.BackgroundBrush ?? Brushes.WhiteSmoke,
+                        BorderBrush = item.Original.BorderBrush ?? Brushes.Black,
+                        BorderThickness = new Thickness(1),
                         CornerRadius = new CornerRadius(4),
                         Width = width,
                         Height = heightRect,
@@ -381,7 +384,7 @@ namespace BACApp.UI.Avalonia.Controls
                         var tb = new TextBlock
                         {
                             Text = clipped.Title,
-                            Foreground = Brushes.White,
+                            Foreground = item.Original.TextBrush,
                             Margin = new Thickness(6, 0, 6, 0),
                             VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center,
                             HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left
