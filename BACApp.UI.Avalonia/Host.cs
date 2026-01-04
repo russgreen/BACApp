@@ -76,6 +76,7 @@ internal static class Host
                 services.AddSingleton<IAircraftService, AircraftService>();
                 services.AddSingleton<ICalendarService, CalendarService>();
 
+                services.AddTransient<ITechlogService, TechlogService>();
                 services.AddTransient<IFlightLogsService, FlightLogsService>();
                 services.AddTransient<ICsvExportService, CsvExportService>();
 

@@ -26,7 +26,7 @@
                   StartHour="6"
                   EndHour="21"
                   MinHourWidth="60"
-                  HeaderWidth="220"
+                  HeaderWidth="250"
                   RowHeight="50"
                   HourWidth="50"
                   TimeHeaderHeight="24"

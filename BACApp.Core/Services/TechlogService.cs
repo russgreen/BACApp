@@ -8,17 +8,20 @@ namespace BACApp.Core.Services;
 public class TechlogService : ITechlogService
 {
     private readonly Abstractions.IApiClient _apiClient;
+    private readonly IAuthService _authService;
 
-    public TechlogService(Abstractions.IApiClient apiClient)
+    public TechlogService(Abstractions.IApiClient apiClient,
+        IAuthService authService)
     {
         _apiClient = apiClient;
+        _authService = authService;
     }
 
-    public async Task<IReadOnlyList<TechLog>> GetTechLogsAsync(int companyId, string registration, DateOnly from, DateOnly to, CancellationToken ct = default)
+    public async Task<IReadOnlyList<TechLog>> GetTechLogsAsync(string registration, DateOnly from, DateOnly to, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
-            ["company-id"] = companyId.ToString()
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
         var query = new Dictionary<string, string?>
@@ -28,15 +31,15 @@ public class TechlogService : ITechlogService
             ["dateTo"] = to.ToString("yyyy-MM-dd")
         };
 
-        var result = await _apiClient.GetAsync<List<TechLog>>("/techlog/list/GetDTLFlightsByAircraft", headers, query, ct);
+        var result = await _apiClient.GetAsync<List<TechLog>>("/techlog/list/GetDTLFlightsByAircraft", query, headers, ct);
         return result ?? new List<TechLog>();
     }
 
-    public async Task<MaintenanceData> GetMaintenanceDataAsync(int companyId, string registration, DateOnly date, CancellationToken ct = default)
+    public async Task<MaintenanceData> GetMaintenanceDataAsync(string registration, DateOnly date, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
-            ["company-id"] = companyId.ToString()
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
         var query = new Dictionary<string, string?>
@@ -45,7 +48,7 @@ public class TechlogService : ITechlogService
             ["date_from"] = date.ToString("yyyy-MM-dd"),
         };
 
-        var result = await _apiClient.GetAsync<MaintenanceData>("/techlog/maintenance/data", headers, query, ct);
+        var result = await _apiClient.GetAsync<MaintenanceData>("/techlog/maintenance/data", query, headers, ct);
         return result;
     }
 }

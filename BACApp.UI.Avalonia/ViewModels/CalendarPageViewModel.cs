@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using BACApp.Core.Extensions;
 using BACApp.Core.Models;
 using BACApp.Core.Services;
 using BACApp.UI.Avalonia.Enums;
@@ -19,6 +20,7 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     private readonly IAuthService _authService;
     private readonly IAircraftService _aircraftService;
     private readonly ICalendarService _calendarService;
+    private readonly ITechlogService _techlogService;
 
     private readonly CancellationTokenSource _refreshCts = new();
     private readonly SemaphoreSlim _loadGate = new(1, 1);
@@ -41,13 +43,15 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     public CalendarPageViewModel(ILogger<LogsPageViewModel> logger,
         IAuthService authService,
         IAircraftService aircraftService,
-        ICalendarService calendarService) 
+        ICalendarService calendarService,
+        ITechlogService techlogService) 
         : base(ApplicationPageNames.Calendar)
     {
         _logger = logger;
         _authService = authService;
         _aircraftService = aircraftService;
         _calendarService = calendarService;
+        _techlogService = techlogService;
 
         // Defer async work; do not block constructor
         _ = LoadAsync(_refreshCts.Token);
@@ -63,9 +67,11 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
         {
             var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
             Resources = new ObservableCollection<Resource>(resources);
-
+            
             var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
             Events = new ObservableCollection<Event>(events);
+
+           _ = SetMaintenanceHours(ct);
 
             SetMessageText();
         }
@@ -123,6 +129,30 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
         if (SelectedDate.Date != localNow.Date)
         {
             SelectedDate = localNow;
+        }
+    }
+
+    private async Task SetMaintenanceHours(CancellationToken ct = default)
+    {
+        foreach (var resource in Resources.Where(x => x.Id < 100))
+        {
+            var registration = resource.Title.Split(" (").First().Trim();
+            if(string.IsNullOrEmpty(registration))
+            {
+                continue;
+            }
+
+            _logger.LogDebug("Fetching maintenance data for {registration}", registration);
+
+            var maintenanceData = await _techlogService.GetMaintenanceDataAsync(registration,SelectedDay, ct);
+            if (maintenanceData != null) 
+            {
+                _logger.LogDebug("Maintenance data for {registration}: NextInspectionType={NextInspectionType}, TotalNextCheckHours={TotalNextCheckHours}",
+                    registration, maintenanceData.NextInspectionType, maintenanceData.TotalNextCheckHours);
+
+                resource.Comment = $"Next check in {maintenanceData.TotalNextCheckHours.ToHoursMinutes()}";
+            }
+            
         }
     }
 

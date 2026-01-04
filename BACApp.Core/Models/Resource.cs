@@ -1,21 +1,16 @@
 ﻿using Avalonia.Media;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Text.Json.Serialization;
 
 namespace BACApp.Core.Models;
 
-public class Resource
+public partial class Resource : ObservableObject
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
 
     [JsonPropertyName("title")]
     public string? Title { get; set; }
-
-    [JsonIgnore]
-    public string? Comment { get; set; }
 
     [JsonPropertyName("colour")]
     public string? Color { get; set; }
@@ -28,5 +23,9 @@ public class Resource
 
     [JsonIgnore]
     public IBrush? ForegroundBrush => !string.IsNullOrEmpty(Color) ? Brush.Parse(Color) : Brushes.Black;
+
+    [ObservableProperty]
+    [JsonIgnore]
+    private string? _comment;
 
 }

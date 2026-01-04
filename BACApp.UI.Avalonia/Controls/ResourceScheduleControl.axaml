@@ -50,12 +50,14 @@
                           </ia:Interaction.Behaviors>
                           
                              <StackPanel Orientation="Horizontal"
+                                         VerticalAlignment="Center"
                                          Margin="10,0">
 								<TextBlock Text="{Binding Title}"
                                            VerticalAlignment="Center"
                                            Foreground="{Binding ForegroundBrush}" />
-                                <TextBlock Text="{Binding Comment}" 
-                                           Margin="10,0"
+                                <TextBlock Text="{Binding Comment}"
+                                           FontSize="12"
+                                           Margin="5,0"
                                            VerticalAlignment="Center"
                                            Foreground="{Binding ForegroundBrush}" />
                              </StackPanel>
