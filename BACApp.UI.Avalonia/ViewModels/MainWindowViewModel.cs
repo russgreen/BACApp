@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace BACApp.UI.Avalonia.ViewModels;
 
@@ -56,6 +57,14 @@ internal partial class MainWindowViewModel : BaseViewModel
             WindowTitle = $"Cloudbase App : {_authService.UserCompany.CompanyName}";
         });
 
+    }
+
+    partial void OnCurrentPageChanged(PageViewModel oldValue, PageViewModel newValue)
+    {
+        if (oldValue is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 
     [RelayCommand]

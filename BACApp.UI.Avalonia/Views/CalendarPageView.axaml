@@ -12,6 +12,7 @@
 		    <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
         <CalendarDatePicker Grid.Row="0"
@@ -32,6 +33,8 @@
                   ResourceClickCommand="{Binding ResourceClickCommand}"
                   EventClickCommand="{Binding EventClickCommand}"/>
 
+        <TextBlock Grid.Row="2" 
+                   Text="{Binding MessageText}" />
     </Grid>
 
 

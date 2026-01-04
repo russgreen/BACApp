@@ -13,18 +13,24 @@ using System.Threading.Tasks;
 
 namespace BACApp.UI.Avalonia.ViewModels;
 
-internal partial class CalendarPageViewModel : PageViewModel
+internal partial class CalendarPageViewModel : PageViewModel, IDisposable
 {
     private readonly ILogger<LogsPageViewModel> _logger;
     private readonly IAuthService _authService;
     private readonly IAircraftService _aircraftService;
     private readonly ICalendarService _calendarService;
 
+    private readonly CancellationTokenSource _refreshCts = new();
+    private readonly SemaphoreSlim _loadGate = new(1, 1);
+
     [ObservableProperty]
     private ObservableCollection<Resource> _resources = new();
 
     [ObservableProperty]
     private ObservableCollection<Event> _events = new();
+
+    [ObservableProperty]
+    private string _messageText = string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedDay))]
@@ -44,17 +50,85 @@ internal partial class CalendarPageViewModel : PageViewModel
         _calendarService = calendarService;
 
         // Defer async work; do not block constructor
-        _ = LoadAsync();
+        _ = LoadAsync(_refreshCts.Token);
 
+        // Background refresh: first run 1 hour after creation, then hourly within business hours.
+        _ = RunHourlyRefreshLoopAsync(_refreshCts.Token);
     }
 
     private async Task LoadAsync(CancellationToken ct = default)
     {
-         var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
-         Resources = new ObservableCollection<Resource>(resources);
+        await _loadGate.WaitAsync(ct);
+        try
+        {
+            var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
+            Resources = new ObservableCollection<Resource>(resources);
 
-         var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
-         Events = new ObservableCollection<Event>(events);
+            var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
+            Events = new ObservableCollection<Event>(events);
+
+            SetMessageText();
+        }
+        catch (OperationCanceledException)
+        {
+            // ignore
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load calendar data for {day}.", SelectedDay);
+        }
+        finally
+        {
+            _loadGate.Release();
+        }
+    }
+
+    private async Task RunHourlyRefreshLoopAsync(CancellationToken ct)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromHours(1), ct);
+
+            while (!ct.IsCancellationRequested)
+            {
+                var now = DateTime.Now;
+
+                EnsureSelectedDateTracksToday(now);
+
+                if (IsWithinBusinessHours(now))
+                {
+                    await LoadAsync(ct);
+                }
+
+                await Task.Delay(TimeSpan.FromHours(1), ct);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // expected on shutdown/navigation
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Calendar refresh loop failed.");
+        }
+    }
+
+    private static bool IsWithinBusinessHours(DateTime localNow)
+    => localNow.TimeOfDay >= TimeSpan.FromHours(8)
+        && localNow.TimeOfDay < TimeSpan.FromHours(18);
+
+    private void EnsureSelectedDateTracksToday(DateTime localNow)
+    {
+        // If app runs overnight, keep the calendar on "today".
+        if (SelectedDate.Date != localNow.Date)
+        {
+            SelectedDate = localNow;
+        }
+    }
+
+    private void SetMessageText()
+    {
+        MessageText = $"Calendar last updated at {DateTime.Now:dd/MM/yyy H:mm}";
     }
 
     [RelayCommand]
@@ -87,7 +161,15 @@ internal partial class CalendarPageViewModel : PageViewModel
     {
         _logger.LogDebug("Date changed {date}", newValue);
 
-        _ = LoadAsync();
+        _ = LoadAsync(_refreshCts.Token);
     }
 
+    public void Dispose()
+    {
+        _refreshCts.Cancel();
+        _refreshCts.Dispose();
+        _loadGate.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
 }
