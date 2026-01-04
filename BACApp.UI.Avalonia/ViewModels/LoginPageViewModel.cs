@@ -61,35 +61,48 @@ internal partial class LoginPageViewModel : PageViewModel
     private void AutoLogin()
     {
         //check for saved credentials in a autologin.json file
-        var autoLoginFile = System.IO.Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "autologin.json");
-
-        if (System.IO.File.Exists(autoLoginFile))
+        var baseDirectory = AppContext.BaseDirectory;
+        if (string.IsNullOrWhiteSpace(baseDirectory))
         {
-            var autologinJson = File.ReadAllText(autoLoginFile, Encoding.UTF8);
-
-            if (autologinJson is not null)
-            {
-                try
-                {
-                    var autoLogin = System.Text.Json.JsonSerializer.Deserialize<AutoLogin>(autologinJson)!;
-
-                    _logger.LogDebug("Optional autologin settings loaded successfully.");
-
-                    if(autoLogin.Username is not null && autoLogin.Password is not null)
-                    {
-                        Username =  autoLogin.Username;
-                        Password =  autoLogin.Password;
-                        Debug.WriteLine("Auto login with saved credentials.");
-                        LoginCommand.Execute(null);
-                    }
-                }
-                catch (Exception ex)
-                {
-                   _logger.LogDebug(ex, "Error deserializing settings file.");
-                }
-            }
+            _logger.LogDebug("Autologin disabled: base directory could not be determined.");
+            return;
         }
 
+        var autoLoginFile = System.IO.Path.Combine(baseDirectory, "autologin.json");
+
+        if (!File.Exists(autoLoginFile))
+        {
+            return;
+        }
+
+        var autologinJson = File.ReadAllText(autoLoginFile, Encoding.UTF8);
+        if (string.IsNullOrWhiteSpace(autologinJson))
+        {
+            return;
+        }
+
+        try
+        {
+            var autoLogin = System.Text.Json.JsonSerializer.Deserialize<AutoLogin>(autologinJson);
+            if (autoLogin is null)
+            {
+                return;
+            }
+
+            _logger.LogDebug("Optional autologin settings loaded successfully.");
+
+            if (autoLogin.Username is not null && autoLogin.Password is not null)
+            {
+                Username = autoLogin.Username;
+                Password = autoLogin.Password;
+                Debug.WriteLine("Auto login with saved credentials.");
+                LoginCommand.Execute(null);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Error deserializing settings file.");
+        }
 
     }
 
