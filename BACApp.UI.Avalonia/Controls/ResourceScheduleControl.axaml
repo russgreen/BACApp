@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:t="clr-namespace:BACApp.UI.Avalonia.Controls"
+        xmlns:i="https://github.com/avaloniaui"
+        xmlns:ia="using:Avalonia.Xaml.Interactivity"
+        xmlns:iac="using:Avalonia.Xaml.Interactions.Core">
+
+  <Style Selector="t|ResourceScheduleControl">
+
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid Background="{TemplateBinding BackgroundBrush}"
+                ColumnDefinitions="Auto,*"
+                RowDefinitions="*">
+
+            <!-- Left header column with resource names -->
+           <Border Background="{DynamicResource ThemeBackgroundBrush}"
+                    VerticalAlignment="Top">
+              <ScrollViewer x:Name="PART_ResourceScrollViewer" 
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Hidden">
+                <StackPanel Orientation="Vertical">
+                  <!-- Spacer to align with TimeHeaderHeight -->
+                  <Border Height="{TemplateBinding TimeHeaderHeight}" />
+                  
+                  <!-- Resource name list -->
+                  <ItemsControl x:Name="PART_ResourceList"
+                                ItemsSource="{TemplateBinding Resources}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:CompileBindings="False">
+                         <Border Height="{Binding $parent[t:ResourceScheduleControl].RowHeight}"
+                                 Background="{Binding BackgroundBrush, FallbackValue=LightGray}"
+                                 BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                                 BorderThickness="0,0,0,1"
+                                 Width="{Binding $parent[t:ResourceScheduleControl].HeaderWidth}"
+                                 Cursor="Hand">
+                          <ia:Interaction.Behaviors>
+                            <iac:EventTriggerBehavior EventName="Tapped">
+                              <iac:InvokeCommandAction 
+                                  Command="{Binding $parent[t:ResourceScheduleControl].ResourceClickCommand}"
+                                  CommandParameter="{Binding}" />
+                            </iac:EventTriggerBehavior>
+                          </ia:Interaction.Behaviors>
+                          
+                             <StackPanel Orientation="Horizontal"
+                                         VerticalAlignment="Center"
+                                         Margin="10,0">
+								<TextBlock Text="{Binding Title}"
+                                           VerticalAlignment="Center"
+                                           Foreground="{Binding ForegroundBrush}" />
+                                <TextBlock Text="{Binding Comment}"
+                                           FontSize="12"
+                                           Margin="5,0"
+                                           VerticalAlignment="Center"
+                                           Foreground="{Binding ForegroundBrush}" />
+                             </StackPanel>
+  
+                        </Border>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </ScrollViewer>
+            </Border>
+
+            <!-- Timeline area -->
+            <ScrollViewer x:Name="PART_ScrollViewer"
+                          Grid.Column="1"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          VerticalAlignment="Top">
+              <Canvas x:Name="PART_TimelineCanvas"
+                      Background="{DynamicResource ThemeBackgroundBrush}" />
+            </ScrollViewer>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>
