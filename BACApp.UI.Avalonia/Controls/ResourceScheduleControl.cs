@@ -142,9 +142,12 @@ namespace BACApp.UI.Avalonia.Controls
         }
 
         private ScrollViewer? _scrollViewer;
+        private ScrollViewer? _resourceScrollViewer;
         private ItemsControl? _resourceList;
         private Canvas? _timelineCanvas;
         private Rect _lastBounds;
+
+        private bool _isSyncingVerticalScroll;
 
         public ResourceScheduleControl()
         {
@@ -178,6 +181,7 @@ namespace BACApp.UI.Avalonia.Controls
             base.OnApplyTemplate(e);
 
             _scrollViewer = e.NameScope.Find<ScrollViewer>("PART_ScrollViewer");
+            _resourceScrollViewer = e.NameScope.Find<ScrollViewer>("PART_ResourceScrollViewer");
             _resourceList = e.NameScope.Find<ItemsControl>("PART_ResourceList");
             _timelineCanvas = e.NameScope.Find<Canvas>("PART_TimelineCanvas");
 
@@ -186,7 +190,70 @@ namespace BACApp.UI.Avalonia.Controls
                 _resourceList.ItemsSource = Resources ?? Enumerable.Empty<Resource>();
             }
 
+            HookScrollSync();
+
             Redraw();
+        }
+
+        private void HookScrollSync()
+        {
+            if (_scrollViewer == null || _resourceScrollViewer == null)
+            {
+                return;
+            }
+
+            _scrollViewer.PropertyChanged -= OnTimelineScrollViewerPropertyChanged;
+            _resourceScrollViewer.PropertyChanged -= OnResourceScrollViewerPropertyChanged;
+
+            _scrollViewer.PropertyChanged += OnTimelineScrollViewerPropertyChanged;
+            _resourceScrollViewer.PropertyChanged += OnResourceScrollViewerPropertyChanged;
+
+            SyncVerticalOffset(_scrollViewer, _resourceScrollViewer);
+        }
+
+        private void OnTimelineScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property != ScrollViewer.OffsetProperty || _scrollViewer == null || _resourceScrollViewer == null)
+            {
+                return;
+            }
+
+            SyncVerticalOffset(_scrollViewer, _resourceScrollViewer);
+        }
+
+        private void OnResourceScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property != ScrollViewer.OffsetProperty || _scrollViewer == null || _resourceScrollViewer == null)
+            {
+                return;
+            }
+
+            SyncVerticalOffset(_resourceScrollViewer, _scrollViewer);
+        }
+
+        private void SyncVerticalOffset(ScrollViewer from, ScrollViewer to)
+        {
+            if (_isSyncingVerticalScroll)
+            {
+                return;
+            }
+
+            try
+            {
+                _isSyncingVerticalScroll = true;
+
+                var fromOffset = from.Offset;
+                var toOffset = to.Offset;
+
+                if (!DoubleEquals(fromOffset.Y, toOffset.Y))
+                {
+                    to.Offset = new Vector(toOffset.X, fromOffset.Y);
+                }
+            }
+            finally
+            {
+                _isSyncingVerticalScroll = false;
+            }
         }
 
         private void OnDataChanged()

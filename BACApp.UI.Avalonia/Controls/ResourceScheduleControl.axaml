@@ -8,19 +8,6 @@
 
   <Style Selector="t|ResourceScheduleControl">
 
-    <!-- Design-time preview
-    <Design.PreviewWith>
-      <Border Padding="20" Background="LightGray">
-        <t:ResourceScheduleControl BackgroundBrush="White"
-                                   HeaderWidth="200"
-                                   RowHeight="40"
-                                   HourWidth="60"
-                                   Day="2025-01-01">
-
-        </t:ResourceScheduleControl>
-      </Border>
-    </Design.PreviewWith> -->
-
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate>
@@ -31,7 +18,8 @@
             <!-- Left header column with resource names -->
            <Border Background="{DynamicResource ThemeBackgroundBrush}"
                     VerticalAlignment="Top">
-              <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+              <ScrollViewer x:Name="PART_ResourceScrollViewer" 
+                            HorizontalScrollBarVisibility="Disabled"
                             VerticalScrollBarVisibility="Hidden">
                 <StackPanel Orientation="Vertical">
                   <!-- Spacer to align with TimeHeaderHeight -->
@@ -84,9 +72,8 @@
             <ScrollViewer x:Name="PART_ScrollViewer"
                           Grid.Column="1"
                           HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Disabled"
-                          VerticalAlignment="Top"
-                          VerticalContentAlignment="Top">
+                          VerticalScrollBarVisibility="Auto"
+                          VerticalAlignment="Top">
               <Canvas x:Name="PART_TimelineCanvas"
                       Background="{DynamicResource ThemeBackgroundBrush}" />
             </ScrollViewer>
