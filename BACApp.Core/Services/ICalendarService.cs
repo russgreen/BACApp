@@ -10,7 +10,7 @@ public interface ICalendarService
     /// <param name="date"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task<IReadOnlyList<Resource>> GetResourcesAsync(DateOnly date, CancellationToken ct = default);
+    Task<IReadOnlyList<BookingResource>> GetResourcesAsync(DateOnly date, CancellationToken ct = default);
 
     /// <summary>
     /// Get Calendar Events
@@ -18,7 +18,7 @@ public interface ICalendarService
     /// <param name="date"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task<IReadOnlyList<Event>> GetEventsAsync(DateOnly date, CancellationToken ct = default);
+    Task<IReadOnlyList<BookingEvent>> GetEventsAsync(DateOnly date, CancellationToken ct = default);
 
     /// <summary>
     /// Get Booking Agenda

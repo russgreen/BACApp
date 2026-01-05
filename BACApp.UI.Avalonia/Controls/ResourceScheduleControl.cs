@@ -14,11 +14,11 @@ namespace BACApp.UI.Avalonia.Controls
 {
     public class ResourceScheduleControl : TemplatedControl
     {
-        public static readonly StyledProperty<IEnumerable<Resource>?> ResourcesProperty =
-            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<Resource>?>(nameof(Resources));
+        public static readonly StyledProperty<IEnumerable<BookingResource>?> ResourcesProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<BookingResource>?>(nameof(Resources));
 
-        public static readonly StyledProperty<IEnumerable<Event>?> EventsProperty =
-            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<Event>?>(nameof(Events));
+        public static readonly StyledProperty<IEnumerable<BookingEvent>?> EventsProperty =
+            AvaloniaProperty.Register<ResourceScheduleControl, IEnumerable<BookingEvent>?>(nameof(Events));
 
         public static readonly StyledProperty<DateOnly> DayProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, DateOnly>(nameof(Day), DateOnly.FromDateTime(DateTime.Today));
@@ -57,13 +57,13 @@ namespace BACApp.UI.Avalonia.Controls
         public static readonly StyledProperty<ICommand?> EventClickCommandProperty =
             AvaloniaProperty.Register<ResourceScheduleControl, ICommand?>(nameof(EventClickCommand));
 
-        public IEnumerable<Resource>? Resources
+        public IEnumerable<BookingResource>? Resources
         {
             get => GetValue(ResourcesProperty);
             set => SetValue(ResourcesProperty, value);
         }
 
-        public IEnumerable<Event>? Events
+        public IEnumerable<BookingEvent>? Events
         {
             get => GetValue(EventsProperty);
             set => SetValue(EventsProperty, value);
@@ -187,7 +187,7 @@ namespace BACApp.UI.Avalonia.Controls
 
             if (_resourceList != null)
             {
-                _resourceList.ItemsSource = Resources ?? Enumerable.Empty<Resource>();
+                _resourceList.ItemsSource = Resources ?? Enumerable.Empty<BookingResource>();
             }
 
             HookScrollSync();
@@ -260,7 +260,7 @@ namespace BACApp.UI.Avalonia.Controls
         {
             if (_resourceList != null)
             {
-                _resourceList.ItemsSource = Resources ?? Enumerable.Empty<Resource>();
+                _resourceList.ItemsSource = Resources ?? Enumerable.Empty<BookingResource>();
             }
 
             Redraw();
@@ -277,8 +277,8 @@ namespace BACApp.UI.Avalonia.Controls
             var endHour = Math.Clamp(EndHour, startHour + 1, 24);
             var visibleHours = endHour - startHour;
 
-            var resources = Resources?.ToList() ?? new List<Resource>();
-            var events = Events?.ToList() ?? new List<Event>();
+            var resources = Resources?.ToList() ?? new List<BookingResource>();
+            var events = Events?.ToList() ?? new List<BookingEvent>();
 
             // Calculate available width from ScrollViewer
             var availableWidth = _scrollViewer?.Viewport.Width ?? Bounds.Width;
@@ -369,8 +369,8 @@ namespace BACApp.UI.Avalonia.Controls
 
         private void DrawEvents(
             Canvas canvas,
-            List<Resource> resources,
-            List<Event> events,
+            List<BookingResource> resources,
+            List<BookingEvent> events,
             int startHour,
             int endHour,
             double hourWidth)
@@ -472,7 +472,7 @@ namespace BACApp.UI.Avalonia.Controls
             }
         }
 
-        private static Event? ClipToDay(Event ev, DateTimeOffset dayStart, DateTimeOffset dayEnd)
+        private static BookingEvent? ClipToDay(BookingEvent ev, DateTimeOffset dayStart, DateTimeOffset dayEnd)
         {
             var start = ev.StartTime < dayStart ? dayStart : ev.StartTime;
             var end = ev.EndTime > dayEnd ? dayEnd : ev.EndTime;
@@ -481,7 +481,7 @@ namespace BACApp.UI.Avalonia.Controls
                 return null;
             }
 
-            return new Event
+            return new BookingEvent
             {
                 ResourceId = ev.ResourceId,
                 Start = start.ToString(),
@@ -491,7 +491,7 @@ namespace BACApp.UI.Avalonia.Controls
             };
         }
 
-        private static Event? ClipToWindow(Event ev, DateTimeOffset windowStart, DateTimeOffset windowEnd)
+        private static BookingEvent? ClipToWindow(BookingEvent ev, DateTimeOffset windowStart, DateTimeOffset windowEnd)
         {
             var start = ev.StartTime < windowStart ? windowStart : ev.StartTime;
             var end = ev.EndTime > windowEnd ? windowEnd : ev.EndTime;
@@ -500,7 +500,7 @@ namespace BACApp.UI.Avalonia.Controls
                 return null;
             }
 
-            return new Event
+            return new BookingEvent
             {
                 ResourceId = ev.ResourceId,
                 Start = start.ToString(),

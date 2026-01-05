@@ -26,10 +26,10 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     private readonly SemaphoreSlim _loadGate = new(1, 1);
 
     [ObservableProperty]
-    private ObservableCollection<Resource> _resources = new();
+    private ObservableCollection<BookingResource> _resources = new();
 
     [ObservableProperty]
-    private ObservableCollection<Event> _events = new();
+    private ObservableCollection<BookingEvent> _events = new();
 
     [ObservableProperty]
     private string _messageText = string.Empty;
@@ -66,10 +66,10 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
         try
         {
             var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
-            Resources = new ObservableCollection<Resource>(resources);
+            Resources = new ObservableCollection<BookingResource>(resources);
             
             var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
-            Events = new ObservableCollection<Event>(events);
+            Events = new ObservableCollection<BookingEvent>(events);
 
            _ = SetMaintenanceHours(ct);
 
@@ -134,26 +134,77 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
 
     private async Task SetMaintenanceHours(CancellationToken ct = default)
     {
-        foreach (var resource in Resources.Where(x => x.Id < 100))
+        if (SelectedDay < DateOnly.FromDateTime(DateTime.Today))
         {
-            var registration = resource.Title.Split(" (").First().Trim();
-            if(string.IsNullOrEmpty(registration))
-            {
-                continue;
-            }
-
-            _logger.LogDebug("Fetching maintenance data for {registration}", registration);
-
-            var maintenanceData = await _techlogService.GetMaintenanceDataAsync(registration,SelectedDay, ct);
-            if (maintenanceData != null) 
-            {
-                _logger.LogDebug("Maintenance data for {registration}: NextInspectionType={NextInspectionType}, TotalNextCheckHours={TotalNextCheckHours}",
-                    registration, maintenanceData.NextInspectionType, maintenanceData.TotalNextCheckHours);
-
-                resource.Comment = $"Next check in {maintenanceData.TotalNextCheckHours.ToHoursMinutes()}";
-            }
-            
+            // don't bother with past dates
+            return;
         }
+
+        // Snapshot to avoid collection changing while awaits are in flight
+        var day = SelectedDay;
+        var resources = Resources.Where(x => x.Id < 100).ToArray();
+
+        // Tune as needed; keeps API/UI responsive
+        const int maxConcurrency = 6;
+        using var throttler = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+
+        var tasks = resources.Select(async resource =>
+        {
+            await throttler.WaitAsync(ct);
+            try
+            {
+                // fast parse: everything before " ("
+                var title = resource.Title ?? string.Empty;
+                var idx = title.IndexOf(" (", StringComparison.Ordinal);
+                var registration = (idx >= 0 ? title[..idx] : title).Trim();
+
+                if (string.IsNullOrEmpty(registration))
+                {
+                    return;
+                }
+
+                _logger.LogDebug("Fetching maintenance data for {registration}", registration);
+
+                var maintenanceData = await _techlogService.GetMaintenanceDataAsync(registration, day, ct);
+                if (maintenanceData == null)
+                {
+                    return;
+                }
+
+                _logger.LogDebug(
+                    "Maintenance data for {registration}: NextInspectionType={NextInspectionType}, TotalNextCheckHours={TotalNextCheckHours}",
+                    registration,
+                    maintenanceData.NextInspectionType,
+                    maintenanceData.TotalNextCheckHours);
+
+                // If SelectedDay changed while we were fetching, don't apply stale results
+                if (SelectedDay != day)
+                {
+                    return;
+                }
+
+                var remaining = maintenanceData.TotalNextCheckHours.ToHoursMinutes();
+                resource.Comment = string.IsNullOrEmpty(remaining) ? string.Empty : $"Next check in {remaining}";
+            }
+            catch (OperationCanceledException)
+            {
+                // ignore
+            }
+            catch (FormatException ex)
+            {
+                _logger.LogWarning(ex, "Invalid maintenance hours format for {resourceTitle}", resource.Title);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch maintenance data for {resourceTitle}", resource.Title);
+            }
+            finally
+            {
+                throttler.Release();
+            }
+        });
+
+        await Task.WhenAll(tasks);
     }
 
     private void SetMessageText()
@@ -162,7 +213,7 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     }
 
     [RelayCommand]
-    private void ResourceClick(Resource resource)
+    private void ResourceClick(BookingResource resource)
     {
         if (resource == null)
         {
@@ -175,7 +226,7 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     }
 
     [RelayCommand]
-    private void EventClick(Event resourceEvent)
+    private void EventClick(BookingEvent resourceEvent)
     {
         if (resourceEvent == null)
         {

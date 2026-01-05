@@ -14,7 +14,7 @@ public class CalendarService : ICalendarService
         _authService = authService;
     }
 
-    public async Task<IReadOnlyList<Resource>> GetResourcesAsync(DateOnly date, CancellationToken ct = default)
+    public async Task<IReadOnlyList<BookingResource>> GetResourcesAsync(DateOnly date, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
@@ -22,11 +22,11 @@ public class CalendarService : ICalendarService
         };
 
         var path = $"/booking_agenda/ReadResources/{date:yyyy-MM-dd}";
-        var data = await _apiClient.GetAsync<List<Resource>>(path, null, headers, ct) ?? new List<Resource>();
-        return data ?? new List<Resource>();
+        var data = await _apiClient.GetAsync<List<BookingResource>>(path, null, headers, ct) ?? new List<BookingResource>();
+        return data ?? new List<BookingResource>();
     }
 
-    public async Task<IReadOnlyList<Event>> GetEventsAsync(DateOnly date, CancellationToken ct = default)
+    public async Task<IReadOnlyList<BookingEvent>> GetEventsAsync(DateOnly date, CancellationToken ct = default)
     {
         var headers = new Dictionary<string, string>
         {
@@ -34,8 +34,8 @@ public class CalendarService : ICalendarService
         };
 
         var path = $"/booking_agenda/ReadEvents/{date:yyyy-MM-dd}";
-        var data = await _apiClient.GetAsync<List<Event>>(path, null, headers, ct) ?? new List<Event>();
-        return data ?? new List<Event>();
+        var data = await _apiClient.GetAsync<List<BookingEvent>>(path, null, headers, ct) ?? new List<BookingEvent>();
+        return data ?? new List<BookingEvent>();
     }
 
     public async Task<BookingAgenda> GetBookingAgendaAsync(int bookingAgndaId, CancellationToken ct = default)

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace BACApp.Core.Models;
 
-public partial class Resource : ObservableObject
+public partial class BookingResource : ObservableObject
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }

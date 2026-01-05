@@ -1,10 +1,10 @@
 ﻿using Avalonia.Media;
-using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Text.Json.Serialization;
 
 namespace BACApp.Core.Models;
 
-public class Event
+public partial class BookingEvent : ObservableObject
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
@@ -33,11 +33,21 @@ public class Event
     [JsonPropertyName("rendering")]
     public string? Rendering { get; set; }
 
+    [JsonIgnore]
     public DateTimeOffset StartTime => DateTimeOffset.Parse(Start);
+    [JsonIgnore]
     public DateTimeOffset EndTime => DateTimeOffset.Parse(End);
+    [JsonIgnore]
+    public TimeSpan Duration => EndTime - StartTime;
 
+    [JsonIgnore]
     public IBrush? BackgroundBrush => !string.IsNullOrEmpty(BackgroundColor) ? Brush.Parse(BackgroundColor) : null;
+    [JsonIgnore]
     public IBrush? TextBrush => !string.IsNullOrEmpty(TextColor) ? Brush.Parse(TextColor) : null;
+    [JsonIgnore]
     public IBrush? BorderBrush => !string.IsNullOrEmpty(BorderColor) ? Brush.Parse(BorderColor) : null;
 
+    [ObservableProperty]
+    [JsonIgnore]
+    private string? _comment;
 }
