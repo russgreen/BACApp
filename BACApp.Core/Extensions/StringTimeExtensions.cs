@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace BACApp.Core.Extensions;
@@ -43,4 +44,5 @@ public static class StringTimeExtensions
 
         return $"{hours:00}:{minutes:00}";
     }
+
 }

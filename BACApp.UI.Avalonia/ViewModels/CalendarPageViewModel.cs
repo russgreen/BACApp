@@ -7,7 +7,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,10 +70,10 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
             var resources = await _calendarService.GetResourcesAsync(SelectedDay, ct);
             Resources = new ObservableCollection<BookingResource>(resources);
             
-            var events = await _calendarService.GetEventsAsync(SelectedDay, ct);
+            var events = await GetEventsFromTodayToSelectedDayAsync(SelectedDay, ct);
             Events = new ObservableCollection<BookingEvent>(events);
 
-           _ = SetMaintenanceHours(ct);
+           _ = SetMaintenanceHoursAsync(ct);
 
             SetMessageText();
         }
@@ -132,7 +134,42 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
         }
     }
 
-    private async Task SetMaintenanceHours(CancellationToken ct = default)
+    private async Task<IReadOnlyList<BookingEvent>> GetEventsFromTodayToSelectedDayAsync(DateOnly selectedDay, CancellationToken ct)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+
+        if (selectedDay <= today)
+        {
+            return await _calendarService.GetEventsAsync(selectedDay, ct);
+        }
+
+        var totalDays = selectedDay.DayNumber - today.DayNumber + 1;
+        var dayList = Enumerable.Range(0, totalDays).Select(i => today.AddDays(i)).ToArray();
+
+        // Modest concurrency: balance latency vs API load
+        const int maxConcurrency = 6;
+        using var throttler = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+
+        var tasks = dayList.Select(async day =>
+        {
+            await throttler.WaitAsync(ct);
+            try
+            {
+                var dayEvents = await _calendarService.GetEventsAsync(day, ct);
+                return dayEvents;
+            }
+            finally
+            {
+                throttler.Release();
+            }
+        });
+
+        var results = await Task.WhenAll(tasks);
+        return results.SelectMany(x => x).ToArray();
+    }
+
+
+    private async Task SetMaintenanceHoursAsync(CancellationToken ct = default)
     {
         if (SelectedDay < DateOnly.FromDateTime(DateTime.Today))
         {
@@ -142,9 +179,10 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
 
         // Snapshot to avoid collection changing while awaits are in flight
         var day = SelectedDay;
-        var resources = Resources.Where(x => x.Id < 100).ToArray();
 
-        // Tune as needed; keeps API/UI responsive
+        var resources = Resources.Where(x => x.Id < 100).ToArray();
+        var allEvents = Events.ToArray();
+
         const int maxConcurrency = 6;
         using var throttler = new SemaphoreSlim(maxConcurrency, maxConcurrency);
 
@@ -153,7 +191,6 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
             await throttler.WaitAsync(ct);
             try
             {
-                // fast parse: everything before " ("
                 var title = resource.Title ?? string.Empty;
                 var idx = title.IndexOf(" (", StringComparison.Ordinal);
                 var registration = (idx >= 0 ? title[..idx] : title).Trim();
@@ -163,6 +200,8 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
                     return;
                 }
 
+                var resourceId = resource.Id;
+
                 _logger.LogDebug("Fetching maintenance data for {registration}", registration);
 
                 var maintenanceData = await _techlogService.GetMaintenanceDataAsync(registration, day, ct);
@@ -171,20 +210,18 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
                     return;
                 }
 
-                _logger.LogDebug(
-                    "Maintenance data for {registration}: NextInspectionType={NextInspectionType}, TotalNextCheckHours={TotalNextCheckHours}",
-                    registration,
-                    maintenanceData.NextInspectionType,
-                    maintenanceData.TotalNextCheckHours);
-
-                // If SelectedDay changed while we were fetching, don't apply stale results
                 if (SelectedDay != day)
                 {
                     return;
                 }
 
-                var remaining = maintenanceData.TotalNextCheckHours.ToHoursMinutes();
-                resource.Comment = string.IsNullOrEmpty(remaining) ? string.Empty : $"Next check in {remaining}";
+                var baseRemaining = ParseHoursMinutesOrZero(maintenanceData.TotalNextCheckHours);
+
+                // Keep existing resource comment behavior (top-level)
+                resource.Comment = $"Next check in {FormatTotalHoursMinutes(baseRemaining)}";
+
+                // Apply BookingEvent.Comment per requirements
+                ApplyRemainingHoursToBookingEvents(resourceId, baseRemaining, allEvents);
             }
             catch (OperationCanceledException)
             {
@@ -196,7 +233,7 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to fetch maintenance data for {resourceTitle}", resource.Title);
+                _logger.LogError(ex, "Failed to set maintenance hours/comments for {resourceTitle}", resource.Title);
             }
             finally
             {
@@ -205,6 +242,87 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
         });
 
         await Task.WhenAll(tasks);
+    }
+
+    private void ApplyRemainingHoursToBookingEvents(int resourceId, TimeSpan totalNextCheckHours, BookingEvent[] allEvents)
+    {
+        var now = DateTimeOffset.Now;
+
+        var aircraftEvents = allEvents
+            .Where(e => e.ResourceId == resourceId)
+            .Where(e => !e.Title.Contains("maintenance", StringComparison.InvariantCultureIgnoreCase))
+            .Where(e => string.IsNullOrWhiteSpace(e.Rendering))
+            .OrderBy(e => e.EndTime)
+            .ToArray();
+
+        var remaining = totalNextCheckHours;
+
+        foreach (var ev in aircraftEvents)
+        {
+            // Requirement: for events when date is today and EndTime has passed,
+            // use maintenanceData.TotalNextCheckHours (raw)
+            if (ev.EndTime <= now)
+            {
+                ev.Comment = FormatTotalHoursMinutes(totalNextCheckHours);
+                continue;
+            }
+
+            // For all other events where EndTime has not passed, subtract estimated flight time cumulatively.
+            var flightTime = ev.GetFlightTime() ?? TimeSpan.Zero;
+            remaining -= flightTime;
+            if (remaining < TimeSpan.Zero)
+            {
+                remaining = TimeSpan.Zero;
+            }
+
+            ev.Comment = FormatTotalHoursMinutes(remaining);
+        }
+    }
+
+    private static TimeSpan ParseHoursMinutesOrZero(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return TimeSpan.Zero;
+        }
+
+        var s = value.Trim();
+        var parts = s.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (parts.Length is < 2 or > 3)
+        {
+            return TimeSpan.Zero;
+        }
+
+        if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var hours) || hours < 0)
+        {
+            return TimeSpan.Zero;
+        }
+
+        if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var minutes) || minutes is < 0 or > 59)
+        {
+            return TimeSpan.Zero;
+        }
+
+        var seconds = 0;
+        if (parts.Length == 3
+            && (!int.TryParse(parts[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) || seconds is < 0 or > 59))
+        {
+            return TimeSpan.Zero;
+        }
+
+        return new TimeSpan(hours, minutes, seconds);
+    }
+
+    private static string FormatTotalHoursMinutes(TimeSpan value)
+    {
+        if (value < TimeSpan.Zero)
+        {
+            value = TimeSpan.Zero;
+        }
+
+        var totalHours = (int)value.TotalHours;
+        return string.Create(CultureInfo.InvariantCulture, $"{totalHours:00}:{value.Minutes:00}");
     }
 
     private void SetMessageText()

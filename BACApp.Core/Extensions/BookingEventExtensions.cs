@@ -7,6 +7,14 @@ namespace BACApp.Core.Extensions;
 
 public static class BookingEventExtensions
 {
+
+    public static TimeSpan? GetFlightTime(this BookingEvent bookingEvent)
+    {
+        // Approximate flight time from booking duration
+        var estimatedFlightTime = bookingEvent.Duration * 0.42;
+        return estimatedFlightTime;
+    }
+
     /// <summary>
     /// Provides a simple approximation of hours remaining until the next check
     /// Estimated flight time is not store by Cloudbase so approximated as 0.42 of
@@ -18,10 +26,10 @@ public static class BookingEventExtensions
     public static TimeSpan? HoursToNextCheck(this BookingEvent bookingEvent)
     {
         // Approximate flight time from booking duration
-        var estimatedFlightTime = bookingEvent.Duration * 0.42;
+        var estimatedFlightTime = bookingEvent.GetFlightTime();
 
 
 
-        return null;
+        return estimatedFlightTime;
     }
 }

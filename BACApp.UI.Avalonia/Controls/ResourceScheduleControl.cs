@@ -7,6 +7,7 @@ using Avalonia.Media;
 using BACApp.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -149,6 +150,8 @@ namespace BACApp.UI.Avalonia.Controls
 
         private bool _isSyncingVerticalScroll;
 
+        private List<INotifyPropertyChanged> _subscribedEvents = new();
+
         public ResourceScheduleControl()
         {
             ResourcesProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.OnDataChanged());
@@ -161,6 +164,9 @@ namespace BACApp.UI.Avalonia.Controls
             EndHourProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
             TimeHeaderHeightProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
             MinHourWidthProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
+
+            // Was: Redraw() only. Must subscribe to item PropertyChanged when Events changes.
+            EventsProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.OnEventsChanged());
 
             PropertyChanged += (_, e) =>
             {
@@ -192,7 +198,69 @@ namespace BACApp.UI.Avalonia.Controls
 
             HookScrollSync();
 
+            SubscribeToEventChanges();
             Redraw();
+        }
+
+        //protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+        //{
+        //    base.OnDetachedFromVisualTree(e);
+        //    UnsubscribeFromEventChanges();
+        //}
+
+        private void OnEventsChanged()
+        {
+            SubscribeToEventChanges();
+            Redraw();
+        }
+
+        private void SubscribeToEventChanges()
+        {
+            UnsubscribeFromEventChanges();
+
+            var list = Events?.OfType<INotifyPropertyChanged>().ToList();
+            if (list == null || list.Count == 0)
+            {
+                _subscribedEvents = new List<INotifyPropertyChanged>();
+                return;
+            }
+
+            _subscribedEvents = list;
+            foreach (var ev in _subscribedEvents)
+            {
+                ev.PropertyChanged += OnEventPropertyChanged;
+            }
+        }
+
+        private void UnsubscribeFromEventChanges()
+        {
+            if (_subscribedEvents.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var ev in _subscribedEvents)
+            {
+                ev.PropertyChanged -= OnEventPropertyChanged;
+            }
+
+            _subscribedEvents.Clear();
+        }
+
+        private void OnEventPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            // Only redraw when something that impacts drawing changes.
+            if (e.PropertyName is nameof(BookingEvent.Comment)
+                or nameof(BookingEvent.Title)
+                or nameof(BookingEvent.Start)
+                or nameof(BookingEvent.End)
+                or nameof(BookingEvent.Rendering)
+                or nameof(BookingEvent.BackgroundColor)
+                or nameof(BookingEvent.BorderColor)
+                or nameof(BookingEvent.TextColor))
+            {
+                Redraw();
+            }
         }
 
         private void HookScrollSync()
@@ -458,7 +526,7 @@ namespace BACApp.UI.Avalonia.Controls
                     {
                         var tb = new TextBlock
                         {
-                            Text = clipped.Title,
+                            Text = $"{clipped.Title} {clipped.Comment}",
                             Foreground = item.Original.TextBrush,
                             Margin = new Thickness(6, 0, 6, 0),
                             VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center,
@@ -486,8 +554,12 @@ namespace BACApp.UI.Avalonia.Controls
                 ResourceId = ev.ResourceId,
                 Start = start.ToString(),
                 End = end.ToString(),
-                //BackgroundColor = ev.BackgroundBrush,
-                Title = ev.Title
+                Title = ev.Title,
+                Comment = ev.Comment,
+                BackgroundColor = ev.BackgroundColor,
+                BorderColor = ev.BorderColor,
+                TextColor = ev.TextColor,
+                Rendering = ev.Rendering
             };
         }
 
@@ -505,8 +577,12 @@ namespace BACApp.UI.Avalonia.Controls
                 ResourceId = ev.ResourceId,
                 Start = start.ToString(),
                 End = end.ToString(),
-                //BackgroundBrush = ev.BackgroundBrush,
-                Title = ev.Title
+                Title = ev.Title,
+                Comment = ev.Comment,
+                BackgroundColor = ev.BackgroundColor,
+                BorderColor = ev.BorderColor,
+                TextColor = ev.TextColor,
+                Rendering = ev.Rendering
             };
         }
     }
