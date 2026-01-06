@@ -2,9 +2,8 @@
   <Configurations>
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
-    <Platform Name="x86" />
   </Configurations>
-  <Project Path="BACApp.Core/BACApp.Core.csproj" />
+  <Project Path="build/_build.csproj" />
   <Project Path="source/BACApp.Core/BACApp.Core.csproj" />
   <Project Path="source/BACApp.UI/BACApp.UI.csproj" />
 </Solution>
