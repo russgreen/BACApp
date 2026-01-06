@@ -5,5 +5,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="BACApp.Core/BACApp.Core.csproj" />
-  <Project Path="BACApp.UI.Avalonia/BACApp.UI.Avalonia.csproj" Id="cda049cd-69ff-4ce7-bb2a-3e2b09c184e3" />
+  <Project Path="source/BACApp.Core/BACApp.Core.csproj" />
+  <Project Path="source/BACApp.UI/BACApp.UI.csproj" />
 </Solution>
