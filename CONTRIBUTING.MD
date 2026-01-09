@@ -1,0 +1,1 @@
+All non-nested types must be public unless explicitly justified.
