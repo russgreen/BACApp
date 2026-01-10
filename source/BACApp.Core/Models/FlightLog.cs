@@ -65,10 +65,21 @@ public class FlightLog
 
     public TimeSpan FlightTime => LandingTime - TakeOffTime;
 
+    public TimeSpan ChargeTime => FlightTime.Add(TimeSpan.FromMinutes(10));
+
     // Rounded to nearest minute for display (e.g., 1:24:30 -> 1:25)
     public TimeSpan BlockTimeRounded => RoundToNearestMinute(BlockTime);
 
     public TimeSpan FlightTimeRounded => RoundToNearestMinute(FlightTime);
+
+    public TimeSpan ChargeTimeRounded => RoundToNearestMinute(ChargeTime);
+
+    public double BlockTimeDecimal => Math.Round(BlockTimeRounded.TotalHours, 2);
+
+    public double FlightTimeDecimal => Math.Round(FlightTimeRounded.TotalHours, 2);
+
+    public double ChargeTimeDecimal => Math.Round(ChargeTimeRounded.TotalHours, 2);
+
 
     private static TimeSpan RoundToNearestMinute(TimeSpan value)
     {

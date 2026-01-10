@@ -43,15 +43,39 @@
             HeadersVisibility="All" 
             GridLinesVisibility="All"
             BorderThickness="1" BorderBrush="Gray" 
-            SelectionChanged="OnSelectionChanged">
+            SelectionChanged="OnSelectionChanged"
+            ShowTotalSummary="True"
+            TotalSummaryPosition="Bottom">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding FlightDate, StringFormat={}{0:yyyy-MM-dd}}" />
                 <DataGridTextColumn Header="Brakes Off" Binding="{Binding BrakesOffTime, StringFormat={}{0:HH\\:mm}}"/>
                 <DataGridTextColumn Header="Take Off" Binding="{Binding TakeOffTime, StringFormat={}{0:HH\\:mm}}" />
                 <DataGridTextColumn Header="Landing" Binding="{Binding LandingTime, StringFormat={}{0:HH\\:mm}}"  />
                 <DataGridTextColumn Header="Brakes On" Binding="{Binding BrakesOnTime, StringFormat={}{0:HH\\:mm}}" /> 
+
                 <DataGridTextColumn Header="Block Time" Binding="{Binding BlockTimeRounded, StringFormat={}{0:hh\\:mm}}" /> 
+                <DataGridTextColumn Header="Block Time" Binding="{Binding BlockTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
+
                 <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTimeRounded, StringFormat={}{0:hh\\:mm}}" />
+                <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Charge Time" Binding="{Binding ChargeTimeRounded, StringFormat={}{0:hh\\:mm}}" />
+                <DataGridTextColumn Header="Charge Time" Binding="{Binding ChargeTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 
