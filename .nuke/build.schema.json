@@ -26,7 +26,9 @@
       "enum": [
         "Clean",
         "Compile",
-        "Restore"
+        "Installer",
+        "Publish",
+        "Sign"
       ]
     },
     "Verbosity": {
@@ -100,13 +102,9 @@
   "allOf": [
     {
       "properties": {
-        "Configuration": {
+        "Solution": {
           "type": "string",
-          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
-          "enum": [
-            "Debug",
-            "Release"
-          ]
+          "description": "Path to a solution file that is automatically loaded"
         }
       }
     },
