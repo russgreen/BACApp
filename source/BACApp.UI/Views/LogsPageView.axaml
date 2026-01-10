@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BACApp.UI.Views.LogsPageView"
+             x:DataType="vm:LogsPageViewModel">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0" 
+                  ItemsSource="{Binding AllAircraftList}" 
+                  DisplayMemberBinding="{CompiledBinding Registration}"
+                  SelectedValue="{Binding SelectedAircraft}">
+        </ComboBox>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    Spacing="10" 
+                    Margin="0,10">
+            <TextBlock Text="From date:" 
+                       VerticalAlignment="Center"/>
+            <CalendarDatePicker SelectedDate="{Binding FromDate}" />
+            <TextBlock Text="To date:" 
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+            <CalendarDatePicker SelectedDate="{Binding ToDate}" />
+        </StackPanel>
+
+		<DataGrid Grid.Row="2" 
+            ItemsSource="{Binding FilteredFlightLogs}"
+            IsReadOnly="True" 
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="True"
+            CanUserSortColumns="True"
+            HeadersVisibility="All" 
+            GridLinesVisibility="All"
+            BorderThickness="1" BorderBrush="Gray" 
+            SelectionChanged="OnSelectionChanged"
+            ShowTotalSummary="True"
+            TotalSummaryPosition="Bottom">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding FlightDate, StringFormat={}{0:yyyy-MM-dd}}" />
+                <DataGridTextColumn Header="Brakes Off" Binding="{Binding BrakesOffTime, StringFormat={}{0:HH\\:mm}}"/>
+                <DataGridTextColumn Header="Take Off" Binding="{Binding TakeOffTime, StringFormat={}{0:HH\\:mm}}" />
+                <DataGridTextColumn Header="Landing" Binding="{Binding LandingTime, StringFormat={}{0:HH\\:mm}}"  />
+                <DataGridTextColumn Header="Brakes On" Binding="{Binding BrakesOnTime, StringFormat={}{0:HH\\:mm}}" /> 
+
+                <DataGridTextColumn Header="Block Time" Binding="{Binding BlockTimeRounded, StringFormat={}{0:hh\\:mm}}" /> 
+                <DataGridTextColumn Header="Block Time" Binding="{Binding BlockTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTimeRounded, StringFormat={}{0:hh\\:mm}}" />
+                <DataGridTextColumn Header="Flight Time" Binding="{Binding FlightTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Charge Time" Binding="{Binding ChargeTimeRounded, StringFormat={}{0:hh\\:mm}}" />
+                <DataGridTextColumn Header="Charge Time" Binding="{Binding ChargeTimeDecimal}">
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    Spacing="10" 
+                    Margin="0,10,0,0">
+            <Button Content="Export selected flights to CSV" 
+                    IsEnabled="{Binding HasLogsSelected}"
+                    Command="{Binding ExportLogsCommand}"/>
+        </StackPanel>
+
+    </Grid>
+
+
+</UserControl>
