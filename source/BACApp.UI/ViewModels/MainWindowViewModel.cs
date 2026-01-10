@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Reflection;
 
 namespace BACApp.UI.ViewModels;
 
@@ -60,8 +61,8 @@ internal partial class MainWindowViewModel : BaseViewModel
         _authService = authService;
         _pageFactory = pageFactory;
 
-
-        WindowTitle = $"Cloudbase App";
+        var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        WindowTitle = $"Cloudbase App [{informationVersion}]";
 
         WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (r, m) =>
         {
@@ -75,7 +76,7 @@ internal partial class MainWindowViewModel : BaseViewModel
                 IsReportsEnabled = true;
             }
 
-            WindowTitle = $"Cloudbase App : {_authService.UserCompany.CompanyName}";
+            WindowTitle = $"Cloudbase App [{informationVersion}] : {_authService.UserCompany.CompanyName}";
         });
 
         WeakReferenceMessenger.Default.Register<AutoLoginMessage>(this, (r, m) =>
