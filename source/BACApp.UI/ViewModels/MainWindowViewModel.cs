@@ -1,4 +1,5 @@
 ﻿using BACApp.Core.Messages;
+using BACApp.Core.Models;
 using BACApp.Core.Services;
 using BACApp.UI.Services;
 using BACApp.UI.ViewModels;
@@ -26,6 +27,18 @@ internal partial class MainWindowViewModel : BaseViewModel
     private bool _isLoggedIn = false;
 
     [ObservableProperty]
+    private bool _isAutoLogin = false;
+
+    [ObservableProperty]
+    private bool _isLogsEnabled = false;
+
+    [ObservableProperty]
+    private bool _isTechLogEnabled = false;
+
+    [ObservableProperty]
+    private bool _isReportsEnabled = false;
+
+    [ObservableProperty]
     private PageViewModel _currentPage;
 
 
@@ -50,14 +63,30 @@ internal partial class MainWindowViewModel : BaseViewModel
 
         WindowTitle = $"Cloudbase App";
 
-        CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
-
         WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (r, m) =>
         {
             CurrentPage = _pageFactory.GetPageViewModel<CalendarPageViewModel>();
             IsLoggedIn = true;
+
+            if (!IsAutoLogin)
+            {
+                IsLogsEnabled = true;
+                IsTechLogEnabled = true;
+                IsReportsEnabled = true;
+            }
+
             WindowTitle = $"Cloudbase App : {_authService.UserCompany.CompanyName}";
         });
+
+        WeakReferenceMessenger.Default.Register<AutoLoginMessage>(this, (r, m) =>
+        {
+            IsAutoLogin = true;
+            IsLogsEnabled = false;
+            IsTechLogEnabled = false;
+            IsReportsEnabled = false;
+        });
+
+        CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
 
     }
 

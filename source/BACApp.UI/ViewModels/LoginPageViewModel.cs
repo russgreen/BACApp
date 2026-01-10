@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,8 @@ internal partial class LoginPageViewModel : PageViewModel
                 Password = autoLogin.Password;
                 Debug.WriteLine("Auto login with saved credentials.");
                 LoginCommand.Execute(null);
+
+                WeakReferenceMessenger.Default.Send(new AutoLoginMessage(true));
             }
         }
         catch (Exception ex)

@@ -48,7 +48,7 @@
             </Button>
 
             <Button Command="{Binding GoToLogsCommand}" 
-                    IsEnabled="{Binding IsLoggedIn}"
+                    IsEnabled="{Binding IsLogsEnabled}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="🗒️" Margin="0,0,15,0"/>
@@ -57,7 +57,7 @@
             </Button>
 
              <Button Command="{Binding GoToTechLogsCommand}" 
-                    IsEnabled="{Binding IsLoggedIn}"
+                    IsEnabled="{Binding IsTechLogEnabled}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="🗒️" Margin="0,0,15,0"/>
@@ -66,7 +66,7 @@
             </Button>
 
             <Button Command="{Binding GoToReportsCommand}" 
-                    IsEnabled="{Binding IsLoggedIn}"
+                    IsEnabled="{Binding IsReportsEnabled}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="📊" Margin="0,0,15,0"/>
