@@ -8,7 +8,7 @@ namespace BACApp.UI;
 internal class Program
 {
     private static SingleInstanceCoordinator? _singleInstance;
-    private static readonly CancellationTokenSource SingleInstanceCts = new();
+    private static readonly CancellationTokenSource _singleInstanceCts = new();
 
     public static Action<SingleInstanceCoordinator.ActivationRequest>? ActivationHandler { get; internal set; }
 
@@ -31,11 +31,11 @@ internal class Program
         {
             ActivationHandler?.Invoke(request);
             return System.Threading.Tasks.Task.CompletedTask;
-        }, SingleInstanceCts.Token);
+        }, _singleInstanceCts.Token);
 
         var exitCode = BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
 
-        SingleInstanceCts.Cancel();
+        _singleInstanceCts.Cancel();
         _singleInstance.Dispose();
 
         return exitCode;
