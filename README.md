@@ -93,10 +93,12 @@ Avalonia desktop application:
 
 Avalonia apps can be published as self-contained single-file executables for various platforms. To publish for Linux and MacOS, run the following commands from the repo root:
 
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.Avalonia.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.Avalonia.csproj -c Release -r linux-arm64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.Avalonia.csproj -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.Avalonia.csproj -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r linux-arm64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
+
+
 
 ## Build automation (NUKE)
 

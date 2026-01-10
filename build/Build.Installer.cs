@@ -1,10 +1,12 @@
 ﻿using Nuke.Common;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 
 partial class Build
 {
     Target Installer => _ => _
-        .DependsOn(Sign)
+        .TriggeredBy(Sign)
+        .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
         .Executes(() =>
         {
         });
