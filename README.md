@@ -4,9 +4,9 @@ Cross-platform desktop client built with `Avalonia UI` and a shared `Core` libra
 
 ## Solution layout
 
-- `source/BACApp.UI` — Desktop UI app (`net10.0`, Avalonia)
-- `source/BACApp.Core` — Shared models/services (`net10.0`)
-- `build` — NUKE build project (`_build.csproj`, `Build.cs`)
+- `source/BACApp.UI` ï¿½ Desktop UI app (`net10.0`, Avalonia)
+- `source/BACApp.Core` ï¿½ Shared models/services (`net10.0`)
+- `build` ï¿½ NUKE build project (`_build.csproj`, `Build.cs`)
 
 ## Tech stack
 
@@ -51,8 +51,8 @@ dotnet run --project source/BACApp.UI/BACApp.UI.csproj
 
 Launch arguments:
 
-- `--maximize` — requests the primary instance to maximize
-- (default) — requests activation (bring to foreground)
+- `--maximize` ï¿½ requests the primary instance to maximize
+- (default) ï¿½ requests activation (bring to foreground)
 
 ### API configuration
 
@@ -93,12 +93,10 @@ Avalonia desktop application:
 
 Avalonia apps can be published as self-contained single-file executables for various platforms. To publish for Linux and MacOS, run the following commands from the repo root:
 
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r linux-arm64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\BACApp.UI.Avalonia\BACApp.UI.csproj -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
-
-
+- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r linux-arm64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
+- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
 
 ## Build automation (NUKE)
 

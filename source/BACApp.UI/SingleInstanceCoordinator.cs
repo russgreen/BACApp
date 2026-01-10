@@ -9,51 +9,65 @@ namespace BACApp.UI;
 
 internal sealed partial class SingleInstanceCoordinator : IDisposable
 {
-    private readonly string _appId;
-    private readonly string _mutexName;
     private readonly string _pipeName;
-    private readonly Mutex _mutex;
-    private readonly bool _ownsMutex;
+    private readonly FileStream? _lockStream;
 
     public SingleInstanceCoordinator(string appId)
     {
-        _appId = appId ?? throw new ArgumentNullException(nameof(appId));
+        if (string.IsNullOrWhiteSpace(appId))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(appId));
+        }
 
-        // Keep names stable and OS-friendly.
-        // Global\ is Windows-only; omit it for cross-platform.
-        _mutexName = $"{_appId}.singleinstance";
-        _pipeName = $"{_appId}.activation";
-
-        _mutex = new Mutex(initiallyOwned: true, name: _mutexName, createdNew: out _ownsMutex);
+        _pipeName = $"{SanitizeName(appId)}.activation";
+        _lockStream = TryAcquireLockStream(appId);
     }
 
-    public bool IsPrimaryInstance => _ownsMutex;
+    public bool IsPrimaryInstance => _lockStream is not null;
 
     public async Task<int> SendActivationAsync(ActivationRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            await using var client = new NamedPipeClientStream(
-                serverName: ".",
-                pipeName: _pipeName,
-                direction: PipeDirection.Out,
-                options: PipeOptions.Asynchronous);
+            // Retry briefly to allow the primary to finish starting the server.
+            for (var attempt = 0; attempt < 12; attempt++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            // Small timeout so a wedged server doesn't hang startup.
-            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(750));
+                try
+                {
+                    await using var client = new NamedPipeClientStream(
+                        serverName: ".",
+                        pipeName: _pipeName,
+                        direction: PipeDirection.Out,
+                        options: PipeOptions.Asynchronous);
 
-            await client.ConnectAsync(timeoutCts.Token).ConfigureAwait(false);
+                    using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                    timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(250));
 
-            await using var writer = new StreamWriter(client) { AutoFlush = true };
-            await writer.WriteLineAsync(request.ToWireValue()).ConfigureAwait(false);
+                    await client.ConnectAsync(timeoutCts.Token).ConfigureAwait(false);
 
-            return 0;
+                    await using var writer = new StreamWriter(client) { AutoFlush = true };
+                    await writer.WriteLineAsync(request.ToWireValue()).ConfigureAwait(false);
+
+                    return 0;
+                }
+                catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+                {
+                    // connect timeout; retry
+                }
+                catch (IOException)
+                {
+                    // server not ready; retry
+                }
+
+                await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken).ConfigureAwait(false);
+            }
+
+            return 3;
         }
         catch
         {
-            // If we can't reach the primary, let this instance continue (fallback).
-            // Returning non-zero allows caller to decide.
             return 2;
         }
     }
@@ -99,12 +113,45 @@ internal sealed partial class SingleInstanceCoordinator : IDisposable
 
     public void Dispose()
     {
-        if (_ownsMutex)
+        _lockStream?.Dispose();
+    }
+
+    private static FileStream? TryAcquireLockStream(string appId)
+    {
+        var baseDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+        if (string.IsNullOrWhiteSpace(baseDir))
         {
-            try { _mutex.ReleaseMutex(); } catch { }
+            baseDir = AppContext.BaseDirectory;
         }
 
-        _mutex.Dispose();
+        var dir = Path.Combine(baseDir, SanitizeName(appId));
+        Directory.CreateDirectory(dir);
+
+        var lockPath = Path.Combine(dir, "singleinstance.lock");
+
+        try
+        {
+            // FileShare.None gives us an exclusive lock across processes on Windows/Linux/macOS.
+            return new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string SanitizeName(string value)
+    {
+        Span<char> buffer = stackalloc char[value.Length];
+        var written = 0;
+
+        foreach (var ch in value)
+        {
+            buffer[written++] = char.IsLetterOrDigit(ch) ? ch : '_';
+        }
+
+        return new string(buffer[..written]);
     }
 
     internal enum ActivationRequest
