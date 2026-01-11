@@ -56,12 +56,12 @@
               </StackPanel>
             </Button>
 
-             <Button Command="{Binding GoToTechLogsCommand}" 
-                    IsEnabled="{Binding IsTechLogEnabled}"
+             <Button Command="{Binding GoToLogsAirframeCommand}" 
+                    IsEnabled="{Binding IsLogsAirframeEnabled}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="🗒️" Margin="0,0,15,0"/>
-                <TextBlock Text="Tech Logs"/>
+                <TextBlock Text="Logs Airframe"/>
               </StackPanel>
             </Button>
 

@@ -34,7 +34,7 @@ internal partial class MainWindowViewModel : BaseViewModel
     private bool _isLogsEnabled = false;
 
     [ObservableProperty]
-    private bool _isTechLogEnabled = false;
+    private bool _isLogsAirframeEnabled = false;
 
     [ObservableProperty]
     private bool _isReportsEnabled = false;
@@ -72,7 +72,7 @@ internal partial class MainWindowViewModel : BaseViewModel
             if (!IsAutoLogin)
             {
                 IsLogsEnabled = true;
-                IsTechLogEnabled = true;
+                IsLogsAirframeEnabled = true;
                 IsReportsEnabled = true;
             }
 
@@ -83,7 +83,7 @@ internal partial class MainWindowViewModel : BaseViewModel
         {
             IsAutoLogin = true;
             IsLogsEnabled = false;
-            IsTechLogEnabled = false;
+            IsLogsAirframeEnabled = false;
             IsReportsEnabled = false;
         });
 
@@ -112,6 +112,6 @@ internal partial class MainWindowViewModel : BaseViewModel
     private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
 
     [RelayCommand]
-    private void GoToTechLogs() => CurrentPage = _pageFactory.GetPageViewModel<TechLogsPageViewModel>();
+    private void GoToLogsAirframe() => CurrentPage = _pageFactory.GetPageViewModel<LogsAirframePageViewModel>();
 
 }
