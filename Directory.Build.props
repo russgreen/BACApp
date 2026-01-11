@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Company>Russell Green</Company>
+
+    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionSuffix>BETA.2</VersionSuffix>
+    <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+
+    <Authors>Russ Green</Authors>
+    <Title>BAC Cloudbase App</Title>
+	<Copyright>Copyright © Russell Green</Copyright>
+	  
+  </PropertyGroup> 
+</Project>
