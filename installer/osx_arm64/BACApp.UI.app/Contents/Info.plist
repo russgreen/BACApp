@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <!-- Display / general -->
+    <key>CFBundleName</key>
+    <string>BACApp.UI</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>BACApp.UI</string>
+
+    <!-- Unique bundle identifier - replace with your reverse-DNS id -->
+    <key>CFBundleIdentifier</key>
+    <string>uk.co.bristolaeroclub.bacapp.ui</string>
+
+    <!-- Versioning -->
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <!-- Executable file inside Contents/MacOS -->
+    <key>CFBundleExecutable</key>
+    <string>BACApp.UI</string>
+
+    <!-- Package type -->
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <!-- Icon (optional) -->
+    <key>CFBundleIconFile</key>
+    <string>BAC.icns</string>
+
+    <!-- App capabilities (GUI app) -->
+    <key>LSBackgroundOnly</key>
+    <false/>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.12</string>
+  </dict>
+</plist>
