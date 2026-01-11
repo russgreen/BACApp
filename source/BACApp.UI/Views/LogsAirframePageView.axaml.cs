@@ -8,33 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace BACApp.UI.Views;
 
-public partial class LogsPageView : UserControl
+public partial class LogsAirframePageView : UserControl
 {
-    public LogsPageView()
+    public LogsAirframePageView()
     {
         InitializeComponent();
 
         AttachedToVisualTree += (_, _) =>
         {
-            if (DataContext is LogsPageViewModel vm)
+            if (DataContext is LogsAirframePageViewModel vm)
             {
                 vm.PickExportFilePathAsync = PickExportFilePathAsync;
             }
         };
-    }
-
-    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var dataGrid = sender as DataGrid;
-        var viewModel = this.DataContext as LogsPageViewModel;
-        if (viewModel != null && dataGrid != null)
-        {
-            viewModel.SelectedFlightLogs = new System.Collections.ObjectModel.ObservableCollection<FlightLog>(dataGrid.SelectedItems.Cast<FlightLog>());
-        }
     }
 
     private async Task<string?> PickExportFilePathAsync()
@@ -45,11 +34,11 @@ public partial class LogsPageView : UserControl
             return null;
         }
 
-        var aircraftReg = (DataContext as LogsPageViewModel)?.SelectedAircraft?.Registration ?? "unknown";
-        var fromDate = (DataContext as LogsPageViewModel)?.FromDate ?? DateTime.Now.AddMonths(-1);
-        var toDate = (DataContext as LogsPageViewModel)?.ToDate ?? DateTime.Now;
+        var aircraftReg = (DataContext as LogsAirframePageViewModel)?.SelectedAircraft?.Registration ?? "unknown";
+        var fromDate = (DataContext as LogsAirframePageViewModel)?.FromDate ?? DateTime.Now.AddMonths(-1);
+        var toDate = (DataContext as LogsAirframePageViewModel)?.ToDate ?? DateTime.Now;
 
-        var suggestedName = $"FlightLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        var suggestedName = $"AirframeTechLog_{aircraftReg}_{fromDate:yyyyMMdd}-{toDate:yyyyMMdd}.csv";
 
         var options = new FilePickerSaveOptions
         {

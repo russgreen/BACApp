@@ -32,6 +32,8 @@
                         VerticalAlignment="Center" 
                         Margin="10,0,0,0"/>
             <CalendarDatePicker SelectedDate="{Binding ToDate}" />
+
+            <Button Content="Reload logs" Command="{Binding ReloadFlightLogsCommand}" />
         </StackPanel>
 
 		<DataGrid Grid.Row="2" 

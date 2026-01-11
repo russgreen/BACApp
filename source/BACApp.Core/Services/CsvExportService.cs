@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using BACApp.Core.Attributes;
 
 namespace BACApp.Core.Services;
 
@@ -29,9 +30,16 @@ public class CsvExportService : ICsvExportService
         var props = type
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Where(p => p.CanRead)
+            .Where(p => !Attribute.IsDefined(p, typeof(CsvIgnoreAttribute)))
             .ToArray();
 
-        Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+        var dir = Path.GetDirectoryName(fullPath);
+        if (string.IsNullOrWhiteSpace(dir))
+        {
+            throw new ArgumentException("Full path must include a directory.", nameof(fullPath));
+        }
+
+        Directory.CreateDirectory(dir);
 
         // Use UTF-8 with BOM to improve compatibility with Excel
         using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None);

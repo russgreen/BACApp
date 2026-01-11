@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             xmlns:models="using:BACApp.Core.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BACApp.UI.Views.LogsAirframePageView"
+             x:DataType="vm:LogsAirframePageViewModel">
+  
+   <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0" 
+                  ItemsSource="{Binding AllAircraftList}" 
+                  DisplayMemberBinding="{CompiledBinding Registration}"
+                  SelectedValue="{Binding SelectedAircraft}">
+        </ComboBox>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    Spacing="10" 
+                    Margin="0,10">
+            <TextBlock Text="From date:" 
+                       VerticalAlignment="Center"/>
+            <CalendarDatePicker SelectedDate="{Binding FromDate}" />
+            <TextBlock Text="To date:" 
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+            <CalendarDatePicker SelectedDate="{Binding ToDate}" />
+
+            <Button Content="Reload logs" Command="{Binding ReloadFlightLogsCommand}" />
+        </StackPanel>
+
+		<DataGrid Grid.Row="2" 
+            ItemsSource="{Binding DailySummaries}"
+            IsReadOnly="True" 
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="True"
+            CanUserSortColumns="False"
+            HeadersVisibility="All" 
+            GridLinesVisibility="All"
+            BorderThickness="1" BorderBrush="Gray" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}" />
+                <DataGridTextColumn Header="No. Flights" Binding="{Binding FlightCount}" />
+                <DataGridTextColumn Header="Hours" Binding="{Binding TotalFlightHours, StringFormat={}{0:00}}" />
+                <DataGridTextColumn Header="Mins" Binding="{Binding TotalFlightMinutes, StringFormat={}{0:00}}" />
+            
+                 <DataGridTextColumn Header="Total Hours" Binding="{Binding EndOfDayAirframeHours, StringFormat={}{0:00}}" />
+                <DataGridTextColumn Header="Total Mins" Binding="{Binding EndOfDayAirframeMinutes, StringFormat={}{0:00}}"  />
+            
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    Spacing="10" 
+                    Margin="0,10,0,0">
+            <Button Content="Export logs to CSV" 
+                    IsEnabled="{Binding HasDailySummaries}"
+                    Command="{Binding ExportLogsCommand}"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
