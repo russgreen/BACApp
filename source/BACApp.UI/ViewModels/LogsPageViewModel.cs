@@ -41,9 +41,6 @@ internal partial class LogsPageViewModel : PageViewModel
     private DateTime _toDate;
 
     [ObservableProperty]
-    private List<FlightLog> _allFlightLogs;
-
-    [ObservableProperty]
     private ObservableCollection<FlightLog> _filteredFlightLogs;
 
     [ObservableProperty]
@@ -51,6 +48,8 @@ internal partial class LogsPageViewModel : PageViewModel
     private ObservableCollection<FlightLog> _selectedFlightLogs;
 
     public bool HasLogsSelected => SelectedFlightLogs != null && SelectedFlightLogs.Count > 0;
+
+    public Func<Task<string?>>? PickExportFilePathAsync { get; set; }
 
     public LogsPageViewModel(ILogger<LogsPageViewModel>logger,
         IAuthService authService,
@@ -70,21 +69,32 @@ internal partial class LogsPageViewModel : PageViewModel
 
         SelectedFlightLogs = new ObservableCollection<FlightLog>();
         FilteredFlightLogs = new ObservableCollection<FlightLog>();
-        AllFlightLogs = new List<FlightLog>();
 
         // Defer async work; do not block constructor
         LoadAsync().ConfigureAwait(false);
     }
 
     [RelayCommand]
-    private void ExportLogs()
+    private async Task ExportLogsAsync()
     {
         // Example default export location. You can replace this with a SaveFile dialog from the View if desired.
         //TODO handle output in a cross platform way
-        var defaultDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        var aircraftReg = SelectedAircraft?.Registration ?? "unknown";
-        var fileName = $"FlightLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-        var fullPath = Path.Combine(defaultDir, fileName);
+        var picker = PickExportFilePathAsync;
+        if (picker is null)
+        {
+            _logger.LogWarning("Export requested but no file picker delegate is configured.");
+            return;
+        }
+
+        var fullPath = await picker();
+        if (string.IsNullOrWhiteSpace(fullPath))
+        {
+            return;
+        }
+
+        //var aircraftReg = SelectedAircraft?.Registration ?? "unknown";
+        //var fileName = $"FlightLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        //var fullPath = Path.Combine(preferredDir, fileName);
 
         _csvExportService.Export(SelectedFlightLogs, fullPath);
     }
@@ -104,90 +114,47 @@ internal partial class LogsPageViewModel : PageViewModel
         if (AllAircraftList != null && AllAircraftList.Count > 0)
         {
             SelectedAircraft = AllAircraftList.First();
+            await ReloadFlightLogsAsync(ct);
         }
     }
 
-
-    partial void OnSelectedAircraftChanged(Aircraft value)
-    {
-        LoadAllFlightLogsAsync();
-    }
-
-    partial void OnFromDateChanged(DateTime value)
-    {
-        ApplyFilter();
-    }
-
-    partial void OnToDateChanged(DateTime value)
-    {
-        ApplyFilter();
-    }
-
-    private async Task LoadAllFlightLogsAsync(CancellationToken ct = default)
+    [RelayCommand]
+    private async Task ReloadFlightLogsAsync(CancellationToken ct)
     {
         if (_authService.UserCompany is null || SelectedAircraft is null)
         {
-            AllFlightLogs = new List<FlightLog>();
-            ApplyFilter();
+            FilteredFlightLogs = new ObservableCollection<FlightLog>();
             return;
+        }
+
+        var from = DateOnly.FromDateTime(FromDate);
+        var to = DateOnly.FromDateTime(ToDate);
+
+        if (from > to)
+        {
+            (from, to) = (to, from);
         }
 
         try
         {
             var logs = await _flightLogsService.GetFlightLogsAsync(
-                 SelectedAircraft.Registration, ct);
+                SelectedAircraft.Registration, from, to, ct);
 
-            AllFlightLogs = logs
+            var sorted = logs
                 .OrderByDescending(x => x.FlightDate)
                 .ThenByDescending(x => x.BrakesOffTime)
                 .ToList();
 
-            ApplyFilter();
+            FilteredFlightLogs = new ObservableCollection<FlightLog>(sorted);
         }
-        catch (OperationCanceledException) { /* ignore canceled loads */ }
-        catch (JsonException ex)
+        catch (OperationCanceledException)
         {
-            // TODO: log response body or switch to a DTO matching server payload
-            AllFlightLogs = new List<FlightLog>();
-            ApplyFilter();
+            // ignored
         }
-    }
-
-    private void ApplyFilter()
-    {
-        var source = AllFlightLogs;
-        if (source is null || source.Count == 0)
+        catch (JsonException)
         {
-            // Replace with empty to trigger a single reset on the UI
             FilteredFlightLogs = new ObservableCollection<FlightLog>();
-            return;
         }
-
-        var from = FromDate.Date;
-        var to = ToDate.Date;
-
-        // Ensure proper bounds (swap if needed)
-        if (from > to)
-        {
-            var tmp = from;
-            from = to;
-            to = tmp;
-        }
-
-        // Single pass filter: avoids multiple enumerations, minimizes allocations
-        var result = new List<FlightLog>(capacity: source.Count);
-        for (int i = 0; i < source.Count; i++)
-        {
-            var log = source[i];
-            var d = log.FlightDate.Date;
-            if (d >= from && d <= to)
-            {
-                result.Add(log);
-            }
-        }
-
-        // Replace collection to emit a single reset for the DataGrid
-        FilteredFlightLogs = new ObservableCollection<FlightLog>(result);
     }
 
 }

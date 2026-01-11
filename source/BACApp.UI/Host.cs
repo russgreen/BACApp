@@ -84,8 +84,8 @@ internal static class Host
 
                 services.AddTransient<CalendarPageViewModel>();
                 services.AddTransient<LogsPageViewModel>();
-
                 services.AddTransient<LogsAirframePageViewModel>();
+
                 services.AddTransient<ReportsPageViewModel>();
             })
             .Build();
