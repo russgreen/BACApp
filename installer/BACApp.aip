@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="23.3" version="23.3" Modules="simple" RootPath="." Language="en_GB" Id="{BF053AE7-D578-4A42-B7D1-F3DEE2C81CE9}">
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_CORE_VERSION"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_DISPLAY" MultiBuildValue="DefaultBuild:10.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_VERSION" MultiBuildValue="DefaultBuild:10.0" ValueLocId="-"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPPRODUCTICON" Value="BAC.exe" Type="8"/>
+    <ROW Property="Manufacturer" Value="Russ Green"/>
+    <ROW Property="ProductCode" Value="2057:{8CB995BD-505D-4F39-A6F4-9D0E5F319BF6} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="BACApp"/>
+    <ROW Property="ProductVersion" Value="0.2.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{810777EA-E40B-48B1-AFCA-DF6EA1EA5783}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1" DirectoryOptions="3"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="lib_Dir" Directory_Parent="win_Dir" DefaultDir="lib" DirectoryOptions="3"/>
+    <ROW Directory="native_Dir" Directory_Parent="winx64_Dir" DefaultDir="native" DirectoryOptions="3"/>
+    <ROW Directory="net10.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net10.0" DirectoryOptions="3"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes" DirectoryOptions="3"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win" DirectoryOptions="3"/>
+    <ROW Directory="winx64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x64" DirectoryOptions="3"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
+    <ROW Component="APPDIR" Value="{FDD92764-71E5-4508-893F-37BCBEE13EFB}"/>
+    <ROW Component="ProductInformation" Value="{FD3C9771-EDCD-4211-97DA-0ECA6114B05D}"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="APPDIR" ComponentId="{FDD92764-71E5-4508-893F-37BCBEE13EFB}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="Avalonia.Base.dll" ComponentId="{C7CEFDD8-B963-4313-A32F-FA655AE2DE11}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Base.dll"/>
+    <ROW Component="Avalonia.Controls.DataGrid.dll" ComponentId="{CE82E143-66D8-409D-9DDA-9904904232A6}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Controls.DataGrid.dll"/>
+    <ROW Component="Avalonia.Controls.dll" ComponentId="{E040FF68-EC96-42E9-9015-FF4CD0CB4C97}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Controls.dll"/>
+    <ROW Component="Avalonia.DesignerSupport.dll" ComponentId="{998F82A4-2F25-49E8-BF45-2D9F429FFB0D}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.DesignerSupport.dll"/>
+    <ROW Component="Avalonia.Desktop.dll" ComponentId="{4C3EF05F-89FF-4490-941F-A23C14DC38C3}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Desktop.dll"/>
+    <ROW Component="Avalonia.Dialogs.dll" ComponentId="{9C9C29DC-49C2-4297-B938-E2D087ABE240}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Dialogs.dll"/>
+    <ROW Component="Avalonia.Fonts.Inter.dll" ComponentId="{08116619-AD02-4B06-8B9B-3CBE0C7679D1}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Fonts.Inter.dll"/>
+    <ROW Component="Avalonia.FreeDesktop.dll" ComponentId="{186135C1-1D67-4A19-8BD9-DE8F3F27134E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.FreeDesktop.dll"/>
+    <ROW Component="Avalonia.Markup.Xaml.dll" ComponentId="{FD1325BE-F3C2-4E21-8A58-6798B6135013}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Markup.Xaml.dll"/>
+    <ROW Component="Avalonia.Markup.dll" ComponentId="{05272488-4ACC-456D-8A50-B0325FC661BC}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Markup.dll"/>
+    <ROW Component="Avalonia.Metal.dll" ComponentId="{DEC69D3C-32D3-4EC6-9EDB-16EEAD5E413E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Metal.dll"/>
+    <ROW Component="Avalonia.MicroCom.dll" ComponentId="{EDD609E5-E4BA-45F8-905A-9547CCEABFC7}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.MicroCom.dll"/>
+    <ROW Component="Avalonia.Native.dll" ComponentId="{550DE405-A226-4AD9-945A-7C6BBA06D35B}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Native.dll"/>
+    <ROW Component="Avalonia.OpenGL.dll" ComponentId="{D217A732-A51E-4D0F-B309-4D4F65B13DC8}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.OpenGL.dll"/>
+    <ROW Component="Avalonia.Remote.Protocol.dll" ComponentId="{1BD5949D-BAB0-4A5A-8B24-28D2EB9D57C8}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Remote.Protocol.dll"/>
+    <ROW Component="Avalonia.Skia.dll" ComponentId="{D327C33F-8589-4FCF-BF35-E8FFC5A72ED0}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Skia.dll"/>
+    <ROW Component="Avalonia.Themes.Fluent.dll" ComponentId="{0E54B165-82D2-4F17-8621-F4232639486A}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Themes.Fluent.dll"/>
+    <ROW Component="Avalonia.Vulkan.dll" ComponentId="{B2682182-B000-4CCC-8C7E-F22E5F2B8328}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Vulkan.dll"/>
+    <ROW Component="Avalonia.Win32.Automation.dll" ComponentId="{4DDF5B3E-2128-4037-98BA-1AB8F948CF35}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Win32.Automation.dll"/>
+    <ROW Component="Avalonia.Win32.dll" ComponentId="{DE31DF1F-1538-411F-94ED-98E7A3CFC82E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Win32.dll"/>
+    <ROW Component="Avalonia.X11.dll" ComponentId="{86421E8F-A8A6-4DFC-8277-508708A2F4B2}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.X11.dll"/>
+    <ROW Component="Avalonia.Xaml.Interactions.dll" ComponentId="{3BA40D24-6732-49A5-AD5C-3984C23CBBDB}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Xaml.Interactions.dll"/>
+    <ROW Component="Avalonia.Xaml.Interactivity.dll" ComponentId="{E716A555-F7F2-49E8-9113-926CDAEB0A7E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Xaml.Interactivity.dll"/>
+    <ROW Component="Avalonia.dll" ComponentId="{58755B2B-D22A-4F08-B1CE-49E7A5945642}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.dll"/>
+    <ROW Component="BACApp.Core.dll" ComponentId="{C58B3B47-8627-4034-90E3-5458D924AD84}" Directory_="APPDIR" Attributes="0" KeyPath="BACApp.Core.dll"/>
+    <ROW Component="BACApp.UI.deps.json" ComponentId="{5E1DF480-8BBB-4DDB-8474-09BD3B0CCC95}" Directory_="APPDIR" Attributes="0" KeyPath="BACApp.UI.deps.json" Type="0"/>
+    <ROW Component="BACApp.UI.dll" ComponentId="{AF51BD26-8CB9-4153-A990-6D4A1C70FB8C}" Directory_="APPDIR" Attributes="0" KeyPath="BACApp.UI.dll"/>
+    <ROW Component="BACApp.UI.exe" ComponentId="{74857577-28E9-416C-B754-9F706430E6F1}" Directory_="APPDIR" Attributes="256" KeyPath="BACApp.UI.exe"/>
+    <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{218FD366-2086-4011-A80F-7BAF38C89C67}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
+    <ROW Component="HarfBuzzSharp.dll" ComponentId="{A81CA6C6-39E7-4A88-8B68-4EC89EB9FA1A}" Directory_="APPDIR" Attributes="0" KeyPath="HarfBuzzSharp.dll"/>
+    <ROW Component="MicroCom.Runtime.dll" ComponentId="{270D3EA2-2C50-4139-B014-DBACB80C0843}" Directory_="APPDIR" Attributes="0" KeyPath="MicroCom.Runtime.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{59DEB575-583C-49E0-8564-C278EBBE68A4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{57D60E0D-BF4D-4658-8177-3907F7EBD4EC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{44EFDC05-E94E-43D2-A616-6AC3DECE9AA8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{6D3848E7-527E-4929-8502-C67B0F9F495C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{C56DAAB3-0607-4E10-9A98-1AB989102D29}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{56909354-AC95-4FA6-9041-B811113A8940}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{68CB7430-8183-4A4B-923F-DF645B737480}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{ADB8CAEF-721C-481F-B5E7-AF878E250C0C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInj_1_ection.dll" ComponentId="{68144EE2-C212-4F9A-AF02-29486F4336F1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{10E8934A-258A-4952-9C83-C8E331676404}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.Abstractions.dll" ComponentId="{C6AF55A8-78F1-4518-8C76-1BB61231C541}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.dll" ComponentId="{F78248FB-9D6B-483C-A703-6A8AA42A78F3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{9C1F1947-0A81-490A-A92F-4C05C0386FDA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{F93B7B15-7B06-4C95-82B0-BEFA77939537}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{BDC57BB5-C7B0-4FA1-845F-8E0A8819CB55}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{F29E2F8A-D602-45A0-80BB-BB3BFAB534F2}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{4E5C9BE2-809B-42C7-82FA-F7FD76C33A66}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Http.dll" ComponentId="{FA9FD30E-7809-4D3F-B482-67B93307A1B6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Http.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{DB4A5A91-3E2B-4612-BB5C-DFA70FB7A6B4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{B947B92D-84C7-4689-8CE4-0371DEB79060}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{F6AD0422-1AFF-4915-AD91-EAB4F3F21D86}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{4544B0E1-5AFE-4862-A536-4DE3C23D99E9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{A772DEFF-FD7F-4ABF-97C2-E8205CC3DA4B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{FE92493F-5A27-47F9-A479-803CC48E66FD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{F7CFA117-B2F6-48A9-8B45-10818D1DDA78}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{EFB6EC03-A39E-4353-9A35-3CA33CD173CC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{060314FD-6FDE-4E82-9B9C-254B56B43F0B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{45A92018-EDCB-40E7-BEC7-BC5117349277}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{FD3C9771-EDCD-4211-97DA-0ECA6114B05D}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{3F0DBEAC-7901-4A6F-AB1B-336F44998EBA}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="Serilog.Extensions.Hosting.dll" ComponentId="{B8C6C6A3-95B4-4C9E-B873-C77F95F9EC40}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Hosting.dll"/>
+    <ROW Component="Serilog.Extensions.Logging.dll" ComponentId="{33727E49-73C3-4802-A334-C793C1F28C52}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Logging.dll"/>
+    <ROW Component="Serilog.Sinks.Async.dll" ComponentId="{917CEF2E-58C4-4F08-A02C-7617CF44A27A}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Async.dll"/>
+    <ROW Component="Serilog.Sinks.Debug.dll" ComponentId="{7AEA86EE-EE39-4CAC-811D-70221F1642FC}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll"/>
+    <ROW Component="Serilog.Sinks.File.dll" ComponentId="{B0EC2803-06BF-4C46-805F-4810E5A28BC9}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
+    <ROW Component="Serilog.dll" ComponentId="{A975E766-7BFE-47FD-B477-AA2F9905A2F9}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
+    <ROW Component="SkiaSharp.dll" ComponentId="{CEB0F2F0-4ED7-433E-AC29-EA80FC7625FD}" Directory_="APPDIR" Attributes="0" KeyPath="SkiaSharp.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.Messages.dll" ComponentId="{2D951AC4-6229-4F0D-9B02-2ED0CC9AA25C}" Directory_="net10.0_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B6E5A3E7-4A22-4EFB-A284-B931AD139543}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll_1" ComponentId="{962BDD11-7AC5-4585-80D5-8FAB09C838AC}" Directory_="net10.0_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll_1"/>
+    <ROW Component="Tmds.DBus.Protocol.dll" ComponentId="{41ED9B15-0A17-4F19-845A-9827FF84AB30}" Directory_="APPDIR" Attributes="0" KeyPath="Tmds.DBus.Protocol.dll"/>
+    <ROW Component="av_libglesv2.dll" ComponentId="{F6A977E2-59A8-4CDA-81C0-C56045479C8E}" Directory_="native_Dir" Attributes="256" KeyPath="av_libglesv2.dll"/>
+    <ROW Component="libHarfBuzzSharp.dll" ComponentId="{C71089FE-1037-4D85-9732-BA3B347E0EF6}" Directory_="native_Dir" Attributes="256" KeyPath="libHarfBuzzSharp.dll"/>
+    <ROW Component="libSkiaSharp.dll" ComponentId="{A586A04B-1F12-44F1-885D-AD86AC0527D1}" Directory_="native_Dir" Attributes="256" KeyPath="libSkiaSharp.dll"/>
+    <ROW Component="runtimes" ComponentId="{AD416D41-D524-4F4E-90F8-DF3513107BE3}" Directory_="runtimes_Dir" Attributes="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="Avalonia.Base.dll" Component_="Avalonia.Base.dll" FileName="AVALON~1.DLL|Avalonia.Base.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Base.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Controls.DataGrid.dll" Component_="Avalonia.Controls.DataGrid.dll" FileName="AVALON~2.DLL|Avalonia.Controls.DataGrid.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Controls.DataGrid.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Controls.dll" Component_="Avalonia.Controls.dll" FileName="AVALON~3.DLL|Avalonia.Controls.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Controls.dll" SelfReg="false"/>
+    <ROW File="Avalonia.DesignerSupport.dll" Component_="Avalonia.DesignerSupport.dll" FileName="AVALON~4.DLL|Avalonia.DesignerSupport.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.DesignerSupport.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Desktop.dll" Component_="Avalonia.Desktop.dll" FileName="AVALON~5.DLL|Avalonia.Desktop.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Desktop.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Dialogs.dll" Component_="Avalonia.Dialogs.dll" FileName="AVALON~6.DLL|Avalonia.Dialogs.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Dialogs.dll" SelfReg="false"/>
+    <ROW File="Avalonia.dll" Component_="Avalonia.dll" FileName="Avalonia.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Fonts.Inter.dll" Component_="Avalonia.Fonts.Inter.dll" FileName="AVALON~7.DLL|Avalonia.Fonts.Inter.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Fonts.Inter.dll" SelfReg="false"/>
+    <ROW File="Avalonia.FreeDesktop.dll" Component_="Avalonia.FreeDesktop.dll" FileName="AVALON~8.DLL|Avalonia.FreeDesktop.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.FreeDesktop.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Markup.dll" Component_="Avalonia.Markup.dll" FileName="AVALON~9.DLL|Avalonia.Markup.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Markup.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Markup.Xaml.dll" Component_="Avalonia.Markup.Xaml.dll" FileName="AVALO~10.DLL|Avalonia.Markup.Xaml.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Markup.Xaml.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Metal.dll" Component_="Avalonia.Metal.dll" FileName="AVALO~11.DLL|Avalonia.Metal.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Metal.dll" SelfReg="false"/>
+    <ROW File="Avalonia.MicroCom.dll" Component_="Avalonia.MicroCom.dll" FileName="AVALO~12.DLL|Avalonia.MicroCom.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.MicroCom.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Native.dll" Component_="Avalonia.Native.dll" FileName="AVALO~13.DLL|Avalonia.Native.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Native.dll" SelfReg="false"/>
+    <ROW File="Avalonia.OpenGL.dll" Component_="Avalonia.OpenGL.dll" FileName="AVALO~14.DLL|Avalonia.OpenGL.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.OpenGL.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Remote.Protocol.dll" Component_="Avalonia.Remote.Protocol.dll" FileName="AVALO~15.DLL|Avalonia.Remote.Protocol.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Remote.Protocol.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Skia.dll" Component_="Avalonia.Skia.dll" FileName="AVALO~16.DLL|Avalonia.Skia.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Skia.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Themes.Fluent.dll" Component_="Avalonia.Themes.Fluent.dll" FileName="AVALO~17.DLL|Avalonia.Themes.Fluent.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Themes.Fluent.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Vulkan.dll" Component_="Avalonia.Vulkan.dll" FileName="AVALO~18.DLL|Avalonia.Vulkan.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Vulkan.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Win32.Automation.dll" Component_="Avalonia.Win32.Automation.dll" FileName="AVALO~19.DLL|Avalonia.Win32.Automation.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Win32.Automation.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Win32.dll" Component_="Avalonia.Win32.dll" FileName="AVALO~20.DLL|Avalonia.Win32.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Win32.dll" SelfReg="false"/>
+    <ROW File="Avalonia.X11.dll" Component_="Avalonia.X11.dll" FileName="AVALO~21.DLL|Avalonia.X11.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.X11.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Xaml.Interactions.dll" Component_="Avalonia.Xaml.Interactions.dll" FileName="AVALO~22.DLL|Avalonia.Xaml.Interactions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Xaml.Interactions.dll" SelfReg="false"/>
+    <ROW File="Avalonia.Xaml.Interactivity.dll" Component_="Avalonia.Xaml.Interactivity.dll" FileName="AVALO~23.DLL|Avalonia.Xaml.Interactivity.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Avalonia.Xaml.Interactivity.dll" SelfReg="false"/>
+    <ROW File="BACApp.Core.dll" Component_="BACApp.Core.dll" FileName="BACAPP~1.DLL|BACApp.Core.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.Core.dll" SelfReg="false"/>
+    <ROW File="BACApp.Core.pdb" Component_="BACApp.Core.dll" FileName="BACAPP~1.PDB|BACApp.Core.pdb" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.Core.pdb" SelfReg="false"/>
+    <ROW File="BACApp.UI.deps.json" Component_="BACApp.UI.deps.json" FileName="BACAPP~1.JSO|BACApp.UI.deps.json" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.deps.json" SelfReg="false"/>
+    <ROW File="BACApp.UI.dll" Component_="BACApp.UI.dll" FileName="BACAPP~2.DLL|BACApp.UI.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.dll" SelfReg="false"/>
+    <ROW File="BACApp.UI.exe" Component_="BACApp.UI.exe" FileName="BACAPP~1.EXE|BACApp.UI.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.exe" SelfReg="false"/>
+    <ROW File="BACApp.UI.pdb" Component_="BACApp.UI.exe" FileName="BACAPP~2.PDB|BACApp.UI.pdb" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.pdb" SelfReg="false"/>
+    <ROW File="BACApp.UI.runtimeconfig.json" Component_="BACApp.UI.deps.json" FileName="BACAPP~2.JSO|BACApp.UI.runtimeconfig.json" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="CommunityToolkit.Mvvm.dll" Component_="CommunityToolkit.Mvvm.dll" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
+    <ROW File="HarfBuzzSharp.dll" Component_="HarfBuzzSharp.dll" FileName="HARFBU~1.DLL|HarfBuzzSharp.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\HarfBuzzSharp.dll" SelfReg="false"/>
+    <ROW File="MicroCom.Runtime.dll" Component_="MicroCom.Runtime.dll" FileName="MICROC~1.DLL|MicroCom.Runtime.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\MicroCom.Runtime.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.Binder.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.Configuration.Json.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInj_1_ection.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.DependencyInjection.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.Abstractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.dll" Component_="Microsoft.Extensions.Diagnostics.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Diagnostics.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Hosting.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Http.dll" Component_="Microsoft.Extensions.Http.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Http.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Http.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Logging.Configuration.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Logging.Console.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Logging.Debug.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Logging.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Logging.EventLog.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Logging.EventSource.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.Options.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~28.DLL|Microsoft.Extensions.Primitives.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Serilog.dll" Component_="Serilog.dll" FileName="Serilog.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Hosting.dll" Component_="Serilog.Extensions.Hosting.dll" FileName="SERILO~1.DLL|Serilog.Extensions.Hosting.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Logging.dll" Component_="Serilog.Extensions.Logging.dll" FileName="SERILO~2.DLL|Serilog.Extensions.Logging.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Async.dll" Component_="Serilog.Sinks.Async.dll" FileName="SERILO~3.DLL|Serilog.Sinks.Async.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.Sinks.Async.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Debug.dll" Component_="Serilog.Sinks.Debug.dll" FileName="SERILO~4.DLL|Serilog.Sinks.Debug.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.Sinks.Debug.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.File.dll" Component_="Serilog.Sinks.File.dll" FileName="SERILO~5.DLL|Serilog.Sinks.File.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Serilog.Sinks.File.dll" SelfReg="false"/>
+    <ROW File="SkiaSharp.dll" Component_="SkiaSharp.dll" FileName="SKIASH~1.DLL|SkiaSharp.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\SkiaSharp.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="Tmds.DBus.Protocol.dll" Component_="Tmds.DBus.Protocol.dll" FileName="TMDSDB~1.DLL|Tmds.DBus.Protocol.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\Tmds.DBus.Protocol.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll_1" Component_="System.Diagnostics.EventLog.dll_1" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.Messages.dll" Component_="System.Diagnostics.EventLog.Messages.dll" FileName="SYSTEM~2.DLL|System.Diagnostics.EventLog.Messages.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.Messages.dll" SelfReg="false"/>
+    <ROW File="av_libglesv2.dll" Component_="av_libglesv2.dll" FileName="AV_LIB~1.DLL|av_libglesv2.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\runtimes\win-x64\native\av_libglesv2.dll" SelfReg="false"/>
+    <ROW File="libHarfBuzzSharp.dll" Component_="libHarfBuzzSharp.dll" FileName="LIBHAR~1.DLL|libHarfBuzzSharp.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\runtimes\win-x64\native\libHarfBuzzSharp.dll" SelfReg="false"/>
+    <ROW File="libSkiaSharp.dll" Component_="libSkiaSharp.dll" FileName="LIBSKI~1.DLL|libSkiaSharp.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\runtimes\win-x64\native\libSkiaSharp.dll" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFileName="BACApp_[|ProductVersion]" Languages="en_GB" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" MsiPackageType="x64"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en_GB.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+    <ROW Directory_="runtimes_Dir" Component_="runtimes" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Base.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Controls.DataGrid.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Controls.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.DesignerSupport.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Desktop.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Dialogs.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Fonts.Inter.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.FreeDesktop.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Markup.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Markup.Xaml.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Metal.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.MicroCom.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Native.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.OpenGL.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Remote.Protocol.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Skia.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Themes.Fluent.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Vulkan.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Win32.Automation.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Win32.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.X11.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Xaml.Interactions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Avalonia.Xaml.Interactivity.dll"/>
+    <ROW Feature_="MainFeature" Component_="BACApp.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="BACApp.UI.deps.json"/>
+    <ROW Feature_="MainFeature" Component_="BACApp.UI.dll"/>
+    <ROW Feature_="MainFeature" Component_="BACApp.UI.exe"/>
+    <ROW Feature_="MainFeature" Component_="CommunityToolkit.Mvvm.dll"/>
+    <ROW Feature_="MainFeature" Component_="HarfBuzzSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="MicroCom.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInj_1_ection.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Http.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Logging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Async.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Debug.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.File.dll"/>
+    <ROW Feature_="MainFeature" Component_="SkiaSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tmds.DBus.Protocol.dll"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="runtimes"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Feature_="MainFeature" Component_="av_libglesv2.dll"/>
+    <ROW Feature_="MainFeature" Component_="libHarfBuzzSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="libSkiaSharp.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="BAC.exe" SourcePath="..\source\BACApp.UI\BAC.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] can not be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] can not be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_DOTNET_CORE_VERSION &gt;= AI_REQUIRED_DOTNET_CORE_VERSION" Description="[ProductName] can not be installed on systems with .NET Core version lower than [AI_REQUIRED_DOTNET_CORE_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNETCore" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] can not be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="BACApp.UI" Directory_="SHORTCUTDIR" Name="BACApp.UI" Component_="BACApp.UI.exe" Target="[#BACApp.UI.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+</DOCUMENT>
