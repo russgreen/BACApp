@@ -1,0 +1,19 @@
+cd repos/BACApp/installer/osx_x64/BACApp.UI.app/Contents/MacOS
+chmod +x BACApp.UI
+cd ../../..
+
+cd repos/BACApp/installer/osx_x64
+
+cd repos/BACApp/installer/osx_arm64/BACApp.UI.app/Contents/MacOS
+chmod +x BACApp.UI
+cd ../../..
+
+cd repos/BACApp/installer/osx_arm64
+
+# make a temporary dmg, attach, copy the .app, eject, and compress
+hdiutil create -srcfolder BACApp.UI.app -volname "BACApp.UI" -fs HFS+ -format UDRW MyApp-temp.dmg
+hdiutil attach MyApp-temp.dmg -mountpoint /Volumes/BACApp.UI
+cp -R BACApp.UI.app /Volumes/BACApp.UI/
+hdiutil detach /Volumes/BACApp.UI
+hdiutil convert MyApp-temp.dmg -format UDBZ -o BACApp.UI.dmg
+rm MyApp-temp.dmg

@@ -362,6 +362,11 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Advanced Installer
+Installer/*.back.aip
+Installer/BACApp-cache/*
+Installer/BACApp-SetupFiles/*
+
 # App files to exclude
 *.dmg
 BACApp.UI
