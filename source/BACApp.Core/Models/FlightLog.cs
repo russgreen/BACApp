@@ -65,7 +65,7 @@ public class FlightLog
 
     public TimeSpan FlightTime => LandingTime - TakeOffTime;
 
-    public TimeSpan ChargeTime => FlightTime.Add(TimeSpan.FromMinutes(10));
+    public TimeSpan ChargeTime { get; set; }
 
     // Rounded to nearest minute for display (e.g., 1:24:30 -> 1:25)
     public TimeSpan BlockTimeRounded => RoundToNearestMinute(BlockTime);
