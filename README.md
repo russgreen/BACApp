@@ -21,28 +21,6 @@ Cross-platform desktop client built with `Avalonia UI` and a shared `Core` libra
 - .NET SDK `10.x`
 - (Optional) Visual Studio / Rider / VS Code
 
-## Getting started
-
-### Restore
-
-From the repo root:
-
-```bash
-dotnet restore
-```
-
-### Build
-
-```bash
-dotnet build -c Debug
-```
-
-### Run the UI
-
-```bash
-dotnet run --project source/BACApp.UI/BACApp.UI.csproj
-```
-
 ## Application behavior
 
 ### Single-instance activation
