@@ -13,6 +13,7 @@ partial class Build
         "osx-x64",
         "osx-arm64",
         "linux-x64",
+        "linux-arm",
         "linux-arm64",
         "win-x64",
     ];
