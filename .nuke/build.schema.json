@@ -28,6 +28,7 @@
         "Compile",
         "Installer",
         "MacBundle",
+        "MacDmg",
         "Publish",
         "Sign"
       ]

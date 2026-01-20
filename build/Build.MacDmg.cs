@@ -63,4 +63,34 @@ partial class Build
             }
         });
 
+    static int RunProcess(string fileName, string arguments, string workingDirectory = null, int timeoutMs = -1)
+{
+    var psi = new ProcessStartInfo(fileName, arguments)
+    {
+        WorkingDirectory = workingDirectory,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+        CreateNoWindow = true,
+    };
+
+    using var proc = Process.Start(psi);
+    //stdout = proc.StandardOutput.ReadToEnd();
+    //stderr = proc.StandardError.ReadToEnd();
+
+    if (timeoutMs > 0)
+    {
+        if (!proc.WaitForExit(timeoutMs))
+        {
+            try { proc.Kill(entireProcessTree: true); } catch { }
+            throw new TimeoutException($"Process {fileName} timed out.");
+        }
+    }
+    else
+    {
+        proc.WaitForExit();
+    }
+
+    return proc.ExitCode;
+}
 }
