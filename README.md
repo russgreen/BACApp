@@ -1,6 +1,6 @@
 # BACApp
 
-Cross-platform desktop client built with `Avalonia UI` and a shared `Core` library.
+Cross-platform desktop client to the cloudbasega.com app built with `Avalonia UI` and a shared `Core` library.  The app only allows logging into the Bristol Aeroclub and Cloudbase Demo Club platforms.
 
 ## Solution layout
 
