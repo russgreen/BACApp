@@ -27,6 +27,8 @@
         "Clean",
         "Compile",
         "Installer",
+        "MacBundle",
+        "MacDmg",
         "Publish",
         "Sign"
       ]
