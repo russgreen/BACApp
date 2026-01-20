@@ -35,12 +35,20 @@ partial class Build
                         var publishDirectory = OutputDirectory / "publish" / configuration / runtime;
                         publishDirectory.CreateOrCleanDirectory();
 
+                        var publishSelfContained = true;
+                        if(runtime == "win-x64")
+                        {
+                            publishSelfContained = false;
+                        }
+
+                        Log.Information("{runtime} is self contained: {selfContained}", runtime, publishSelfContained);
+
                         DotNetPublish(settings => settings
                             .SetProject(Solution.BACApp_UI)
                             .SetConfiguration(configuration)
                             .SetRuntime(runtime)
                             .SetOutput(publishDirectory)
-                            .SetSelfContained(true)
+                            .SetSelfContained(publishSelfContained)
                             .SetProperty("PublishSingleFile", "true")
                             //.SetProperty("PublishTrimmed", "true")
                             .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
