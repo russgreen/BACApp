@@ -367,6 +367,9 @@ Installer/*.back.aip
 Installer/BACApp-cache/*
 Installer/BACApp-SetupFiles/*
 
+Installer/osx_arm64/*
+Installer/osx_x64/*
+
 # App files to exclude
 *.dmg
 BACApp.UI
