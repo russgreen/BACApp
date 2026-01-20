@@ -370,3 +370,5 @@ Installer/BACApp-SetupFiles/*
 # App files to exclude
 *.dmg
 BACApp.UI
+
+.DS_Store
