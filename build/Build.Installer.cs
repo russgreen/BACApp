@@ -13,6 +13,7 @@ partial class Build
     Target Installer => _ => _
         .TriggeredBy(Sign)
         .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
+        .OnlyWhenStatic(() => OperatingSystem.IsWindows())
         .Executes(() =>
         {
             var aipProjectPath = Path.Combine(RootDirectory, @"Installer\BACApp.aip");
