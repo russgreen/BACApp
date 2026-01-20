@@ -7,8 +7,7 @@
         x:DataType="vm:MainWindowViewModel"
         x:CompileBindings="True"
         Title="{Binding WindowTitle}"
-        Width="900" Height="600"
-        WindowState="Maximized">
+        Width="900" Height="600">
 
   <Grid RowDefinitions="*">
 
