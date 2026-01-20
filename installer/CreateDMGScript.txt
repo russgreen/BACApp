@@ -17,3 +17,9 @@ cp -R BACApp.UI.app /Volumes/BACApp.UI/
 hdiutil detach /Volumes/BACApp.UI
 hdiutil convert MyApp-temp.dmg -format UDBZ -o BACApp.UI.dmg
 rm MyApp-temp.dmg
+
+
+
+##clear quaranteed flag
+#cd to folder when DMG downloaded
+xattr -d com.apple.quarantine BACApp.UI.dmg
