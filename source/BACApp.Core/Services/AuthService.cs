@@ -52,6 +52,33 @@ public class AuthService : IAuthService
             return null;
         }
 
+        //only allow logins to Bristol Aeroclub or the Cloudbase Demo club
+        var allowedCompanyIds = new HashSet<int> { 1002, 1158 };
+
+        // If only one company is returned and it's not allowed, fail login.
+        if (result.Companies.Count() == 1 && !allowedCompanyIds.Contains(result.Companies[0].CompanyId))
+        {
+            CurrentLogin = null;
+            return null;
+        }
+
+        // If more than one company is returned, remove any non-allowed companies.
+        if (result.Companies.Count() > 1)
+        {
+            var filteredCompanies = result.Companies
+                .Where(c => allowedCompanyIds.Contains(c.CompanyId))
+                .ToArray();
+
+            result.Companies = filteredCompanies;
+
+            // If filtering removed everything, fail login.
+            if (result.Companies.Count() == 0)
+            {
+                CurrentLogin = null;
+                return null;
+            }
+        }
+
         await _tokenStore.SetTokenAsync(result.Token);
 
         CurrentLogin = result;
