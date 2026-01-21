@@ -3,6 +3,7 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.SignTool;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -13,6 +14,7 @@ partial class Build
     Target Sign => _ => _
         .TriggeredBy(Publish)
         .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
+        .OnlyWhenStatic(() => OperatingSystem.IsWindows())
         .Executes(() =>
         {
             var compiledAssemblies = new List<string>();
