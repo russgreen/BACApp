@@ -27,8 +27,8 @@ partial class Build
                         throw new Exception($"App bundle not found: {appPath}");
 
                     var dmgTemp = ridDir / $"{MacAppName}-temp.dmg";
-                    var dmgOut = ridDir / $"{MacAppName}_{configuration}.dmg";
-                    var zipOut = ridDir / $"{MacAppName}_{configuration}.zip";
+                    var dmgOut = ridDir / $"{MacAppName}_{rid}.dmg";
+                    var zipOut = ridDir / $"{MacAppName}_{rid}.zip";
                     var volumeName = MacAppName;
 
                     if (File.Exists(dmgTemp)) File.Delete(dmgTemp);
