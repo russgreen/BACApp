@@ -5,6 +5,7 @@ using Nuke.Common.IO;
 using Serilog;
 using System.Linq;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using System;
 
 partial class Build
 {
@@ -55,6 +56,22 @@ partial class Build
                             .SetProperty("DebugType", "none")
                             .SetProperty("DebugSymbols", "false")
                             .SetVerbosity(DotNetVerbosity.minimal));
+
+                        if (runtime == "linux-arm")
+                        {
+                            var scriptSource = RootDirectory / "run-wayland.sh";
+                            var scriptTarget = publishDirectory / "run-wayland.sh";
+
+                            scriptTarget.DeleteFile();
+                            System.IO.File.Copy(scriptSource, scriptTarget, true);
+        
+                            // Mark executable (best-effort; on Windows this is harmless/no-op depending on filesystem).
+                            if(OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+                            {
+                                ProcessTasks.StartProcess("chmod", $"+x \"{scriptTarget}\"").AssertZeroExitCode();
+                            }
+                            
+                        }
                     }
                 }
             }
