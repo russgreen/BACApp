@@ -67,23 +67,9 @@ Avalonia desktop application:
 - HTTP client configured with an auth header handler
 - Single-instance coordination in `SingleInstanceCoordinator.cs`
 
-## Publishing for MacOS and Linux
-
-Avalonia apps can be published as self-contained single-file executables for various platforms. To publish for Linux and MacOS, run the following commands from the repo root:
-
-- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r linux-arm64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
-- dotnet publish .\source\BACApp.UI\BACApp.UI.csproj -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
-
 ## Build automation (NUKE)
 
 The repository includes a NUKE build project in `build/`.
-
-Notes:
-
-- Targets are defined in `build/Build.cs` (`Clean`, `Restore`, `Compile`)
-- Some targets are placeholders (no operations implemented)
 
 ## Development notes
 
