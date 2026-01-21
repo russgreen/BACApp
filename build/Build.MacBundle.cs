@@ -22,6 +22,7 @@ partial class Build
 
     Target MacBundle => _ => _
         .TriggeredBy(Publish)
+        .OnlyWhenStatic(() => OperatingSystem.IsMacOS())
         .Executes(() =>
         {
             foreach (var configuration in Solution.GetModel().BuildTypes.Where(x => x.StartsWith("Release", StringComparison.OrdinalIgnoreCase)))
