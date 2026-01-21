@@ -9,10 +9,10 @@
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="BAC.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="2057:{8CEA3AFF-2B18-4CE0-8867-ADCEFDE4AED4} " Type="16"/>
+    <ROW Property="ProductCode" Value="2057:{73C9CF54-C11D-4FBC-B2D5-2F7CE5BF2AB1} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="BACApp"/>
-    <ROW Property="ProductVersion" Value="0.2.2" Options="32"/>
+    <ROW Property="ProductVersion" Value="0.2.3" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{810777EA-E40B-48B1-AFCA-DF6EA1EA5783}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
