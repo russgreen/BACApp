@@ -44,6 +44,8 @@ partial class Build
 
                         Log.Information("{runtime} is self contained: {selfContained}", runtime, publishSelfContained);
 
+                        var isLinuxArmFamily = runtime is "linux-arm" or "linux-arm64";
+
                         DotNetPublish(settings => settings
                             .SetProject(Solution.BACApp_UI)
                             .SetConfiguration(configuration)
@@ -55,7 +57,26 @@ partial class Build
                             .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
                             .SetProperty("DebugType", "none")
                             .SetProperty("DebugSymbols", "false")
+                            // Avoid illegal-instruction issues on older ARM CPUs caused by native/AOT codegen.
+                            .SetProperty("PublishAot", isLinuxArmFamily ? "false" : null)
                             .SetVerbosity(DotNetVerbosity.minimal));
+
+
+                        if (isLinuxArmFamily)
+                        {
+                            var launcherPath = publishDirectory / "run-pi.sh";
+                            launcherPath.WriteAllText(
+                                "#!/usr/bin/env bash\n" +
+                                "set -euo pipefail\n" +
+                                "export AVALONIA_USE_SOFTWARE_RENDERING=1\n" +
+                                "DIR=\"$(cd \"$(dirname \"$0\")\" && pwd)\"\n" +
+                                "exec \"$DIR/BACApp.UI\" \"$@\"\n");
+
+                            if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+                            {
+                                ProcessTasks.StartProcess("chmod", $"+x \"{launcherPath}\"").AssertZeroExitCode();
+                            }
+                        }
 
                         if (runtime == "linux-arm")
                         {
