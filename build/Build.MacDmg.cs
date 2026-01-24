@@ -11,7 +11,7 @@ using static Nuke.Common.IO.PathConstruction;
 partial class Build
 {
     Target MacDmg => _ => _
-        .TriggeredBy(MacBundle)
+        .TriggeredBy(MacSign)
         .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
         .OnlyWhenStatic(() => OperatingSystem.IsMacOS())
         .Executes(() =>
