@@ -6,14 +6,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<ApplicationIcon>BAC.ico</ApplicationIcon>
-	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="BAC.ico" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Content Include="BAC.ico" />
-	</ItemGroup>
 
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.*" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.*" />
