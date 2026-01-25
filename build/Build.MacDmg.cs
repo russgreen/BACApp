@@ -24,7 +24,9 @@ partial class Build
                     var appPath = ridDir / $"{MacAppName}.app";
 
                     if (!Directory.Exists(appPath))
+                    {
                         throw new Exception($"App bundle not found: {appPath}");
+                    }
 
                     var dmgTemp = ridDir / $"{MacAppName}-temp.dmg";
                     var dmgOut = ridDir / $"{MacAppName}_{rid}.dmg";
