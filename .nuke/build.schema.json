@@ -29,6 +29,7 @@
         "Installer",
         "MacBundle",
         "MacDmg",
+        "MacSign",
         "Publish",
         "Sign"
       ]
@@ -104,6 +105,10 @@
   "allOf": [
     {
       "properties": {
+        "MacSignIdentity": {
+          "type": "string",
+          "description": "macOS codesign identity (hash or common name). If omitted, the build will try to resolve one from Keychain"
+        },
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"

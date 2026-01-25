@@ -19,7 +19,7 @@ partial class Build
 
     Target MacSign => _ => _
         .TriggeredBy(MacBundle)
-        //.OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
+        .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
         .OnlyWhenStatic(() => OperatingSystem.IsMacOS())
         .Executes(() =>
         {
