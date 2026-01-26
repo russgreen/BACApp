@@ -37,38 +37,40 @@ partial class Build
 
                         Log.Information("Notarizing ZIP: {Zip}", zipOut);
 
-                        // Submit for notarization
-                        var notarizeOutput = RunProcess(
+                        var (notarizeExit, notarizeStdout, notarizeStderr) = RunProcessCapture(
                             "xcrun",
                             $"notarytool submit \"{zipOut}\" --keychain-profile \"AC_PASSWORD\" --wait",
                             RootDirectory);
 
-                        if (notarizeOutput != 0)
+                        if (notarizeExit != 0)
                         {
+                            Log.Error("Notarization stdout: {Stdout}", notarizeStdout);
+                            Log.Error("Notarization stderr: {Stderr}", notarizeStderr);
                             throw new Exception($"Notarization failed for {zipOut}");
                         }
 
                         Log.Information("Successfully notarized: {Zip}", zipOut);
+                        Log.Information("Notarization output: {Output}", notarizeStdout);
 
-                        // Staple the DMG if it exists (recommended for distribution)
-                        if (File.Exists(dmgOut))
+                        // Wait for notarization ticket to be available (can take 1-2 minutes)
+                        Log.Information("Waiting for notarization ticket to be available...");
+                        System.Threading.Thread.Sleep(10000); // Wait 10 seconds for ticket to propagate
+
+                        // Staple the ticket to the app bundle
+                        Log.Information("Stapling app bundle: {App}", appPath);
+                        var (stapleAppExit, stapleAppStdout, stapleAppStderr) = RunProcessCapture(
+                            "xcrun",
+                            $"stapler staple \"{appPath}\"",
+                            RootDirectory);
+
+                        if (stapleAppExit != 0)
                         {
-                            var stapleDmgExit = RunProcess(
-                                "xcrun",
-                                $"stapler staple \"{dmgOut}\"",
-                                RootDirectory);
-
-                            if (stapleDmgExit != 0)
-                            {
-                                throw new Exception($"Stapling failed for DMG: {dmgOut}");
-                            }
-
-                            Log.Information("Stapled DMG: {Dmg}", dmgOut);
+                            Log.Error("Staple stdout: {Stdout}", stapleAppStdout);
+                            Log.Error("Staple stderr: {Stderr}", stapleAppStderr);
+                            throw new Exception($"Stapling failed for app bundle: {appPath}");
                         }
-                        else
-                        {
-                            Log.Warning("DMG not found, skipping staple: {Dmg}", dmgOut);
-                        }
+
+                        Log.Information("Stapled app bundle: {App}", appPath);
                     }
                 }
             });

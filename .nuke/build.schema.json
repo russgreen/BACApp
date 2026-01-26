@@ -29,6 +29,7 @@
         "Installer",
         "MacBundle",
         "MacDmg",
+        "MacNotarize",
         "MacSign",
         "Publish",
         "Sign"
