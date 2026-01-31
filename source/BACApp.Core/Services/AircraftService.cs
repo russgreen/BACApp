@@ -33,6 +33,7 @@ public class AircraftService : IAircraftService
             ["company-id"] = _authService.UserCompany.CompanyId.ToString()
         };
 
-        return _apiClient.GetAsync<IReadOnlyList<Models.Aircraft>>("/aircraft/list/GetAircraftCompanyId", headers, ct);
+        var path = "/aircraft/list/GetAircraftCompanyId";
+        return _apiClient.GetAsync<IReadOnlyList<Models.Aircraft>>(path, headers, ct);
     }
 }
