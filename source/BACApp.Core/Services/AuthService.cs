@@ -1,8 +1,10 @@
-using System.Text;
+using Avalonia.Controls.Platform;
 using BACApp.Core.Abstractions;
 using BACApp.Core.DTO;
 using BACApp.Core.Messages;
+using BACApp.Core.Models;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Text;
 
 namespace BACApp.Core.Services;
 
@@ -15,17 +17,39 @@ public class AuthService : IAuthService
 
     public CompanyDto UserCompany { get; private set; }
 
+    public UserDto User { get; private set; }
+
     public AuthService(IApiClient apiClient, ITokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
 
-        WeakReferenceMessenger.Default.Register<SelectedCompanyMessage>(this, (r, m) =>
+        WeakReferenceMessenger.Default.Register<SelectedCompanyMessage>(this, async (r, m) =>
         {
             UserCompany = m.Value;
 
+            User = await GetUserAsync();
+
             WeakReferenceMessenger.Default.Send(new LoggedInMessage(true));
         });
+    }
+
+
+
+    private async Task<UserDto> GetUserAsync(CancellationToken ct = default)
+    {
+        var headers = new Dictionary<string, string>
+        {
+            ["accept"] = "application/json"
+            // do NOT set user-token here; AuthHeaderHandler adds it
+        };
+
+        var path = "/user/getAccessContent";
+        var data = await _apiClient.GetAsync<List<UserDto>>(path, headers, ct) ?? new List<UserDto>();
+
+        var user = data.Where(x => x.CompanyId == UserCompany.CompanyId).First();
+
+        return user ?? new UserDto();
     }
 
     public async Task<LoginResponse> LoginAsync(string usernameOrEmail, string password, CancellationToken ct = default)
