@@ -40,6 +40,9 @@ internal partial class MainWindowViewModel : BaseViewModel
     private bool _isReportsEnabled = false;
 
     [ObservableProperty]
+    private bool _isInvoicesEnabled = false;    
+
+    [ObservableProperty]
     private PageViewModel _currentPage;
 
 
@@ -76,7 +79,8 @@ internal partial class MainWindowViewModel : BaseViewModel
 
                 if(_authService.User.Role == "Administrator")
                 {
-                IsReportsEnabled = true;
+                    IsReportsEnabled = true;
+                    IsInvoicesEnabled = true;
                 }
             }
 
@@ -89,6 +93,7 @@ internal partial class MainWindowViewModel : BaseViewModel
             IsLogsEnabled = false;
             IsLogsAirframeEnabled = false;
             IsReportsEnabled = false;
+            IsInvoicesEnabled = false;
         });
 
         CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
@@ -117,5 +122,9 @@ internal partial class MainWindowViewModel : BaseViewModel
 
     [RelayCommand]
     private void GoToLogsAirframe() => CurrentPage = _pageFactory.GetPageViewModel<LogsAirframePageViewModel>();
+
+    [RelayCommand]
+    private void GoToInvoices() => CurrentPage = _pageFactory.GetPageViewModel<InvoicesPageViewModel>();
+
 
 }

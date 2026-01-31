@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             xmlns:models="using:BACApp.Core.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BACApp.UI.Views.InvoicesPageView"
+             x:DataType="vm:InvoicesPageViewModel">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0" 
+                  ItemsSource="{Binding AllMembers}" 
+                  DisplayMemberBinding="{CompiledBinding Name}"
+                  SelectedValue="{Binding SelectedMember}">
+        </ComboBox>
+
+         <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    Spacing="10" 
+                    Margin="0,10">
+            <TextBlock Text="From date:" 
+                       VerticalAlignment="Center"/>
+            <CalendarDatePicker SelectedDate="{Binding FromDate}" />
+            <TextBlock Text="To date:" 
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+            <CalendarDatePicker SelectedDate="{Binding ToDate}" />
+
+            <Button Content="Reload invoices" Command="{Binding LoadInvoicesCommand}" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" 
+            ItemsSource="{Binding Invoices}"
+            IsReadOnly="True" 
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="True"
+            CanUserSortColumns="True"
+            HeadersVisibility="All" 
+            GridLinesVisibility="All"
+            BorderThickness="1" 
+            BorderBrush="Gray"  
+            RowDetailsVisibilityMode="VisibleWhenSelected">
+
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate x:DataType="models:Invoice">
+                    <Border Margin="10,4"
+                            Padding="8"
+                            BorderThickness="1"
+                            BorderBrush="LightGray">
+                        <DataGrid ItemsSource="{Binding InvoiceLines}"
+                                  IsReadOnly="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="True"
+                                  CanUserSortColumns="True"
+                                  HeadersVisibility="All"
+                                  GridLinesVisibility="All"
+                                  AutoGenerateColumns="True">
+                            <!--
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Flight Date" Binding="{Binding FlightDate}" />
+                                <DataGridTextColumn Header="Reg" Binding="{Binding AircraftRegistration}" />
+                                <DataGridTextColumn Header="Type" Binding="{Binding FlightType}" />
+                                <DataGridTextColumn Header="Time Type" Binding="{Binding TimeType}" />
+                                <DataGridTextColumn Header="From" Binding="{Binding TimeFrom}" />
+                                <DataGridTextColumn Header="Until" Binding="{Binding TimeUntil}" />
+                                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
+                                <DataGridTextColumn Header="Charge Name" Binding="{Binding AircraftChargeName}" />
+                                <DataGridTextColumn Header="Flight Charge" Binding="{Binding FlightCharge}" />
+                                <DataGridTextColumn Header="VAT Rate" Binding="{Binding VatRate}" />
+                                <DataGridTextColumn Header="VAT Charge" Binding="{Binding VatCharge}" />
+                                <DataGridTextColumn Header="Total Inc VAT" Binding="{Binding TotalIncVat}" />
+                                <DataGridTextColumn Header="Voucher" Binding="{Binding VoucherReference}" />
+                            </DataGrid.Columns>
+                            -->
+                        </DataGrid>
+                    </Border>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+           <DataGrid.Columns>
+			   <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat={}{0:yyyy-MM-dd}}" />
+               <DataGridTextColumn Header="Number" Binding="{Binding InvoiceNumber}" />
+               <DataGridTextColumn Header="Total" Binding="{Binding TotalInvoice}" />
+               <DataGridTextColumn Header="Status" Binding="{Binding InvoiceStatusId}" />
+               <DataGridTextColumn Header="Settled" Binding="{Binding SettlementDate, StringFormat={}{0:yyyy-MM-dd}}" />
+               <DataGridTextColumn Header="Cancelled" Binding="{Binding CancelDate, StringFormat={}{0:yyyy-MM-dd}}" />
+               <DataGridTextColumn Header="Reason" Binding="{Binding CancelReason}" />
+               <DataGridTextColumn Header="Voucher" Binding="{Binding ReferenceVoucher}" />
+               <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+               <DataGridTextColumn Header="Address" Binding="{Binding Address}" />
+               <DataGridTextColumn Header="City" Binding="{Binding City}" />
+               <DataGridTextColumn Header="Country" Binding="{Binding Country}" />
+               <DataGridTextColumn Header="Post Code" Binding="{Binding PostCode}" />
+               <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+               <DataGridTextColumn Header="Tel" Binding="{Binding Telephone}" />
+               <DataGridTextColumn Header="Xero Response" Binding="{Binding XeroInvoiceResponse}" />
+           </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
