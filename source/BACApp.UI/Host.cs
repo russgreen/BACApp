@@ -49,7 +49,7 @@ internal static class Host
             .ConfigureServices((_, services) =>
             {
                 services.AddTransient<AuthHeaderHandler>();
-                services.AddHttpClient<IApiClient, ApiClient>(client =>
+                services.AddHttpClient<IApiClient, ApiClient2>(client =>
                 {
                     client.BaseAddress = apiBase;
                     client.Timeout = TimeSpan.FromSeconds(30);
