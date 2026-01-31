@@ -73,10 +73,11 @@ internal partial class MainWindowViewModel : BaseViewModel
             {
                 IsLogsEnabled = true;
                 IsLogsAirframeEnabled = true;
+                IsReportsEnabled = true;
 
                 if(_authService.User.Role == "Administrator")
                 {
-                IsReportsEnabled = true;
+                
                 }
             }
 
