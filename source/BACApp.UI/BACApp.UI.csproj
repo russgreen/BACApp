@@ -16,6 +16,7 @@
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
 		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.*" />
 
+
 		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.*" />-->
 		<PackageReference Include="ProDataGrid" Version="11.*-*" />
 
@@ -28,6 +29,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<!--<PackageReference Include="System.Text.Json" Version="10.*" />-->
 		
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />		
 
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />

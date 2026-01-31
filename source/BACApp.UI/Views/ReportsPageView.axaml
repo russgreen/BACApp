@@ -3,10 +3,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:BACApp.UI.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:draw="using:LiveChartsCore.SkiaSharpView.Drawing.Geometries"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BACApp.UI.Views.ReportsPageView"
              x:DataType="vm:ReportsPageViewModel">
 
-<TextBlock Text="Reports Page" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0" 
+                  ItemsSource="{Binding AllAircraftList}" 
+                  DisplayMemberBinding="{CompiledBinding Registration}"
+                  SelectedValue="{Binding SelectedAircraft}">
+        </ComboBox>
+
+        <lvc:CartesianChart Grid.Row="1"
+                            LegendPosition="Right"
+                            XAxes="{Binding XAxis}"
+                            Series="{Binding Series}">
+            <lvc:CartesianChart.Title>
+                <lvc:XamlDrawnLabelVisual
+                    Text="Charge Time"
+                    Paint="{lvc:SolidColorPaint Color='#303030'}"
+                    TextSize="25"
+                    Padding="{lvc:Padding '15'}"/>
+            </lvc:CartesianChart.Title>
+        </lvc:CartesianChart>
+    </Grid>
 
 </UserControl>
