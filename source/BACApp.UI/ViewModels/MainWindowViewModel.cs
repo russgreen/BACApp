@@ -73,7 +73,11 @@ internal partial class MainWindowViewModel : BaseViewModel
             {
                 IsLogsEnabled = true;
                 IsLogsAirframeEnabled = true;
+
+                if(_authService.User.Role == "Administrator")
+                {
                 IsReportsEnabled = true;
+                }
             }
 
             WindowTitle = $"Cloudbase App [{informationVersion}] : {_authService.UserCompany.CompanyName}";
