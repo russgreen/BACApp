@@ -27,7 +27,8 @@ public class FlightLogsService : IFlightLogsService
             ["registration"] = registration
         };
 
-        var data = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters", query, headers, ct);
+        var path = "/flightlog/list/byAircraftFilters";
+        var data = await _apiClient.GetAsync<List<FlightLog>>(path, query, headers, ct);
         return data ?? new List<FlightLog>();
     }
 
@@ -45,7 +46,8 @@ public class FlightLogsService : IFlightLogsService
             ["date_to"] = to.ToString("yyyy-MM-dd")
         };
 
-        var data = await _apiClient.GetAsync<List<FlightLog>>("/flightlog/list/byAircraftFilters",  query, headers, ct);
+        var path = "/flightlog/list/byAircraftFilters";
+        var data = await _apiClient.GetAsync<List<FlightLog>>(path,  query, headers, ct);
         return data ?? new List<FlightLog>();
     }
 

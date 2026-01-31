@@ -22,7 +22,7 @@ public class CalendarService : ICalendarService
         };
 
         var path = $"/booking_agenda/ReadResources/{date:yyyy-MM-dd}";
-        var data = await _apiClient.GetAsync<List<BookingResource>>(path, null, headers, ct) ?? new List<BookingResource>();
+        var data = await _apiClient.GetAsync<List<BookingResource>>(path, headers, ct) ?? new List<BookingResource>();
         return data ?? new List<BookingResource>();
     }
 
@@ -34,7 +34,7 @@ public class CalendarService : ICalendarService
         };
 
         var path = $"/booking_agenda/ReadEvents/{date:yyyy-MM-dd}";
-        var data = await _apiClient.GetAsync<List<BookingEvent>>(path, null, headers, ct) ?? new List<BookingEvent>();
+        var data = await _apiClient.GetAsync<List<BookingEvent>>(path, headers, ct) ?? new List<BookingEvent>();
         return data ?? new List<BookingEvent>();
     }
 
@@ -46,7 +46,7 @@ public class CalendarService : ICalendarService
         };
 
         var path = $"/booking_agenda/{bookingAgndaId}";
-        var data = await _apiClient.GetAsync<BookingAgenda>(path, null, headers, ct) ?? new BookingAgenda();
+        var data = await _apiClient.GetAsync<BookingAgenda>(path, headers, ct) ?? new BookingAgenda();
         return data ?? new BookingAgenda();
     }
 }

@@ -371,7 +371,7 @@ Installer/osx_arm64/*
 Installer/osx_x64/*
 
 # App files to exclude
+output/*
 *.dmg
-BACApp.UI
 
 .DS_Store

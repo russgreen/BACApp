@@ -49,10 +49,10 @@ internal static class Host
             .ConfigureServices((_, services) =>
             {
                 services.AddTransient<AuthHeaderHandler>();
-                services.AddHttpClient<IApiClient, ApiClient>(client =>
+                services.AddHttpClient<IApiClient, ApiClient2>(client =>
                 {
                     client.BaseAddress = apiBase;
-                    client.Timeout = TimeSpan.FromSeconds(30);
+                    client.Timeout = TimeSpan.FromMinutes(2); // or Timeout.InfiniteTimeSpan
                 })
                 .AddHttpMessageHandler<AuthHeaderHandler>();
 
@@ -79,6 +79,7 @@ internal static class Host
                 services.AddTransient<ITechlogService, TechlogService>();
                 services.AddTransient<IFlightLogsService, FlightLogsService>();
                 services.AddTransient<ICsvExportService, CsvExportService>();
+                services.AddTransient<IMemberService, MemberService>();
 
                 services.AddTransient<LoginPageViewModel>();
 

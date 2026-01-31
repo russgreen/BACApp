@@ -12,4 +12,6 @@ public interface IAuthService
     LoginResponse? CurrentLogin { get; }
 
     CompanyDto UserCompany { get; }
+
+    UserDto User { get; }
 }

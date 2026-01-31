@@ -31,7 +31,8 @@ public class TechlogService : ITechlogService
             ["dateTo"] = to.ToString("yyyy-MM-dd")
         };
 
-        var result = await _apiClient.GetAsync<List<TechLog>>("/techlog/list/GetDTLFlightsByAircraft", query, headers, ct);
+        var path = "/techlog/list/GetDTLFlightsByAircraft";
+        var result = await _apiClient.GetAsync<List<TechLog>>(path, query, headers, ct);
         return result ?? new List<TechLog>();
     }
 
@@ -48,7 +49,8 @@ public class TechlogService : ITechlogService
             ["date_from"] = date.ToString("yyyy-MM-dd"),
         };
 
-        var result = await _apiClient.GetAsync<MaintenanceData>("/techlog/maintenance/data", query, headers, ct);
+        var path = "/techlog/maintenance/data";
+        var result = await _apiClient.GetAsync<MaintenanceData>(path, query, headers, ct);
         return result;
     }
 }

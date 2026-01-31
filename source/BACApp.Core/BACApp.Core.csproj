@@ -9,5 +9,6 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<PackageReference Include="Avalonia" Version="11.*" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 	</ItemGroup>
 </Project>
