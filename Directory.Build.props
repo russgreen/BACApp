@@ -14,4 +14,8 @@
 	<Copyright>Copyright © Russell Green</Copyright>
 	  
   </PropertyGroup> 
+
+     <PropertyGroup>
+      <NoWarn>$(NoWarn);CS8625;CS8618;CS8611</NoWarn>
+   </PropertyGroup>
 </Project>

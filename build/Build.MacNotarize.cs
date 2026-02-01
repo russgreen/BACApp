@@ -20,7 +20,7 @@ partial class Build
                 {
                     foreach (var rid in MacRuntimes)
                     {
-                        var ridDir = OutputDirectory / "publish" / configuration / rid;
+                        var ridDir = OutputDirectory / rid;
                         var appPath = ridDir / $"{MacAppName}.app";
                         var dmgOut = ridDir / $"{MacAppName}_{rid}.dmg";
                         var zipOut = ridDir / $"{MacAppName}_{rid}.zip";

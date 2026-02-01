@@ -29,14 +29,14 @@ partial class Build
             {
                 foreach (var rid in MacRuntimes)
                 {
-                    var publishDir = OutputDirectory / "publish" / configuration / rid;
+                    var publishDir = OutputDirectory / rid;
 
                     if (!Directory.Exists(publishDir))
                     {
                         throw new Exception($"Publish directory not found: {publishDir}");
                     }
 
-                    var appBundleRoot = OutputDirectory / "publish" / configuration / rid / $"{MacAppName}.app";
+                    var appBundleRoot = publishDir / $"{MacAppName}.app";
                     var contentsDir = appBundleRoot / "Contents";
                     var macOsDir = contentsDir / "MacOS";
                     var resourcesDir = contentsDir / "Resources";

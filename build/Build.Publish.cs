@@ -33,7 +33,7 @@ partial class Build
                 {
                     foreach (var runtime in PublishRuntimes)
                     {
-                        var publishDirectory = OutputDirectory / "publish" / configuration / runtime;
+                        var publishDirectory = OutputDirectory / runtime;
                         publishDirectory.CreateOrCleanDirectory();
 
                         var publishSelfContained = true;
@@ -51,7 +51,6 @@ partial class Build
                             .SetOutput(publishDirectory)
                             .SetSelfContained(publishSelfContained)
                             .SetProperty("PublishSingleFile", "true")
-                            //.SetProperty("PublishTrimmed", "true")
                             .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
                             .SetProperty("DebugType", "none")
                             .SetProperty("DebugSymbols", "false")
