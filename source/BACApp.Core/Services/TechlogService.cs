@@ -46,7 +46,7 @@ public class TechlogService : ITechlogService
         var query = new Dictionary<string, string?>
         {
             ["registration"] = registration,
-            ["date_from"] = date.ToString("yyyy-MM-dd"),
+            ["dateFrom"] = date.ToString("yyyy-MM-dd"),
         };
 
         var path = "/techlog/maintenance/data";
