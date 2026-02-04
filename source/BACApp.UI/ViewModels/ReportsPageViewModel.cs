@@ -274,34 +274,59 @@ internal partial class ReportsPageViewModel : PageViewModel
     {
         Series = new();
 
-        double[] last12, previous12;
-        WireUpValueArrays(sorted, SelectedAircraft?.Registration, out last12, out previous12);
+        double[] cumulativeLast12, cumulativePrevious12, monthlyLast12, monthlyPrevious12;
+        WireUpValueArrays(sorted, SelectedAircraft?.Registration, out cumulativeLast12, out cumulativePrevious12);
+        WireUpValueArrays(sorted, SelectedAircraft?.Registration, out monthlyLast12, out monthlyPrevious12, false);
 
         //build the current year previous twelve months series
-        var currentTwelveMonths = new LineSeries<double>()
+        var cumumulativeLast12Series = new LineSeries<double>()
         {
             Name = "Current year hours",
-            Values = last12,
+            Values = cumulativeLast12,
             LineSmoothness = 0, //straight lines, no smoothing
         };
 
-        Series.Add(currentTwelveMonths);
+        Series.Add(cumumulativeLast12Series);
+
+        var monthlyLast12Series = new ColumnSeries<double>()
+        {
+            Name = "Current year hours",
+            Values = monthlyLast12,
+        };
+
+        Series.Add(monthlyLast12Series);
+
 
         //build the previoes year series for comparison
-        var previousTwelveMonths = new LineSeries<double>()
+        var cumulativePrevious12Series = new LineSeries<double>()
         {
             Name = "Preceeding year hours",
-            Values = previous12,
+            Values = cumulativePrevious12,
             LineSmoothness = 0, //straight lines, no smoothing
             Fill = null,
             Stroke  = new SolidColorPaint(SKColors.Gray) { StrokeThickness = 2 },
             GeometryStroke = new SolidColorPaint(SKColors.Gray) { StrokeThickness = 2 }
         };
 
-        Series.Add(previousTwelveMonths);
+        Series.Add(cumulativePrevious12Series);
+
+        var monthlyPrevious12Series = new ColumnSeries<double>()
+        {
+            Name = "Preceeding year hours",
+            Values = monthlyPrevious12,
+            Fill = new SolidColorPaint(SKColors.Gray),
+            Stroke = new SolidColorPaint(SKColors.Gray) { StrokeThickness = 2 },
+        };
+
+        Series.Add(monthlyPrevious12Series);
+
     }
 
-    private static void WireUpValueArrays(List<FlightLog> sorted, string? registration, out double[] last12, out double[] previous12)
+    private static void WireUpValueArrays(List<FlightLog> sorted, 
+        string? registration, 
+        out double[] last12, 
+        out double[] previous12,
+        bool cumulativeTotals = true)
     {
         // Desired alignment:
         // If current month is Jan 2026:
@@ -370,12 +395,16 @@ internal partial class ReportsPageViewModel : PageViewModel
             }
         }
 
-        // Convert monthly totals to cumulative totals (running sum)
-        for (var i = 1; i < 12; i++)
+        if (cumulativeTotals)
         {
-            last12[i] += last12[i - 1];
-            previous12[i] += previous12[i - 1];
+            // Convert monthly totals to cumulative totals (running sum)
+            for (var i = 1; i < 12; i++)
+            {
+                last12[i] += last12[i - 1];
+                previous12[i] += previous12[i - 1];
+            }
         }
+
 
     }
 
