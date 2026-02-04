@@ -6,7 +6,7 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<ApplicationIcon>BAC.ico</ApplicationIcon>
-
+		
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -15,10 +15,10 @@
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
 		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.*" />
-
-
+		
 		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.*" />-->
 		<PackageReference Include="ProDataGrid" Version="11.*-*" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />				
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.*">
@@ -28,7 +28,7 @@
 
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<!--<PackageReference Include="System.Text.Json" Version="10.*" />-->
-		
+
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />		
 
 		<!--IOC-->
