@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:draw="using:LiveChartsCore.SkiaSharpView.Drawing.Geometries"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BACApp.UI.Views.ReportsPage2View"
+             x:DataType="vm:ReportsPage2ViewModel">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Select Aircraft: " VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox ItemsSource="{Binding AllAircraftList}" 
+                      DisplayMemberBinding="{CompiledBinding Registration}"
+                      SelectedValue="{Binding SelectedAircraft}" />
+
+            <TextBlock Text="Financial year ending: " VerticalAlignment="Center" Margin="10,0,5,0"/>
+            <ComboBox ItemsSource="{Binding YearEndings}" 
+                      SelectedValue="{Binding SelectedYearEnding}" />            
+        </StackPanel>
+
+        <lvc:CartesianChart Grid.Row="1"
+                            LegendPosition="Right"
+                            XAxes="{Binding XAxis}"
+                            Series="{Binding Series}">
+            <lvc:CartesianChart.Title>
+                <lvc:XamlDrawnLabelVisual
+                    Text="Charge Time"
+                    Paint="{lvc:SolidColorPaint Color='#303030'}"
+                    TextSize="25"
+                    Padding="{lvc:Padding '15'}"/>
+            </lvc:CartesianChart.Title>
+        </lvc:CartesianChart>
+    </Grid>
+
+</UserControl>
