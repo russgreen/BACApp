@@ -85,6 +85,12 @@ public class Invoice
 	[JsonPropertyName("xero_invoice_response")]
 	public string? XeroInvoiceResponse { get; set; }
 
+	[JsonPropertyName("invoice_status_nam")]
+	public string? InvoiceStatusName { get; set; }
+
+	[JsonPropertyName("description")]
+	public string? Description { get; set; }
+
 	[JsonPropertyName("invoice_lines")]
 	public List<InvoiceLine>? InvoiceLines { get; set; } = new();
 

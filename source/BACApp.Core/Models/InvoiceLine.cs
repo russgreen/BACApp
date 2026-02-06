@@ -4,14 +4,24 @@ namespace BACApp.Core.Models;
 
 public class InvoiceLine
 {
-	[JsonPropertyName("invoice_details_id")]
+	[JsonPropertyName("fs_invoice_details_id")]
 	public int? InvoiceDetailsId { get; set; }
 
-	[JsonPropertyName("user_id")]
+	[JsonPropertyName("company_id")]
+	public int? CompanyId { get; set; }
+
+
+    [JsonPropertyName("invoice_id")]
+    public int? InvoiceId { get; set; }
+
+    [JsonPropertyName("user_id")]
 	public int? UserId { get; set; }
 
 	[JsonPropertyName("flight_log_id")]
 	public int? FlightLogId { get; set; }
+
+	[JsonPropertyName("description")]
+	public string? Description { get; set; }
 
 	[JsonPropertyName("flight_id")]
 	public int? FlightId { get; set; }
@@ -73,12 +83,6 @@ public class InvoiceLine
 	[JsonPropertyName("total_inc_vat")]
 	public double? TotalIncVat { get; set; }
 
-	[JsonPropertyName("invoice_id")]
-	public int? InvoiceId { get; set; }
-
-	[JsonPropertyName("company_id")]
-	public int? CompanyId { get; set; }
-
 	[JsonPropertyName("flight_type")]
 	public string? FlightType { get; set; }
 
@@ -100,12 +104,22 @@ public class InvoiceLine
 	[JsonPropertyName("landings")]
 	public int? Landings { get; set; }
 
+	[JsonPropertyName("hire_hours")]
+    public string? HireHours { get; set; }
+
+    [JsonPropertyName("training_hours")]
+    public string? TrainingHours { get; set; }
+
 	[JsonPropertyName("fuel_surcharge")]
 	public double? FuelSurcharge { get; set; }
 
-	[JsonPropertyName("tacho_start")]
+    [JsonPropertyName("tacho_start")]
 	public double? TachoStart { get; set; }
 
 	[JsonPropertyName("tacho_stop")]
 	public double? TachoStop { get; set; }
+
+	[JsonPropertyName("xero_account_code")]
+	public int? XeroAccountCode { get; set; }
+
 }

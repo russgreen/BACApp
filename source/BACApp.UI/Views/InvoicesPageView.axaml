@@ -88,7 +88,7 @@
            <DataGrid.Columns>
 			   <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat={}{0:yyyy-MM-dd}}" />
                <DataGridTextColumn Header="Number" Binding="{Binding InvoiceNumber}" />
-               <DataGridTextColumn Header="Total" Binding="{Binding TotalInvoice}" />
+               <DataGridTextColumn Header="Total £" Binding="{Binding TotalInvoice}" />
                <DataGridTextColumn Header="Status" Binding="{Binding InvoiceStatusId}" />
                <DataGridTextColumn Header="Settled" Binding="{Binding SettlementDate, StringFormat={}{0:yyyy-MM-dd}}" />
                <DataGridTextColumn Header="Cancelled" Binding="{Binding CancelDate, StringFormat={}{0:yyyy-MM-dd}}" />
