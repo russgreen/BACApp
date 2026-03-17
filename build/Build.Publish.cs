@@ -23,7 +23,7 @@ partial class Build
         .TriggeredBy(Compile)
         .Executes(() =>
         {
-            var publishableProject = Solution.BACApp_UI;
+            var publishableProject = Solution.BACApp_Desktop;
 
             foreach (var configuration in Solution.GetModel().BuildTypes)
             {
@@ -45,7 +45,7 @@ partial class Build
                         Log.Information("{runtime} is self contained: {selfContained}", runtime, publishSelfContained);
 
                         DotNetPublish(settings => settings
-                            .SetProject(Solution.BACApp_UI)
+                            .SetProject(Solution.BACApp_Desktop)
                             .SetConfiguration(configuration)
                             .SetRuntime(runtime)
                             .SetOutput(publishDirectory)
