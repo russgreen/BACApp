@@ -56,6 +56,13 @@ public partial class App : Application
                 });
             };
         }
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        {
+            singleViewPlatform.MainView = new Views.MainView
+            {
+                DataContext = Host.GetService<ViewModels.MainWindowViewModel>()
+            };
+        }
 
         base.OnFrameworkInitializationCompleted();
     }

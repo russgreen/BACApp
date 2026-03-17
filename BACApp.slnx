@@ -11,4 +11,5 @@
   </Project>
   <Project Path="source/BACApp.Core/BACApp.Core.csproj" />
   <Project Path="source/BACApp.UI/BACApp.UI.csproj" />
+  <Project Path="source/BACApp.iOS/BACApp.iOS.csproj" />
 </Solution>
