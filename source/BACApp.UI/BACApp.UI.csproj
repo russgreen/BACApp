@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
+		<OutputType>Library</OutputType>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-		<ApplicationIcon>BAC.ico</ApplicationIcon>
 		
 	</PropertyGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.*" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.*" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
 		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.*" />
@@ -29,8 +26,6 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<!--<PackageReference Include="System.Text.Json" Version="10.*" />-->
 
-		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />		
-
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.*" />
@@ -44,6 +39,10 @@
 
 		<!--<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />-->
 
+	</ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Update="**\*.axaml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static BACApp.UI.SingleInstanceCoordinator;
+using static BACApp.Desktop.SingleInstanceCoordinator;
 
-namespace BACApp.UI.Extensions;
+namespace BACApp.Desktop.Extensions;
 
 internal static class ActivationRequestExtensions
 {

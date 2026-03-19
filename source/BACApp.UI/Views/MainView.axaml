@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             x:Class="BACApp.UI.Views.MainView"
+             x:DataType="vm:MainWindowViewModel"
+             x:CompileBindings="True">
+
+  <Grid RowDefinitions="*">
+
+    <!-- Main layout with collapsible side panel -->
+    <SplitView x:Name="MainSplitView"
+               IsPaneOpen="{Binding IsPaneOpen}"
+               DisplayMode="CompactInline"
+               OpenPaneLength="240"
+               CompactPaneLength="45"
+               PanePlacement="Left">
+
+      <SplitView.Pane>
+        <StackPanel Margin="5" Spacing="5" >
+            <ToggleButton
+                    HorizontalAlignment="Stretch"
+                    Content="☰"
+                    ToolTip.Tip="Toggle menu"
+                    IsChecked="{Binding IsPaneOpen, ElementName=MainSplitView, Mode=TwoWay}" />
+
+
+            <Button Command="{Binding GoToLoginCommand}" 
+                    IsEnabled="{Binding !IsLoggedIn}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🔐" Margin="0,0,15,0"/>
+                <TextBlock Text="Login"/>
+              </StackPanel>
+            </Button>
+
+            <Button Command="{Binding GoToCalendarCommand}" 
+                    IsEnabled="{Binding IsLoggedIn}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📅" Margin="0,0,15,0"/>
+                <TextBlock Text="Calendar"/>
+              </StackPanel>
+            </Button>
+
+            <Button Command="{Binding GoToLogsCommand}" 
+                    IsEnabled="{Binding IsLogsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🗒️" Margin="0,0,15,0"/>
+                <TextBlock Text="Logs"/>
+              </StackPanel>
+            </Button>
+
+             <Button Command="{Binding GoToLogsAirframeCommand}" 
+                    IsEnabled="{Binding IsLogsAirframeEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🗒️" Margin="0,0,15,0"/>
+                <TextBlock Text="Logs Airframe"/>
+              </StackPanel>
+            </Button>
+
+            <Button Command="{Binding GoToReportsCommand}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📈" Margin="0,0,15,0"/>
+                <TextBlock Text="Reports"/>
+              </StackPanel> 
+              </Button>
+
+            <Button Command="{Binding GoToReports2Command}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📈" Margin="0,0,15,0"/>
+                <TextBlock Text="Reports 2"/>
+              </StackPanel> 
+              </Button>
+
+        </StackPanel>
+      </SplitView.Pane>
+
+      <SplitView.Content>
+        <!-- Load pages here -->
+        <ContentControl Content="{Binding CurrentPage}" />
+        
+      </SplitView.Content>
+    </SplitView>
+  </Grid>
+
+</UserControl>
