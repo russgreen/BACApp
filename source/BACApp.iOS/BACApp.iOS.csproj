@@ -17,4 +17,10 @@
 		<ProjectReference Include="..\BACApp.UI\BACApp.UI.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="Info.plist">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>

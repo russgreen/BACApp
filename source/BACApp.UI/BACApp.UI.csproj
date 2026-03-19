@@ -42,6 +42,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Update="**\*.axaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\BACApp.Core\BACApp.Core.csproj" />
 	</ItemGroup>
 
