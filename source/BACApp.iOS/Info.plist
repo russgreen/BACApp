@@ -20,6 +20,7 @@
 	<true/>
 	<key>UIDeviceFamily</key>
 	<array>
+		<integer>1</integer>
 		<integer>2</integer>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -31,7 +32,7 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UIApplicationSupportsMultipleScenes</key>
-<false/>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
