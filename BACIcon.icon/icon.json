@@ -1,0 +1,39 @@
+{
+  "fill" : "automatic",
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill" : "none",
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "BAC-Logo-SVG.svg",
+          "name" : "BAC-Logo-SVG",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 1.3,
+            "translation-in-points" : [
+              0.3276000000001204,
+              0.382902099652415
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

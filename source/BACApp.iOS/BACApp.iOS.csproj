@@ -22,8 +22,16 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+
+	<ItemGroup>
+    <MauiIcon Include="AppIcon\appicon.svg" ForegroundFile="AppIcon\appiconfg.svg" TintColor="white" />
+	</ItemGroup>
 	
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<BundleResource Include="PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Assets.xcassets/" />
 	</ItemGroup>
 </Project>

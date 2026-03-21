@@ -16,6 +16,8 @@
 	<string>APPL</string>
 	<key>CFBundleExecutable</key>
 	<string>BACApp.iOS</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIDeviceFamily</key>
