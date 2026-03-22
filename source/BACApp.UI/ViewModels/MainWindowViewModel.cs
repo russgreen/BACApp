@@ -108,6 +108,18 @@ internal partial class MainWindowViewModel : BaseViewModel
     private void GoToLogin() => CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
 
     [RelayCommand]
+    private void Logout()
+    {
+        _authService.LogoutAsync();
+        CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
+        IsLoggedIn = false;
+        IsLogsEnabled = false;
+        IsLogsAirframeEnabled = false;
+        IsReportsEnabled = false;
+    }
+
+
+    [RelayCommand]
     private void GoToCalendar() => CurrentPage = _pageFactory.GetPageViewModel<CalendarPageViewModel>();
 
     [RelayCommand]
@@ -121,5 +133,6 @@ internal partial class MainWindowViewModel : BaseViewModel
 
     [RelayCommand]
     private void GoToLogsAirframe() => CurrentPage = _pageFactory.GetPageViewModel<LogsAirframePageViewModel>();
+
 
 }
