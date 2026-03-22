@@ -5,8 +5,12 @@
 		<OutputType>Exe</OutputType>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<SupportedOSPlatformVersion>16.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>
 		<RootNamespace>BACApp.iOS</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup>
+	  <CodesignExtraArgs>--deep</CodesignExtraArgs>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,5 +26,36 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <BundleResource Include="PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 
+	<Target Name="CompileAssetCatalog" BeforeTargets="_CollectBundleResources">
+	  <PropertyGroup>
+		<_AssetCatalogOutputDir>$(IntermediateOutputPath)assetcatalog</_AssetCatalogOutputDir>
+		<_AssetCatalogPartialPlist>$(_AssetCatalogOutputDir)/assetcatalog-partial-info.plist</_AssetCatalogPartialPlist>
+	  </PropertyGroup>
+
+	  <MakeDir Directories="$(_AssetCatalogOutputDir)" />
+
+	  <Exec Command="xcrun actool --compile '$(_AssetCatalogOutputDir)' --platform iphoneos --minimum-deployment-target $(SupportedOSPlatformVersion) --app-icon AppIcon --output-partial-info-plist '$(_AssetCatalogPartialPlist)' '$(MSBuildProjectDirectory)/Assets.xcassets'" />
+
+	  <ItemGroup>
+		<BundleResource Include="$(_AssetCatalogOutputDir)/Assets.car" LogicalName="Assets.car" />
+	  </ItemGroup>
+	</Target>
+
+	<Target Name="ResetCodesignCache" BeforeTargets="_CodesignAppBundle">
+      <RemoveDir Directories="obj/$(Configuration)/$(TargetFramework)/$(RuntimeIdentifier)/codesign" />
+    </Target>
+
+	<Target Name="CleanStaleIosBundleArtifacts" BeforeTargets="Build">
+	  <RemoveDir Directories="$(OutputPath)$(AssemblyName).app" />
+	  <RemoveDir Directories="$(IntermediateOutputPath)ipa" />
+	</Target>
+
+	<Target Name="ResignFrameworksInIpa" AfterTargets="_CreateIpa">
+	  <Exec Command="sh ./sign-frameworks.sh 'obj/$(Configuration)/$(TargetFramework)/$(RuntimeIdentifier)/ipa/Payload/BACApp.iOS.app' &quot;$(CodesignKey)&quot;" />
+	</Target>
 </Project>
