@@ -7,9 +7,10 @@ public partial class LoginPageView : UserControl
     public LoginPageView()
     {
         InitializeComponent();
-    }
 
-    private void ComboBox_ActualThemeVariantChanged(object? sender, System.EventArgs e)
-    {
+        if (System.OperatingSystem.IsIOS())
+        {
+            SharedLoginControls.IsVisible = false;
+        }
     }
 }

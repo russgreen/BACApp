@@ -155,7 +155,9 @@ public class ApiClient2 : IApiClient
     private static void ApplyHeaders(HttpRequestMessage request, IDictionary<string, string>? headers)
     {
         if (headers is not { Count: > 0 })
+        {
             return;
+        }
 
         foreach (var kv in headers)
         {
