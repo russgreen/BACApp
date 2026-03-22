@@ -25,11 +25,20 @@
 
 
             <Button Command="{Binding GoToLoginCommand}" 
-                    IsEnabled="{Binding !IsLoggedIn}"
+                    IsVisible="{Binding !IsLoggedIn}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="🔐" Margin="0,0,15,0"/>
                 <TextBlock Text="Login"/>
+              </StackPanel>
+            </Button>
+
+           <Button Command="{Binding LogoutCommand}" 
+                    IsVisible="{Binding IsLoggedIn}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🔐" Margin="0,0,15,0"/>
+                <TextBlock Text="Logout"/>
               </StackPanel>
             </Button>
 

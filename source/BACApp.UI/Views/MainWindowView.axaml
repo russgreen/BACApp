@@ -7,8 +7,9 @@
         x:DataType="vm:MainWindowViewModel"
         x:CompileBindings="True"
         Title="{Binding WindowTitle}"
-        Width="900" Height="600">
+        Width="900"
+        Height="600">
 
-  <views:MainView />
+  <views:MainView DataContext="{Binding}" />
 
 </Window>

@@ -31,7 +31,7 @@
 	  <BundleResource Include="PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
 	</ItemGroup>
 
-	<Target Name="CompileAssetCatalog" BeforeTargets="_CollectBundleResources">
+	<Target Name="CompileAssetCatalog" BeforeTargets="_CollectBundleResources" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 	  <PropertyGroup>
 		<_AssetCatalogOutputDir>$(IntermediateOutputPath)assetcatalog</_AssetCatalogOutputDir>
 		<_AssetCatalogPartialPlist>$(_AssetCatalogOutputDir)/assetcatalog-partial-info.plist</_AssetCatalogPartialPlist>
@@ -46,16 +46,16 @@
 	  </ItemGroup>
 	</Target>
 
-	<Target Name="ResetCodesignCache" BeforeTargets="_CodesignAppBundle">
+	<Target Name="ResetCodesignCache" BeforeTargets="_CodesignAppBundle" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
       <RemoveDir Directories="obj/$(Configuration)/$(TargetFramework)/$(RuntimeIdentifier)/codesign" />
     </Target>
 
-	<Target Name="CleanStaleIosBundleArtifacts" BeforeTargets="Build">
+	<Target Name="CleanStaleIosBundleArtifacts" BeforeTargets="Build" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 	  <RemoveDir Directories="$(OutputPath)$(AssemblyName).app" />
 	  <RemoveDir Directories="$(IntermediateOutputPath)ipa" />
 	</Target>
 
-	<Target Name="ResignFrameworksInIpa" AfterTargets="_CreateIpa">
+	<Target Name="ResignFrameworksInIpa" AfterTargets="_CreateIpa" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 	  <Exec Command="sh ./sign-frameworks.sh 'obj/$(Configuration)/$(TargetFramework)/$(RuntimeIdentifier)/ipa/Payload/BACApp.iOS.app' &quot;$(CodesignKey)&quot;" />
 	</Target>
 </Project>
