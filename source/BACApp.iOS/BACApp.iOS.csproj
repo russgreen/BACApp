@@ -22,12 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Info.plist">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-	
-	<ItemGroup>
 	  <BundleResource Include="PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
 	</ItemGroup>
 
