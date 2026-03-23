@@ -19,20 +19,19 @@ partial class Build
         {
             var compiledAssemblies = new List<string>();
 
-            foreach (var project in Solution.AllProjects.Where(project => project != Solution._build))
+            var project = Solution.BACApp_Desktop;
+
+            AbsolutePath projectDirectory = project.Directory;
+            Log.Information(projectDirectory);
+
+            var files = projectDirectory
+                .GlobDirectories(@"**\bin\**")
+                .SelectMany(x => x.GlobFiles(CompiledAssemblies));
+
+            foreach (var file in files)
             {
-                AbsolutePath projectDirectory = project.Directory;
-                Log.Information(projectDirectory);
-
-                var files = projectDirectory
-                    .GlobDirectories(@"**\bin\**")
-                    .SelectMany(x => x.GlobFiles(CompiledAssemblies));
-
-                foreach (var file in files)
-                {
-                    Log.Information("File : {file}", file);
-                    compiledAssemblies.Add(file);
-                }
+                Log.Information("File : {file}", file);
+                compiledAssemblies.Add(file);
             }
 
             var publishedFiles = OutputDirectory
