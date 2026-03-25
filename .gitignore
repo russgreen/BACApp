@@ -375,3 +375,4 @@ output/*
 *.dmg
 
 .DS_Store
+build/entitlements.plist

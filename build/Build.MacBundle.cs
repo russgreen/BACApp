@@ -16,8 +16,8 @@ partial class Build
         "osx-arm64"
     ];
 
-    const string MacAppName = "BACApp.UI";
-    const string MacExeName = "BACApp.UI"; // Avalonia app binary name on macOS
+    const string MacAppName = "BACApp";
+    const string MacExeName = "BACApp.Desktop"; // Avalonia app binary name on macOS
     const string MacIconFileName = "BAC.icns";
 
     Target MacBundle => _ => _
@@ -29,14 +29,14 @@ partial class Build
             {
                 foreach (var rid in MacRuntimes)
                 {
-                    var publishDir = OutputDirectory / "publish" / configuration / rid;
+                    var publishDir = OutputDirectory / rid;
 
                     if (!Directory.Exists(publishDir))
                     {
                         throw new Exception($"Publish directory not found: {publishDir}");
                     }
 
-                    var appBundleRoot = OutputDirectory / "publish" / configuration / rid / $"{MacAppName}.app";
+                    var appBundleRoot = publishDir / $"{MacAppName}.app";
                     var contentsDir = appBundleRoot / "Contents";
                     var macOsDir = contentsDir / "MacOS";
                     var resourcesDir = contentsDir / "Resources";
@@ -81,9 +81,9 @@ partial class Build
                     // Write Info.plist
                     var infoPlistPath = contentsDir / "Info.plist";
                     File.WriteAllText(infoPlistPath, BuildInfoPlist(
-                        bundleId: "com.russgreen.bacapp", // change if you have an official id
+                        bundleId: "com.russellgreen.bacapp", // change if you have an official id
                         appName: MacAppName,
-                        version: Solution.BACApp_UI.GetProperty("VersionPrefix") ?? "0.0.0",
+                        version: Solution.BACApp_Desktop.GetProperty("VersionPrefix") ?? "0.0.0",
                         executableName: MacExeName
                     ));
 

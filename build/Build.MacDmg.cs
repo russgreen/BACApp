@@ -20,7 +20,7 @@ partial class Build
             {
                 foreach (var rid in MacRuntimes)
                 {
-                    var ridDir = OutputDirectory / "publish" / configuration / rid;
+                    var ridDir = OutputDirectory / rid;
                     var appPath = ridDir / $"{MacAppName}.app";
 
                     if (!Directory.Exists(appPath))
@@ -39,19 +39,36 @@ partial class Build
 
                     RunProcess("chmod", $"+x \"{appPath / "Contents" / "MacOS" / MacAppName}\"", RootDirectory);
 
+                    //RunProcess(
+                    //    "hdiutil",
+                    //    $"create -srcfolder \"{appPath}\" -volname \"{volumeName}\" -fs HFS+ -format UDRW \"{dmgTemp}\"",
+                    //    RootDirectory);
+
+                    //RunProcess(
+                    //    "hdiutil",
+                    //    $"convert \"{dmgTemp}\" -format UDBZ -o \"{dmgOut}\"",
+                    //    RootDirectory);
+
+                    // Create DMG directly in compressed format (avoids mounting/sandbox issues)
                     RunProcess(
                         "hdiutil",
-                        $"create -srcfolder \"{appPath}\" -volname \"{volumeName}\" -fs HFS+ -format UDRW \"{dmgTemp}\"",
+                        $"create -srcfolder \"{appPath}\" -volname \"{volumeName}\" -fs HFS+ -format UDBZ -ov \"{dmgOut}\"",
                         RootDirectory);
 
-                    RunProcess(
-                        "hdiutil",
-                        $"convert \"{dmgTemp}\" -format UDBZ -o \"{dmgOut}\"",
-                        RootDirectory);
-
-                    File.Delete(dmgTemp);
+                    //File.Delete(dmgTemp);
 
                     Log.Information("Created DMG: {Dmg}", dmgOut);
+
+                    // Verify file exists
+                    if (File.Exists(dmgOut))
+                    {
+                        var fileInfo = new FileInfo(dmgOut);
+                        Log.Information("DMG verified to exist: {Size} bytes", fileInfo.Length);
+                    }
+                    else
+                    {
+                        Log.Error("DMG was created but no longer exists!");
+                    }
 
                     // ZIP (preserves executable bits on macOS)
                     // --keepParent ensures the .app folder is preserved in the zip root, not only its contents

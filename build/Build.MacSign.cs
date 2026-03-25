@@ -25,11 +25,15 @@ partial class Build
         {
             var identity = ResolveMacCodeSignIdentity(MacSignIdentity);
 
+            // Create entitlements file for hardened runtime
+            var entitlementsPath = RootDirectory / "build" / "entitlements.plist";
+            CreateEntitlementsFile(entitlementsPath);
+
             foreach (var configuration in Solution.GetModel().BuildTypes.Where(x => x.StartsWith("Release", StringComparison.OrdinalIgnoreCase)))
             {
                 foreach (var rid in MacRuntimes)
                 {
-                    var ridDir = OutputDirectory / "publish" / configuration / rid;
+                    var ridDir = OutputDirectory / rid;
                     var appPath = ridDir / $"{MacAppName}.app";
                     if (!Directory.Exists(appPath))
                     {
@@ -38,11 +42,12 @@ partial class Build
 
                     Log.Information("Signing macOS app bundle: {AppPath}", appPath);
                     Log.Information("Using codesign identity: {Identity}", identity);
+                    Log.Information("Using entitlements: {Entitlements}", entitlementsPath);
 
                     // Sign (hardened runtime option is typical if you later notarize)
                     RunProcess(
                         "codesign",
-                        $"--deep --force --options runtime --timestamp --verify --verbose --sign \"{identity}\" \"{appPath}\"",
+                        $"--deep --force --options runtime --entitlements \"{entitlementsPath}\" --timestamp --verify --verbose --sign \"{identity}\" \"{appPath}\"",
                         RootDirectory);
 
                     // Verify signature
@@ -55,6 +60,26 @@ partial class Build
                 }
             }
         });
+
+    static void CreateEntitlementsFile(AbsolutePath path)
+    {
+        var entitlements = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<!DOCTYPE plist PUBLIC ""-//Apple//DTD PLIST 1.0//EN"" ""http://www.apple.com/DTDs/PropertyList-1.0.dtd"">
+<plist version=""1.0"">
+<dict>
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>";
+
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        File.WriteAllText(path, entitlements);
+        Log.Information("Created entitlements file: {Path}", path);
+    }
 
     static string ResolveMacCodeSignIdentity(string? configuredIdentity)
     {

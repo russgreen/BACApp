@@ -20,10 +20,10 @@ partial class Build
     ];
 
     Target Publish => _ => _
-        .TriggeredBy(Compile)
+        .TriggeredBy(PublishIos)
         .Executes(() =>
         {
-            var publishableProject = Solution.BACApp_UI;
+            var publishableProject = Solution.BACApp_Desktop;
 
             foreach (var configuration in Solution.GetModel().BuildTypes)
             {
@@ -33,7 +33,7 @@ partial class Build
                 {
                     foreach (var runtime in PublishRuntimes)
                     {
-                        var publishDirectory = OutputDirectory / "publish" / configuration / runtime;
+                        var publishDirectory = OutputDirectory / runtime;
                         publishDirectory.CreateOrCleanDirectory();
 
                         var publishSelfContained = true;
@@ -45,13 +45,12 @@ partial class Build
                         Log.Information("{runtime} is self contained: {selfContained}", runtime, publishSelfContained);
 
                         DotNetPublish(settings => settings
-                            .SetProject(Solution.BACApp_UI)
+                            .SetProject(Solution.BACApp_Desktop)
                             .SetConfiguration(configuration)
                             .SetRuntime(runtime)
                             .SetOutput(publishDirectory)
                             .SetSelfContained(publishSelfContained)
                             .SetProperty("PublishSingleFile", "true")
-                            //.SetProperty("PublishTrimmed", "true")
                             .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
                             .SetProperty("DebugType", "none")
                             .SetProperty("DebugSymbols", "false")

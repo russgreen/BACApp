@@ -17,7 +17,7 @@ partial class Build
         .Executes(() =>
         {
             var aipProjectPath = Path.Combine(RootDirectory, @"Installer\BACApp.aip");
-            var version = Solution.BACApp_UI.GetProperty("VersionPrefix");
+            var version = Solution.BACApp_Desktop.GetProperty("VersionPrefix");
 
             Log.Information("AIP : {aipProjectPath}", aipProjectPath);
             Log.Information("Version : {version}", version);

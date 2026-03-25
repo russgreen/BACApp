@@ -1,23 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net10.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net10.0</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('OSX'))">net10.0;net10.0-ios</TargetFrameworks>
 		<Nullable>enable</Nullable>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-		<ApplicationIcon>BAC.ico</ApplicationIcon>
-
+		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-ios'">18.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
+
+	<!-- <PropertyGroup>
+  		<PublishTrimmed>true</PublishTrimmed>
+  		<TrimMode>partial</TrimMode>
+  		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	</PropertyGroup> -->
 	
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.*" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.*" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
 		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.*" />
-
+		
 		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.*" />-->
 		<PackageReference Include="ProDataGrid" Version="11.*-*" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc6.1" />				
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.*">
@@ -27,7 +32,6 @@
 
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<!--<PackageReference Include="System.Text.Json" Version="10.*" />-->
-		
 
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
@@ -42,6 +46,16 @@
 
 		<!--<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />-->
 
+	</ItemGroup>
+
+	<!-- <ItemGroup>
+		<TrimmerRootAssembly Include="ProDataGrid" />
+		<TrimmerRootAssembly Include="Avalonia.Xaml.Interactions" />
+		<TrimmerRootAssembly Include="Avalonia.Diagnostics" />
+	</ItemGroup> -->
+
+	<ItemGroup>
+		<AvaloniaResource Update="**\*.axaml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using BACApp.Core.Services;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +40,20 @@ internal class AuthHeaderHandler : DelegatingHandler
             }
         }
 
-        return await base.SendAsync(request, ct);
+        try
+        {
+            return await base.SendAsync(request, ct).ConfigureAwait(false);
+        }
+        catch (TaskCanceledException) when (ct.IsCancellationRequested)
+        {
+            // Expected when navigating away / disposing the page and canceling in-flight requests.
+            // Keep cancellation semantics intact (do not wrap; do not log here).
+            throw;
+        }
+        catch (HttpRequestException ex) when (ct.IsCancellationRequested && ex.InnerException is IOException)
+        {
+            // Some socket aborts during cancellation surface as HttpRequestException/IOException.
+            throw new TaskCanceledException("The operation was canceled.", ex, ct);
+        }
     }
 }

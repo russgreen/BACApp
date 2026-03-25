@@ -1,16 +1,15 @@
-﻿using Avalonia;
+using Avalonia;
+using BACApp.UI;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace BACApp.UI;
+namespace BACApp.Desktop;
 
 internal class Program
 {
     private static SingleInstanceCoordinator? _singleInstance;
     private static readonly CancellationTokenSource _singleInstanceCts = new();
-
-    public static Action<SingleInstanceCoordinator.ActivationRequest>? ActivationHandler { get; internal set; }
 
     [STAThread]
     public static int Main(string[] args)
@@ -29,7 +28,7 @@ internal class Program
 
         _ = _singleInstance.RunServerAsync(request =>
         {
-            ActivationHandler?.Invoke(request);
+            App.ActivationHandler?.Invoke(request == SingleInstanceCoordinator.ActivationRequest.Maximize);
             return System.Threading.Tasks.Task.CompletedTask;
         }, _singleInstanceCts.Token);
 

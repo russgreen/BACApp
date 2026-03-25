@@ -2,8 +2,8 @@
   <PropertyGroup>
     <Company>Russell Green</Company>
 
-    <VersionPrefix>0.2.4</VersionPrefix>
-    <VersionSuffix>BETA.2</VersionSuffix>
+    <VersionPrefix>0.5.2</VersionPrefix>
+    <VersionSuffix>BETA.5</VersionSuffix>
     <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -14,4 +14,8 @@
 	<Copyright>Copyright © Russell Green</Copyright>
 	  
   </PropertyGroup> 
+
+     <PropertyGroup>
+      <NoWarn>$(NoWarn);CS8625;CS8618;CS8611</NoWarn>
+   </PropertyGroup>
 </Project>

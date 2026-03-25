@@ -42,8 +42,8 @@ public class FlightLogsService : IFlightLogsService
         var query = new Dictionary<string, string?>
         {
             ["registration"] = registration,
-            ["date_from"] = from.ToString("yyyy-MM-dd"),
-            ["date_to"] = to.ToString("yyyy-MM-dd")
+            ["dateFrom"] = from.ToString("yyyy-MM-dd"),
+            ["dateTo"] = to.ToString("yyyy-MM-dd")
         };
 
         var path = "/flightlog/list/byAircraftFilters";

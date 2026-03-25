@@ -3,9 +3,9 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
-using BACApp.UI.Extensions;
+using BACApp.Desktop.Extensions;
 
-namespace BACApp.UI;
+namespace BACApp.Desktop;
 
 internal sealed partial class SingleInstanceCoordinator : IDisposable
 {

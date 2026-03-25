@@ -45,18 +45,17 @@ internal partial class MainWindowViewModel : BaseViewModel
     [ObservableProperty]
     private PageViewModel _currentPage;
 
-
-
     public MainWindowViewModel()
     {
-        _logger = null;
-        _authService = null;
+        _logger = null!;
+        _authService = null!;
+        _pageFactory = null!;
 
         WindowTitle = "Cloudbase App";
     }
 
-
-    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, 
+    public MainWindowViewModel(
+        ILogger<MainWindowViewModel> logger,
         IAuthService authService,
         PageFactory pageFactory)
     {
@@ -64,7 +63,10 @@ internal partial class MainWindowViewModel : BaseViewModel
         _authService = authService;
         _pageFactory = pageFactory;
 
-        var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        var informationVersion = Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
+            .InformationalVersion;
+
         WindowTitle = $"Cloudbase App [{informationVersion}]";
 
         WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (r, m) =>
@@ -76,10 +78,10 @@ internal partial class MainWindowViewModel : BaseViewModel
             {
                 IsLogsEnabled = true;
                 IsLogsAirframeEnabled = true;
+                IsReportsEnabled = true;
 
-                if(_authService.User.Role == "Administrator")
+                if (_authService.User.Role == "Administrator")
                 {
-                    IsReportsEnabled = true;
                     IsInvoicesEnabled = true;
                 }
             }
@@ -97,7 +99,7 @@ internal partial class MainWindowViewModel : BaseViewModel
         });
 
         CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
-
+        WeakReferenceMessenger.Default.Send(new NativeLoginVisibilityMessage(true));
     }
 
     partial void OnCurrentPageChanged(PageViewModel oldValue, PageViewModel newValue)
@@ -106,16 +108,32 @@ internal partial class MainWindowViewModel : BaseViewModel
         {
             disposable.Dispose();
         }
+
+        WeakReferenceMessenger.Default.Send(new NativeLoginVisibilityMessage(newValue is LoginPageViewModel));
     }
 
     [RelayCommand]
     private void GoToLogin() => CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
 
     [RelayCommand]
+    private void Logout()
+    {
+        _authService.LogoutAsync();
+        CurrentPage = _pageFactory.GetPageViewModel<LoginPageViewModel>();
+        IsLoggedIn = false;
+        IsLogsEnabled = false;
+        IsLogsAirframeEnabled = false;
+        IsReportsEnabled = false;
+    }
+
+    [RelayCommand]
     private void GoToCalendar() => CurrentPage = _pageFactory.GetPageViewModel<CalendarPageViewModel>();
 
     [RelayCommand]
     private void GoToReports() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPageViewModel>();
+
+    [RelayCommand]
+    private void GoToReports2() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPage2ViewModel>();
 
     [RelayCommand]
     private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
