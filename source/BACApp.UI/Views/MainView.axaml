@@ -87,6 +87,26 @@
               </StackPanel> 
               </Button>
 
+             <Button Command="{Binding GoToReports3Command}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📈" Margin="0,0,15,0"/>
+                <TextBlock Text="Reports 3"/>
+              </StackPanel> 
+              </Button>
+
+             <!-- 
+            <Button Command="{Binding GoToInvoicesCommand}" 
+                    IsEnabled="{Binding IsInvoicesEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="💷" Margin="0,0,15,0"/>
+                <TextBlock Text="Invoices"/>
+              </StackPanel> 
+           </Button>
+           -->
+
         </StackPanel>
       </SplitView.Pane>
 

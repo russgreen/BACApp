@@ -93,7 +93,7 @@ internal partial class ReportsPage2ViewModel : PageViewModel
         WireupAxisLabels();
 
         // Defer async work; do not block constructor
-        LoadAsync().ConfigureAwait(false);
+        LoadAsync().ConfigureAwait(false); 
     }
 
     private void SetDates()

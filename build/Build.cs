@@ -16,7 +16,7 @@ partial class Build : NukeBuild
     readonly AbsolutePath OutputDirectory = RootDirectory / "output";
     readonly AbsolutePath SourceDirectory = RootDirectory / "source";
 
-    readonly string[] CompiledAssemblies = { "BACApp.Core.dll", "BACApp.Desktop.exe" };
+    readonly string[] CompiledAssemblies = { "BACApp.Core.dll", "BACApp.UI.dll", "BACApp.Desktop.exe" };
 
     [GitRepository]
     [Required]

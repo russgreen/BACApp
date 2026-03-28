@@ -20,7 +20,7 @@ partial class Build
     ];
 
     Target Publish => _ => _
-        .TriggeredBy(Compile)
+        .TriggeredBy(PublishIos)
         .Executes(() =>
         {
             var publishableProject = Solution.BACApp_Desktop;

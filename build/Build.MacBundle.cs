@@ -81,7 +81,7 @@ partial class Build
                     // Write Info.plist
                     var infoPlistPath = contentsDir / "Info.plist";
                     File.WriteAllText(infoPlistPath, BuildInfoPlist(
-                        bundleId: "com.russgreen.bacapp", // change if you have an official id
+                        bundleId: "com.russellgreen.bacapp", // change if you have an official id
                         appName: MacAppName,
                         version: Solution.BACApp_Desktop.GetProperty("VersionPrefix") ?? "0.0.0",
                         executableName: MacExeName

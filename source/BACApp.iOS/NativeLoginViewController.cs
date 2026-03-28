@@ -126,35 +126,41 @@ internal sealed class NativeLoginViewController : UIViewController
 
         try
         {
-            SetBusy(true, "Attempting login...");
+            InvokeOnMainThread(() => SetBusy(true, "Attempting login..."));
 
             var response = await NativeLoginBridge.LoginAsync(username, password);
 
             if (response is null)
             {
-                SetBusy(false, "Login failed. Check credentials.");
+                InvokeOnMainThread(() => SetBusy(false, "Login failed. Check credentials."));
                 return;
             }
 
             if (response.Companies is null || response.Companies.Length == 0)
             {
-                SetBusy(false, "No valid companies were returned.");
+                InvokeOnMainThread(() => SetBusy(false, "No valid companies were returned."));
                 return;
             }
 
             if (response.Companies.Length == 1)
             {
-                NativeLoginBridge.CompleteLogin(response.Companies[0]);
-                SetBusy(false, string.Empty);
+                InvokeOnMainThread(() =>
+                {
+                    NativeLoginBridge.CompleteLogin(response.Companies[0]);
+                    SetBusy(false, string.Empty);
+                });
                 return;
             }
 
-            SetBusy(false, string.Empty);
-            PresentCompanyPicker(response.Companies);
+            InvokeOnMainThread(() =>
+            {
+                SetBusy(false, string.Empty);
+                PresentCompanyPicker(response.Companies);
+            });
         }
         catch (Exception ex)
         {
-            SetBusy(false, ex.Message);
+            InvokeOnMainThread(() => SetBusy(false, ex.Message));
         }
     }
 
