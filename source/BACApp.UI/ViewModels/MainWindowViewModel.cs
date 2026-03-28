@@ -136,6 +136,9 @@ internal partial class MainWindowViewModel : BaseViewModel
     private void GoToReports2() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPage2ViewModel>();
 
     [RelayCommand]
+    private void GoToReports3() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPage3ViewModel>();
+
+    [RelayCommand]
     private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
 
     [RelayCommand]

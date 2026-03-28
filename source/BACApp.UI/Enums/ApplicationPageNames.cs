@@ -10,4 +10,5 @@ internal enum ApplicationPageNames
     TechLogs = 5,
     Reports2 = 6,
     Invoices = 7,
+    Reports3 = 8,
 }

@@ -67,6 +67,7 @@ internal static class Host
                     _ when type == typeof(LogsAirframePageViewModel) => x.GetRequiredService<LogsAirframePageViewModel>(),
                     _ when type == typeof(ReportsPageViewModel) => x.GetRequiredService<ReportsPageViewModel>(),
                     _ when type == typeof(ReportsPage2ViewModel) => x.GetRequiredService<ReportsPage2ViewModel>(),
+                    _ when type == typeof(ReportsPage3ViewModel) => x.GetRequiredService<ReportsPage3ViewModel>(),
                     _ when type == typeof(InvoicesPageViewModel) => x.GetRequiredService<InvoicesPageViewModel>(),
                     _ => throw new InvalidOperationException($"Page of type {type?.FullName} has no view model"),
                 });
@@ -92,6 +93,7 @@ internal static class Host
 
                 services.AddTransient<ReportsPageViewModel>();
                 services.AddTransient<ReportsPage2ViewModel>();
+                services.AddTransient<ReportsPage3ViewModel>();
 
                 services.AddTransient<InvoicesPageViewModel>();
             })
