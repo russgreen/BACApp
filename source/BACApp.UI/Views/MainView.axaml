@@ -96,6 +96,7 @@
               </StackPanel> 
               </Button>
 
+             <!-- 
             <Button Command="{Binding GoToInvoicesCommand}" 
                     IsEnabled="{Binding IsInvoicesEnabled}"
                     HorizontalAlignment="Stretch">
@@ -104,6 +105,7 @@
                 <TextBlock Text="Invoices"/>
               </StackPanel> 
            </Button>
+           -->
 
         </StackPanel>
       </SplitView.Pane>
