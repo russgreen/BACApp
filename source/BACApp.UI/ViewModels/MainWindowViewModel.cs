@@ -130,6 +130,12 @@ internal partial class MainWindowViewModel : BaseViewModel
     private void GoToCalendar() => CurrentPage = _pageFactory.GetPageViewModel<CalendarPageViewModel>();
 
     [RelayCommand]
+    private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
+
+    [RelayCommand]
+    private void GoToLogsAirframe() => CurrentPage = _pageFactory.GetPageViewModel<LogsAirframePageViewModel>();
+
+    [RelayCommand]
     private void GoToReports() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPageViewModel>();
 
     [RelayCommand]
@@ -139,10 +145,7 @@ internal partial class MainWindowViewModel : BaseViewModel
     private void GoToReports3() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPage3ViewModel>();
 
     [RelayCommand]
-    private void GoToLogs() => CurrentPage = _pageFactory.GetPageViewModel<LogsPageViewModel>();
-
-    [RelayCommand]
-    private void GoToLogsAirframe() => CurrentPage = _pageFactory.GetPageViewModel<LogsAirframePageViewModel>();
+    private void GoToReports4() => CurrentPage = _pageFactory.GetPageViewModel<ReportsPage4ViewModel>();
 
     [RelayCommand]
     private void GoToInvoices() => CurrentPage = _pageFactory.GetPageViewModel<InvoicesPageViewModel>();

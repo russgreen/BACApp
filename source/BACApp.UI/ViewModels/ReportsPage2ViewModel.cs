@@ -157,6 +157,11 @@ internal partial class ReportsPage2ViewModel : PageViewModel
 
         try
         {
+            var validAircraft = AllAircraftList
+            .Where(a => !string.IsNullOrWhiteSpace(a.Registration))
+            .ToList();
+
+
             var logs = await _flightLogsService.GetFlightLogsAsync(
                 SelectedAircraft.Registration, from, to, ct);
 

@@ -74,16 +74,7 @@
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="📈" Margin="0,0,15,0"/>
-                <TextBlock Text="Reports"/>
-              </StackPanel> 
-              </Button>
-
-            <Button Command="{Binding GoToReports2Command}" 
-                    IsEnabled="{Binding IsReportsEnabled}"
-                    HorizontalAlignment="Stretch">
-              <StackPanel Orientation="Horizontal" Margin="0,4">
-                <TextBlock Text="📈" Margin="0,0,15,0"/>
-                <TextBlock Text="Reports 2"/>
+                <TextBlock Text="Chart 1"/>
               </StackPanel> 
               </Button>
 
@@ -92,7 +83,25 @@
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="📈" Margin="0,0,15,0"/>
-                <TextBlock Text="Reports 3"/>
+                <TextBlock Text="Chart 2"/>
+              </StackPanel> 
+              </Button>
+
+            <Button Command="{Binding GoToReports2Command}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📈" Margin="0,0,15,0"/>
+                <TextBlock Text="Chart 3"/>
+              </StackPanel> 
+           </Button>
+
+           <Button Command="{Binding GoToReports4Command}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="📈" Margin="0,0,15,0"/>
+                <TextBlock Text="Chart 4"/>
               </StackPanel> 
               </Button>
 
