@@ -69,6 +69,7 @@
               </StackPanel>
             </Button>
 
+            <!-- 
             <Button Command="{Binding GoToReportsCommand}" 
                     IsEnabled="{Binding IsReportsEnabled}"
                     HorizontalAlignment="Stretch">
@@ -86,6 +87,7 @@
                 <TextBlock Text="Chart 2"/>
               </StackPanel> 
               </Button>
+              -->
 
             <Button Command="{Binding GoToReports2Command}" 
                     IsEnabled="{Binding IsReportsEnabled}"
