@@ -48,38 +48,19 @@ internal partial class InvoicesPageViewModel : PageViewModel
         _invoiceService = invoiceService;
         _memberService = memberService;
 
-        FromDate = DateTime.Now.AddMonths(-1);
+        FromDate = DateTime.Now.AddYears(-1);
         ToDate = DateTime.Now;
 
         Invoices = new();
 
-        _ = LoadAsync();
+        _ = LoadInvoicesAsync(default);
     }
 
-    private async Task LoadAsync(CancellationToken ct = default)
-    {
-        if (_authService.UserCompany is null)
-        {
-            return;
-        }
-
-        var members = await _memberService.GetAllMembersAsync(ct);
-
-        AllMembers = members
-            .OrderBy(a => a.Name)
-            .ToList();
-
-        if (AllMembers != null && AllMembers.Count > 0)
-        {
-            SelectedMember = AllMembers.First();
-            await LoadInvoicesAsync(ct);
-        }
-    }
 
     [RelayCommand]
     private async Task LoadInvoicesAsync(CancellationToken ct)
     {
-        if (_authService.UserCompany is null || SelectedMember is null)
+        if (_authService.UserCompany is null)
         {
             Invoices = new();
             return;
@@ -95,7 +76,9 @@ internal partial class InvoicesPageViewModel : PageViewModel
 
         try
         {
-            Invoices = (List<Invoice>)await _invoiceService.GetInvoicesAsync(SelectedMember.UserId, from, to, ct);
+            //Invoices = (List<Invoice>)await _invoiceService.GetAllInvoicesAsync(ct);
+
+            Invoices = (List<Invoice>)await _invoiceService.GetUnsettledInvoicesAsync(from, to, ct);
         }
         catch(Exception ex)
         {

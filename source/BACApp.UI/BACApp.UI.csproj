@@ -62,4 +62,10 @@
 		<ProjectReference Include="..\BACApp.Core\BACApp.Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views\MembersListView.axaml.cs">
+	    <DependentUpon>MembersListView.axaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:BACApp.UI.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BACApp.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BACApp.UI.Views.MembersListView"
+             x:DataType="vm:MembersListViewModel"  >
+
+<Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+      <DataGrid Grid.Row="0" 
+            ItemsSource="{Binding AllMembers}"
+            IsReadOnly="True" 
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="True"
+            CanUserSortColumns="True"
+            HeadersVisibility="All" 
+            GridLinesVisibility="All"
+            BorderThickness="1" BorderBrush="Gray" 
+            ShowTotalSummary="True"
+            TotalSummaryPosition="Bottom">
+		  <DataGrid.Columns>
+			<DataGridTextColumn Header="Name" Binding="{Binding Member.Name}" />
+            <DataGridTextColumn Header="Unpaid Flights hrs" Binding="{Binding UnpaidFlightHours}" />
+            <DataGridTextColumn Header="Unpaid Flights £" Binding="{Binding UnpaidFlightsAmount}" />
+            <DataGridTextColumn Header="Unsettled Invoices" Binding="{Binding UnsettledInvoicesAmount}" />
+            <DataGridTextColumn Header="Total Owed" Binding="{Binding TotalAmountOwed}" SortDirection="Descending" >
+					<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                      </DataGridTextColumn.Summaries>
+            </DataGridTextColumn>
+
+          </DataGrid.Columns>
+      </DataGrid>
+</Grid>
+
+</UserControl>

@@ -11,18 +11,11 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ComboBox Grid.Row="0" 
-                  ItemsSource="{Binding AllMembers}" 
-                  DisplayMemberBinding="{CompiledBinding Name}"
-                  SelectedValue="{Binding SelectedMember}">
-        </ComboBox>
-
-         <StackPanel Grid.Row="1" 
+         <StackPanel Grid.Row="0" 
                     Orientation="Horizontal" 
                     Spacing="10" 
                     Margin="0,10">
@@ -37,7 +30,7 @@
             <Button Content="Reload invoices" Command="{Binding LoadInvoicesCommand}" />
         </StackPanel>
 
-        <DataGrid Grid.Row="2" 
+        <DataGrid Grid.Row="1" 
             ItemsSource="{Binding Invoices}"
             IsReadOnly="True" 
             CanUserReorderColumns="False"
@@ -62,24 +55,8 @@
                                   CanUserSortColumns="True"
                                   HeadersVisibility="All"
                                   GridLinesVisibility="All"
+                                  ShowTotalSummary="True"
                                   AutoGenerateColumns="True">
-                            <!--
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Flight Date" Binding="{Binding FlightDate}" />
-                                <DataGridTextColumn Header="Reg" Binding="{Binding AircraftRegistration}" />
-                                <DataGridTextColumn Header="Type" Binding="{Binding FlightType}" />
-                                <DataGridTextColumn Header="Time Type" Binding="{Binding TimeType}" />
-                                <DataGridTextColumn Header="From" Binding="{Binding TimeFrom}" />
-                                <DataGridTextColumn Header="Until" Binding="{Binding TimeUntil}" />
-                                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
-                                <DataGridTextColumn Header="Charge Name" Binding="{Binding AircraftChargeName}" />
-                                <DataGridTextColumn Header="Flight Charge" Binding="{Binding FlightCharge}" />
-                                <DataGridTextColumn Header="VAT Rate" Binding="{Binding VatRate}" />
-                                <DataGridTextColumn Header="VAT Charge" Binding="{Binding VatCharge}" />
-                                <DataGridTextColumn Header="Total Inc VAT" Binding="{Binding TotalIncVat}" />
-                                <DataGridTextColumn Header="Voucher" Binding="{Binding VoucherReference}" />
-                            </DataGrid.Columns>
-                            -->
                         </DataGrid>
                     </Border>
                 </DataTemplate>
@@ -88,7 +65,12 @@
            <DataGrid.Columns>
 			   <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat={}{0:yyyy-MM-dd}}" />
                <DataGridTextColumn Header="Number" Binding="{Binding InvoiceNumber}" />
-               <DataGridTextColumn Header="Total £" Binding="{Binding TotalInvoice}" />
+               <DataGridTextColumn Header="Total £" Binding="{Binding TotalInvoice}" >
+				   	<DataGridTextColumn.Summaries>
+                        <DataGridAggregateSummaryDescription Aggregate="Sum" 
+                                                             Scope="Both" />
+                    </DataGridTextColumn.Summaries>
+               </DataGridTextColumn>
                <DataGridTextColumn Header="Status" Binding="{Binding InvoiceStatusId}" />
                <DataGridTextColumn Header="Settled" Binding="{Binding SettlementDate, StringFormat={}{0:yyyy-MM-dd}}" />
                <DataGridTextColumn Header="Cancelled" Binding="{Binding CancelDate, StringFormat={}{0:yyyy-MM-dd}}" />

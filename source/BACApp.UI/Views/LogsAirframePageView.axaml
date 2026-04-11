@@ -52,7 +52,7 @@
                 <DataGridTextColumn Header="Hours" Binding="{Binding TotalFlightHours, StringFormat={}{0:00}}" />
                 <DataGridTextColumn Header="Mins" Binding="{Binding TotalFlightMinutes, StringFormat={}{0:00}}" />
             
-                 <DataGridTextColumn Header="Total Hours" Binding="{Binding EndOfDayAirframeHours, StringFormat={}{0:00}}" />
+                <DataGridTextColumn Header="Total Hours" Binding="{Binding EndOfDayAirframeHours, StringFormat={}{0:00}}" />
                 <DataGridTextColumn Header="Total Mins" Binding="{Binding EndOfDayAirframeMinutes, StringFormat={}{0:00}}"  />
             
             </DataGrid.Columns>

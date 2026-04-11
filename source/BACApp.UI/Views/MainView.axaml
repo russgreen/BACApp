@@ -94,7 +94,7 @@
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="📈" Margin="0,0,15,0"/>
-                <TextBlock Text="Chart 3"/>
+                <TextBlock Text="Aircraft Charge Time"/>
               </StackPanel> 
            </Button>
 
@@ -103,20 +103,31 @@
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="📈" Margin="0,0,15,0"/>
-                <TextBlock Text="Chart 4"/>
+                <TextBlock Text="Total Charge Time"/>
               </StackPanel> 
               </Button>
 
-             <!-- 
+             <!-- -->
+
             <Button Command="{Binding GoToInvoicesCommand}" 
                     IsEnabled="{Binding IsInvoicesEnabled}"
                     HorizontalAlignment="Stretch">
               <StackPanel Orientation="Horizontal" Margin="0,4">
                 <TextBlock Text="💷" Margin="0,0,15,0"/>
-                <TextBlock Text="Invoices"/>
+                <TextBlock Text="Unsettled Invoices"/>
               </StackPanel> 
            </Button>
-           -->
+           
+
+            <Button Command="{Binding GoToMembersCommand}" 
+                    IsEnabled="{Binding IsReportsEnabled}"
+                    HorizontalAlignment="Stretch">
+              <StackPanel Orientation="Horizontal" Margin="0,4">
+                <TextBlock Text="🗒️" Margin="0,0,15,0"/>
+                <TextBlock Text="Members"/>
+              </StackPanel> 
+           </Button>
+
 
         </StackPanel>
       </SplitView.Pane>
