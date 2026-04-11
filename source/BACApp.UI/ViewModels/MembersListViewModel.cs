@@ -84,48 +84,49 @@ internal partial class MembersListViewModel : PageViewModel
         }
 
         var invoicesTask = _invoiceService.GetUnsettledInvoicesAsync(from, to, ct);
-        var flightLogsTask = _flightLogsService.GetFlightLogsUnbilledAsync(ct);
-        var techLogsTask = _techlogService.GetAllTechLogsAsync(ct);
+        //var flightLogsTask = _flightLogsService.GetFlightLogsUnbilledAsync(ct);
+        //var techLogsTask = _techlogService.GetAllTechLogsAsync(ct);
         var membersTask = _memberService.GetAllMembersAsync(ct);
 
-        await Task.WhenAll(invoicesTask, flightLogsTask, techLogsTask, membersTask);
+        //await Task.WhenAll(invoicesTask, flightLogsTask, techLogsTask, membersTask);
+        await Task.WhenAll(invoicesTask, membersTask);
 
         var invoices = invoicesTask.Result.ToList();
-        var flightLogs = flightLogsTask.Result.ToList();
-        var techLogs = techLogsTask.Result.ToList();
+        //var flightLogs = flightLogsTask.Result.ToList();
+        //var techLogs = techLogsTask.Result.ToList();
         var members = membersTask.Result;
 
         AllInvoices = invoices;
-        AllFlightLogs = flightLogs;
-        AllTechLogs = techLogs;
+        //AllFlightLogs = flightLogs;
+        //AllTechLogs = techLogs;
 
         var invoicesByUserId = invoices
             .Where(i => i.UserId.HasValue)
             .GroupBy(i => i.UserId!.Value)
             .ToDictionary(g => g.Key, g => g.ToList());
 
-        var flightLogsById = flightLogs
-            .GroupBy(f => f.FlightLogId)
-            .ToDictionary(g => g.Key, g => g.First());
+        //var flightLogsById = flightLogs
+        //    .GroupBy(f => f.FlightLogId)
+        //    .ToDictionary(g => g.Key, g => g.First());
 
-        var flightLogIdsByMemberId = new Dictionary<int, HashSet<int>>();
+        //var flightLogIdsByMemberId = new Dictionary<int, HashSet<int>>();
 
-        foreach (var techLog in techLogs)
-        {
-            var memberId = techLog.StudentId ?? techLog.PicId;
-            if (!memberId.HasValue || !techLog.FlightLogId.HasValue)
-            {
-                continue;
-            }
+        //foreach (var techLog in techLogs)
+        //{
+        //    var memberId = techLog.StudentId ?? techLog.PicId;
+        //    if (!memberId.HasValue || !techLog.FlightLogId.HasValue)
+        //    {
+        //        continue;
+        //    }
 
-            if (!flightLogIdsByMemberId.TryGetValue(memberId.Value, out var logIds))
-            {
-                logIds = new HashSet<int>();
-                flightLogIdsByMemberId[memberId.Value] = logIds;
-            }
+        //    if (!flightLogIdsByMemberId.TryGetValue(memberId.Value, out var logIds))
+        //    {
+        //        logIds = new HashSet<int>();
+        //        flightLogIdsByMemberId[memberId.Value] = logIds;
+        //    }
 
-            logIds.Add(techLog.FlightLogId.Value);
-        }
+        //    logIds.Add(techLog.FlightLogId.Value);
+        //}
 
         var loadedMembers = new List<MemberEx>(members.Count);
 
@@ -144,21 +145,21 @@ internal partial class MembersListViewModel : PageViewModel
                 memberEx.UnsettledInvoicesAmount = 0;
             }
 
-            if (flightLogIdsByMemberId.TryGetValue(member.UserId, out var memberFlightLogIds))
-            {
-                var memberFlightLogs = memberFlightLogIds
-                    .Where(flightLogsById.ContainsKey)
-                    .Select(flightLogId => flightLogsById[flightLogId])
-                    .ToList();
+            //if (flightLogIdsByMemberId.TryGetValue(member.UserId, out var memberFlightLogIds))
+            //{
+            //    var memberFlightLogs = memberFlightLogIds
+            //        .Where(flightLogsById.ContainsKey)
+            //        .Select(flightLogId => flightLogsById[flightLogId])
+            //        .ToList();
 
-                memberEx.UnpaidFlightLogs = memberFlightLogs;
-                memberEx.UnpaidFlightHours = memberFlightLogs.Sum(f => f.ChargeTimeDecimal);
-            }
-            else
-            {
-                memberEx.UnpaidFlightLogs = new List<FlightLog>();
-                memberEx.UnpaidFlightHours = 0;
-            }
+            //    memberEx.UnpaidFlightLogs = memberFlightLogs;
+            //    memberEx.UnpaidFlightHours = memberFlightLogs.Sum(f => f.ChargeTimeDecimal);
+            //}
+            //else
+            //{
+            //    memberEx.UnpaidFlightLogs = new List<FlightLog>();
+            //    memberEx.UnpaidFlightHours = 0;
+            //}
 
             loadedMembers.Add(memberEx);
         }
