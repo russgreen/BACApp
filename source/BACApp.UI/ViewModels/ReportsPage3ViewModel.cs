@@ -142,11 +142,6 @@ internal partial class ReportsPage3ViewModel : PageViewModel
                 var logs = await _flightLogsService.GetFlightLogsAsync(aircraft.Registration, from, to, ct);
                 var list = logs.ToList();
 
-                foreach (var log in list)
-                {
-                    log.SetChargeTime(aircraft.UseBrakesTimeToInvoice, aircraft.TimeAdjustMinutes);
-                }
-
                 return (Aircraft: aircraft, Logs: list);
             });
 

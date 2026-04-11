@@ -38,4 +38,35 @@ public class InvoiceService : IInvoiceService
         var data = await _apiClient.GetAsync<List<Invoice>>(path, query, headers, ct);
         return data ?? new List<Invoice>();
     }
+
+    public async Task<IReadOnlyList<Invoice>> GetAllInvoicesAsync(CancellationToken ct = default)
+    {
+        var headers = new Dictionary<string, string>
+        {
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
+        };
+
+        var path = "/invoice/list/GetInvoicesByFilters";
+        var data = await _apiClient.GetAsync<List<Invoice>>(path, headers, ct);
+        return data ?? new List<Invoice>();
+    }
+
+    public async Task<IReadOnlyList<Invoice>> GetUnsettledInvoicesAsync(DateOnly from, DateOnly to, CancellationToken ct = default)
+    {
+        var headers = new Dictionary<string, string>
+        {
+            ["company-id"] = _authService.UserCompany.CompanyId.ToString()
+        };
+
+        var query = new Dictionary<string, string?>
+        {
+            ["invoiceStatusName"] = "unsettled",
+            ["dateFrom"] = from.ToString("yyyy-MM-dd"),
+            ["dateTo"] = to.ToString("yyyy-MM-dd")
+        };
+
+        var path = "/invoice/list/GetInvoicesByFilters";
+        var data = await _apiClient.GetAsync<List<Invoice>>(path, query, headers, ct);
+        return data ?? new List<Invoice>();
+    }
 }

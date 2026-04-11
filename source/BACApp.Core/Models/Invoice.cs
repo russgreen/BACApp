@@ -17,16 +17,16 @@ public class Invoice
 	public int InvoiceNumber { get; set; }
 
 	[JsonPropertyName("user_id")]
-	public int UserId { get; set; }
+	public int? UserId { get; set; }
 
     /// <summary>
     /// 1- Unsettled, 2- Settled, 3- Cancelled
     /// </summary>
     [JsonPropertyName("invoice_status_id")]
-	public int InvoiceStatusId { get; set; }
+	public int? InvoiceStatusId { get; set; }
 
 	[JsonPropertyName("email_notification")]
-	public int EmailNotification { get; set; }
+	public int? EmailNotification { get; set; }
 
 	[JsonPropertyName("settlement_date")]
 	public string? SettlementDate { get; set; }

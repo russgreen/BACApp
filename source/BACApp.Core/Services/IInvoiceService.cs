@@ -7,4 +7,8 @@ public interface IInvoiceService
     Task AddInvoiceAsync(Invoice invoice, CancellationToken ct = default);
 
     Task<IReadOnlyList<Invoice>> GetInvoicesAsync(int userID, DateOnly from, DateOnly to, CancellationToken ct = default);
+
+    Task<IReadOnlyList<Invoice>> GetAllInvoicesAsync(CancellationToken ct = default);
+
+    Task<IReadOnlyList<Invoice>> GetUnsettledInvoicesAsync(DateOnly from, DateOnly to, CancellationToken ct = default);
 }

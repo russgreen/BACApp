@@ -150,5 +150,7 @@ internal partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void GoToInvoices() => CurrentPage = _pageFactory.GetPageViewModel<InvoicesPageViewModel>();
 
+    [RelayCommand]
+    private void GoToMembers() => CurrentPage = _pageFactory.GetPageViewModel<MembersListViewModel>();
 
 }
