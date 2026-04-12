@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using BACApp.Core.Models;
 using System;
@@ -57,6 +58,8 @@ public class ResourceScheduleControl : TemplatedControl
 
     public static readonly StyledProperty<ICommand?> EventClickCommandProperty =
         AvaloniaProperty.Register<ResourceScheduleControl, ICommand?>(nameof(EventClickCommand));
+
+    public static readonly RoutedEvent<TappedEventArgs> TappedEvent;
 
     public IEnumerable<BookingResource>? Resources
     {
@@ -194,19 +197,32 @@ public class ResourceScheduleControl : TemplatedControl
         if (_resourceList != null)
         {
             _resourceList.ItemsSource = Resources ?? Enumerable.Empty<BookingResource>();
+            _resourceList.AddHandler(
+                InputElement.TappedEvent,
+                OnResourceTapped,
+                Avalonia.Interactivity.RoutingStrategies.Bubble);
         }
 
         HookScrollSync();
-
         SubscribeToEventChanges();
         Redraw();
     }
 
-    //protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
-    //{
-    //    base.OnDetachedFromVisualTree(e);
-    //    UnsubscribeFromEventChanges();
-    //}
+    private void OnResourceTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        // Walk up from the tapped element to find the BookingResource data context
+        var source = e.Source as Avalonia.Controls.Control;
+        while (source != null)
+        {
+            if (source.DataContext is BookingResource resource)
+            {
+                if (ResourceClickCommand?.CanExecute(resource) == true)
+                    ResourceClickCommand.Execute(resource);
+                break;
+            }
+            source = source.Parent as Avalonia.Controls.Control;
+        }
+    }
 
     private void OnEventsChanged()
     {

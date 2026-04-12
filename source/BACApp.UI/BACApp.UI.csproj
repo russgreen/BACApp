@@ -9,13 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.*" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
-		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.*" />
+		<PackageReference Include="Avalonia" Version="12.*" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="12.*" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="12.*" />
+		<!--<PackageReference Include="Avalonia.Xaml.Interactions" Version="12.*" />-->
 		
-		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.*" />-->
-		<PackageReference Include="ProDataGrid" Version="11.*" />
+		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="12.*" />-->
+		<PackageReference Include="ProDataGrid" Version="12.*" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.*" />				
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
