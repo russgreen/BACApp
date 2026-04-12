@@ -48,6 +48,7 @@ partial class Build
                             .SetProject(Solution.BACApp_Desktop)
                             .SetConfiguration(configuration)
                             .SetRuntime(runtime)
+                            .SetFramework("net10.0")
                             .SetOutput(publishDirectory)
                             .SetSelfContained(publishSelfContained)
                             .SetProperty("PublishSingleFile", "true")
