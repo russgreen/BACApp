@@ -12,6 +12,14 @@ public static class BookingEventExtensions
     {
         // Approximate flight time from booking duration
         var estimatedFlightTime = bookingEvent.Duration * 0.42;
+
+        if(bookingEvent.Title.Equals("not available", StringComparison.OrdinalIgnoreCase) || 
+        bookingEvent.Title.Equals("maintenance", StringComparison.OrdinalIgnoreCase))
+        {
+            // For maintenance, assume 0hr flight time regardless of booking duration
+            estimatedFlightTime = TimeSpan.Zero;
+        }
+
         return estimatedFlightTime;
     }
 
