@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="23.3" version="23.6" Modules="simple" RootPath="." Language="en_GB" Id="{BF053AE7-D578-4A42-B7D1-F3DEE2C81CE9}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="23.3" version="23.7" Modules="simple" RootPath="." Language="en_GB" Id="{BF053AE7-D578-4A42-B7D1-F3DEE2C81CE9}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_CORE_VERSION"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_DISPLAY" MultiBuildValue="DefaultBuild:10.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_VERSION" MultiBuildValue="DefaultBuild:10.0" ValueLocId="-"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="BAC.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="2057:{4C3584AF-0EC9-459D-B890-ED8EFB0C9E0C} " Type="16"/>
+    <ROW Property="ProductCode" Value="2057:{939DA937-C95D-48F7-83D0-6DE33FE6FA2F} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="BACApp"/>
-    <ROW Property="ProductVersion" Value="0.7.0" Options="32"/>
+    <ROW Property="ProductVersion" Value="0.8.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{810777EA-E40B-48B1-AFCA-DF6EA1EA5783}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -60,8 +63,6 @@
     <ROW Component="Avalonia.Win32.Automation.dll" ComponentId="{4DDF5B3E-2128-4037-98BA-1AB8F948CF35}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Win32.Automation.dll"/>
     <ROW Component="Avalonia.Win32.dll" ComponentId="{DE31DF1F-1538-411F-94ED-98E7A3CFC82E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Win32.dll"/>
     <ROW Component="Avalonia.X11.dll" ComponentId="{86421E8F-A8A6-4DFC-8277-508708A2F4B2}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.X11.dll"/>
-    <ROW Component="Avalonia.Xaml.Interactions.dll" ComponentId="{3BA40D24-6732-49A5-AD5C-3984C23CBBDB}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Xaml.Interactions.dll"/>
-    <ROW Component="Avalonia.Xaml.Interactivity.dll" ComponentId="{E716A555-F7F2-49E8-9113-926CDAEB0A7E}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.Xaml.Interactivity.dll"/>
     <ROW Component="Avalonia.dll" ComponentId="{58755B2B-D22A-4F08-B1CE-49E7A5945642}" Directory_="APPDIR" Attributes="0" KeyPath="Avalonia.dll"/>
     <ROW Component="BACApp.Core.dll" ComponentId="{C58B3B47-8627-4034-90E3-5458D924AD84}" Directory_="APPDIR" Attributes="0" KeyPath="BACApp.Core.dll"/>
     <ROW Component="BACApp.Desktop.dll_1" ComponentId="{4B740111-5503-4501-9CE1-977B99457617}" Directory_="APPDIR" Attributes="0" KeyPath="BACApp.Desktop.dll_1"/>
@@ -149,8 +150,6 @@
     <ROW File="Avalonia.Win32.Automation.dll" Component_="Avalonia.Win32.Automation.dll" FileName="AVALO~19.DLL|Avalonia.Win32.Automation.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\Avalonia.Win32.Automation.dll" SelfReg="false"/>
     <ROW File="Avalonia.Win32.dll" Component_="Avalonia.Win32.dll" FileName="AVALO~20.DLL|Avalonia.Win32.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\Avalonia.Win32.dll" SelfReg="false"/>
     <ROW File="Avalonia.X11.dll" Component_="Avalonia.X11.dll" FileName="AVALO~21.DLL|Avalonia.X11.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\Avalonia.X11.dll" SelfReg="false"/>
-    <ROW File="Avalonia.Xaml.Interactions.dll" Component_="Avalonia.Xaml.Interactions.dll" FileName="AVALO~22.DLL|Avalonia.Xaml.Interactions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\Avalonia.Xaml.Interactions.dll" SelfReg="false"/>
-    <ROW File="Avalonia.Xaml.Interactivity.dll" Component_="Avalonia.Xaml.Interactivity.dll" FileName="AVALO~23.DLL|Avalonia.Xaml.Interactivity.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\Avalonia.Xaml.Interactivity.dll" SelfReg="false"/>
     <ROW File="BACApp.Core.dll" Component_="BACApp.Core.dll" FileName="BACAPP~1.DLL|BACApp.Core.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\BACApp.Core.dll" SelfReg="false"/>
     <ROW File="BACApp.Core.pdb" Component_="BACApp.Core.dll" FileName="BACAPP~1.PDB|BACApp.Core.pdb" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\BACApp.Core.pdb" SelfReg="false"/>
     <ROW File="BACApp.UI.deps.json" Component_="BACApp.UI.deps.json" FileName="BACAPP~1.JSO|BACApp.UI.deps.json" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.UI\bin\Release\net10.0\BACApp.UI.deps.json" SelfReg="false"/>
@@ -213,6 +212,9 @@
     <ROW File="ProDataGrid.FormulaEngine.Excel.dll_1" Component_="ProDataGrid.FormulaEngine.Excel.dll_1" FileName="PRODAT~2.DLL|ProDataGrid.FormulaEngine.Excel.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\ProDataGrid.FormulaEngine.Excel.dll" SelfReg="false"/>
     <ROW File="SkiaSharp.HarfBuzz.dll_1" Component_="SkiaSharp.HarfBuzz.dll_1" FileName="SKIASH~2.DLL|SkiaSharp.HarfBuzz.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\source\BACApp.Desktop\bin\Release\net10.0\SkiaSharp.HarfBuzz.dll" SelfReg="false"/>
   </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFileName="BACApp_[|ProductVersion]" Languages="en_GB" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" MsiPackageType="x64"/>
   </COMPONENT>
@@ -237,6 +239,7 @@
     <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
@@ -268,6 +271,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
     <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
     <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
@@ -306,8 +310,6 @@
     <ROW Feature_="MainFeature" Component_="Avalonia.Win32.Automation.dll"/>
     <ROW Feature_="MainFeature" Component_="Avalonia.Win32.dll"/>
     <ROW Feature_="MainFeature" Component_="Avalonia.X11.dll"/>
-    <ROW Feature_="MainFeature" Component_="Avalonia.Xaml.Interactions.dll"/>
-    <ROW Feature_="MainFeature" Component_="Avalonia.Xaml.Interactivity.dll"/>
     <ROW Feature_="MainFeature" Component_="BACApp.Core.dll"/>
     <ROW Feature_="MainFeature" Component_="BACApp.UI.deps.json"/>
     <ROW Feature_="MainFeature" Component_="BACApp.UI.dll"/>
@@ -376,6 +378,7 @@
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
@@ -383,12 +386,14 @@
     <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
     <ROW Action="AI_DpiContentScale" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] can not be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] can not be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_DOTNET_CORE_VERSION &gt;= AI_REQUIRED_DOTNET_CORE_VERSION" Description="[ProductName] can not be installed on systems with .NET Core version lower than [AI_REQUIRED_DOTNET_CORE_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNETCore" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="VersionNT" Description="[ProductName] can not be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
