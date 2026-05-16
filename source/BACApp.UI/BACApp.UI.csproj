@@ -16,7 +16,7 @@
 		
 		<!--<PackageReference Include="Avalonia.Controls.DataGrid" Version="12.*" />-->
 		<PackageReference Include="ProDataGrid" Version="12.*" />
-		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.*" />				
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.1.0-dev-570" />				
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.*">

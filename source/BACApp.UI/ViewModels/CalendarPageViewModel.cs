@@ -40,6 +40,9 @@ internal partial class CalendarPageViewModel : PageViewModel, IDisposable
     [NotifyPropertyChangedFor(nameof(SelectedDay))]
     private DateTime _selectedDate = DateTime.Today;
 
+    [ObservableProperty]
+    private bool _useLocalTimes = true;
+
     public DateOnly SelectedDay => DateOnly.FromDateTime(SelectedDate);
 
     public CalendarPageViewModel(ILogger<LogsPageViewModel> logger,
