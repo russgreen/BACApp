@@ -53,6 +53,9 @@ public class ResourceScheduleControl : TemplatedControl
     public static readonly StyledProperty<double> MinHourWidthProperty =
         AvaloniaProperty.Register<ResourceScheduleControl, double>(nameof(MinHourWidth), 40);
 
+    public static readonly StyledProperty<bool> UseLocalTimesProperty =
+        AvaloniaProperty.Register<ResourceScheduleControl, bool>(nameof(UseLocalTimes), false);
+
     public static readonly StyledProperty<ICommand?> ResourceClickCommandProperty =
         AvaloniaProperty.Register<ResourceScheduleControl, ICommand?>(nameof(ResourceClickCommand));
 
@@ -133,6 +136,12 @@ public class ResourceScheduleControl : TemplatedControl
         set => SetValue(MinHourWidthProperty, value);
     }
 
+    public bool UseLocalTimes
+    {
+        get => GetValue(UseLocalTimesProperty);
+        set => SetValue(UseLocalTimesProperty, value);
+    }
+
     public ICommand? ResourceClickCommand
     {
         get => GetValue(ResourceClickCommandProperty);
@@ -167,6 +176,7 @@ public class ResourceScheduleControl : TemplatedControl
         EndHourProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
         TimeHeaderHeightProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
         MinHourWidthProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
+        UseLocalTimesProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.Redraw());
 
         // Was: Redraw() only. Must subscribe to item PropertyChanged when Events changes.
         EventsProperty.Changed.AddClassHandler<ResourceScheduleControl>((c, _) => c.OnEventsChanged());
@@ -464,11 +474,11 @@ public class ResourceScheduleControl : TemplatedControl
             return;
         }
 
-        var dayStart = new DateTimeOffset(Day.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
+        var dayStart = GetDisplayDayStart();
         var dayEnd = dayStart.AddDays(1);
 
         var byResource = events
-            .Select(e => new { Original = e, Clipped = ClipToDay(e, dayStart, dayEnd) })
+            .Select(e => new { Original = e, Clipped = ClipToDay(ProjectForDisplay(e), dayStart, dayEnd) })
             .Where(x => x.Clipped != null)
             .GroupBy(x => x.Clipped!.ResourceId)
             .ToDictionary(g => g.Key, g => g.ToList());
@@ -554,6 +564,37 @@ public class ResourceScheduleControl : TemplatedControl
                 canvas.Children.Add(eventBorder);
             }
         }
+    }
+
+    private DateTimeOffset GetDisplayDayStart()
+    {
+        var dayStartLocalDate = Day.ToDateTime(TimeOnly.MinValue);
+        if (UseLocalTimes)
+        {
+            var localOffset = TimeZoneInfo.Local.GetUtcOffset(dayStartLocalDate);
+            return new DateTimeOffset(dayStartLocalDate, localOffset);
+        }
+
+        return new DateTimeOffset(dayStartLocalDate, TimeSpan.Zero);
+    }
+
+    private BookingEvent ProjectForDisplay(BookingEvent bookingEvent)
+    {
+        var start = UseLocalTimes ? bookingEvent.StartTime.ToLocalTime() : bookingEvent.StartTime.ToUniversalTime();
+        var end = UseLocalTimes ? bookingEvent.EndTime.ToLocalTime() : bookingEvent.EndTime.ToUniversalTime();
+
+        return new BookingEvent
+        {
+            ResourceId = bookingEvent.ResourceId,
+            Start = start.ToString("o"),
+            End = end.ToString("o"),
+            Title = bookingEvent.Title,
+            Comment = bookingEvent.Comment,
+            BackgroundColor = bookingEvent.BackgroundColor,
+            BorderColor = bookingEvent.BorderColor,
+            TextColor = bookingEvent.TextColor,
+            Rendering = bookingEvent.Rendering
+        };
     }
 
     private static BookingEvent? ClipToDay(BookingEvent ev, DateTimeOffset dayStart, DateTimeOffset dayEnd)
