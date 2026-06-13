@@ -1,17 +1,17 @@
-using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.CI;
+using Fallout.Common.Execution;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Solutions;
+using Fallout.Common.Tooling;
+using Fallout.Common.Utilities.Collections;
 using System;
 using System.Linq;
-using static Nuke.Common.EnvironmentInfo;
-using static Nuke.Common.IO.PathConstruction;
+using static Fallout.Common.EnvironmentInfo;
+using static Fallout.Common.IO.PathConstruction;
 
-partial class Build : NukeBuild
+partial class Build : FalloutBuild
 {
     readonly AbsolutePath OutputDirectory = RootDirectory / "output";
     readonly AbsolutePath SourceDirectory = RootDirectory / "source";
