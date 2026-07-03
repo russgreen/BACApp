@@ -1,4 +1,5 @@
 ﻿using BACApp.Core.Extensions;
+using BACApp.Core.Helpers;
 using BACApp.Core.Models;
 using BACApp.Core.Services;
 using BACApp.UI.Enums;
@@ -78,11 +79,9 @@ internal partial class ReportsPage4ViewModel : PageViewModel
         _aircraftService = aircraftService;
         _flightLogsService = flightLogsService;
 
-        YearEndings = Enumerable.Range(DateTime.Now.Year - 1, 3)
-            .Select(y => $"{y}")
-            .ToList();
+        YearEndings = YearEndingsHelper.GetYearEndings();
 
-        SelectedYearEnding = YearEndings[1];
+        SelectedYearEnding = YearEndingsHelper.CurrentYearEnding(YearEndings);
 
         SetDates();
 
