@@ -139,7 +139,7 @@ internal partial class ReportsPage4ViewModel : PageViewModel
             return;
         }
 
-        var from = DateOnly.FromDateTime(FromDate);
+        var from = DateOnly.FromDateTime(FromDate.AddMonths(-12));
         var to = DateOnly.FromDateTime(ToDate);
 
         if (from > to)
