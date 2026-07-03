@@ -1,12 +1,12 @@
-﻿using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using static Nuke.Common.IO.PathConstruction;
+using static Fallout.Common.IO.PathConstruction;
 
 partial class Build
 {

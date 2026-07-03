@@ -1,4 +1,5 @@
 ﻿using BACApp.Core.Extensions;
+using BACApp.Core.Helpers;
 using BACApp.Core.Models;
 using BACApp.Core.Services;
 using BACApp.UI.Enums;
@@ -8,8 +9,8 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
-using SkiaSharp;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -82,11 +83,9 @@ internal partial class ReportsPage2ViewModel : PageViewModel
         _aircraftService = aircraftService;
         _flightLogsService = flightLogsService;
 
-        YearEndings = Enumerable.Range(DateTime.Now.Year - 1, 3)
-            .Select(y => $"{y}")
-            .ToList();
+        YearEndings = YearEndingsHelper.GetYearEndings();
 
-        SelectedYearEnding = YearEndings[1];
+        SelectedYearEnding = YearEndingsHelper.CurrentYearEnding(YearEndings);
 
         SetDates();
 
@@ -147,7 +146,7 @@ internal partial class ReportsPage2ViewModel : PageViewModel
             return;
         }
 
-        var from = DateOnly.FromDateTime(FromDate);
+        var from = DateOnly.FromDateTime(FromDate.AddMonths(-12));
         var to = DateOnly.FromDateTime(ToDate);
 
         if (from > to)
@@ -406,8 +405,8 @@ internal partial class ReportsPage2ViewModel : PageViewModel
     var now = DateTime.Now;
     var currentMonthStart = new DateTime(now.Year, now.Month, 1);
 
-    var last12Start = FromDate;
-    var previous12Start = last12Start.AddMonths(-12);
+    var currentYearStart = FromDate;
+    var previousYearStart = currentYearStart.AddMonths(-12);
 
     currentYear = new double[12];
     previousYear = new double[12];
@@ -416,18 +415,20 @@ internal partial class ReportsPage2ViewModel : PageViewModel
     {
         for (var i = 0; i < 12; i++)
         {
-            var month = last12Start.AddMonths(i);
+            var month = currentYearStart.AddMonths(i);
             if (HistoricalMonthlyChargeHours.TryGetValue((registration, month), out var hours))
             {
+                _logger.LogDebug("Current year {date} hours {hours}", month, hours);
                 currentYear[i] = hours;
             }
         }
 
         for (var i = 0; i < 12; i++)
         {
-            var month = previous12Start.AddMonths(i);
+            var month = previousYearStart.AddMonths(i);
             if (HistoricalMonthlyChargeHours.TryGetValue((registration, month), out var hours))
             {
+                _logger.LogDebug("Previous year {date} hours {hours}", month, hours);
                 previousYear[i] = hours;
             }
         }
@@ -438,23 +439,25 @@ internal partial class ReportsPage2ViewModel : PageViewModel
         var monthStart = new DateTime(log.FlightDate.Year, log.FlightDate.Month, 1);
         var chargeHours = log.ChargeTimeDecimal;
 
-        if (monthStart >= last12Start && monthStart < currentMonthStart.AddMonths(1))
+        if (monthStart >= currentYearStart && monthStart < currentMonthStart.AddMonths(1))
         {
-            var index = (monthStart.Year - last12Start.Year) * 12 + (monthStart.Month - last12Start.Month);
+            var index = (monthStart.Year - currentYearStart.Year) * 12 + (monthStart.Month - currentYearStart.Month);
             if ((uint)index < 12u)
             {
-                currentYear[index] += chargeHours;
+                    _logger.LogDebug("Current year {date} hours {hours}", monthStart, chargeHours);
+                    currentYear[index] += chargeHours;
             }
 
             continue;
         }
 
-        if (monthStart >= previous12Start && monthStart < last12Start)
+        if (monthStart >= previousYearStart && monthStart < currentYearStart)
         {
-            var index = (monthStart.Year - previous12Start.Year) * 12 + (monthStart.Month - previous12Start.Month);
+            var index = (monthStart.Year - previousYearStart.Year) * 12 + (monthStart.Month - previousYearStart.Month);
             if ((uint)index < 12u)
             {
-                previousYear[index] += chargeHours;
+                    _logger.LogDebug("Current year {date} hours {hours}", monthStart, chargeHours);
+                    previousYear[index] += chargeHours;
             }
         }
     }
