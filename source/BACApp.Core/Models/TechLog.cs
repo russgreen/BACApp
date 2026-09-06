@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace BACApp.Core.Models;
@@ -159,16 +160,20 @@ public class TechLog
     [JsonPropertyName("company_id")]
     public int? CompanyId { get; set; }
 
-    public DateTime FlightDate => DateTime.Parse(Flight_Date ?? string.Empty);
+    public DateTime FlightDate => TryParseDateTime(Flight_Date, out var value) ? value : DateTime.MinValue;
 
-    public DateTime BrakesOffTime => DateTime.Parse(Brakes_Off_Time ?? string.Empty);
-    public DateTime TakeOffTime => DateTime.Parse(Take_Off_Time ?? string.Empty);
-    public DateTime LandingTime => DateTime.Parse(Landing_Time ?? string.Empty);
-    public DateTime BrakesOnTime => DateTime.Parse(Brakes_On_Time ?? string.Empty);
+    public DateTime BrakesOffTime => TryParseDateTime(Brakes_Off_Time, out var brakesOff) ? brakesOff : DateTime.MinValue;
+    public DateTime TakeOffTime => TryParseDateTime(Take_Off_Time, out var takeOff) ? takeOff : DateTime.MinValue;
+    public DateTime LandingTime => TryParseDateTime(Landing_Time, out var landing) ? landing : DateTime.MinValue;
+    public DateTime BrakesOnTime => TryParseDateTime(Brakes_On_Time, out var brakesOn) ? brakesOn : DateTime.MinValue;
 
-    public TimeSpan BlockTime => BrakesOnTime - BrakesOffTime;
+    public TimeSpan BlockTime => TryGetDuration(Brakes_Off_Time, Brakes_On_Time, out var duration)
+        ? duration
+        : TimeSpan.Zero;
 
-    public TimeSpan FlightTime => LandingTime - TakeOffTime;
+    public TimeSpan FlightTime => TryGetDuration(Take_Off_Time, Landing_Time, out var duration)
+        ? duration
+        : TimeSpan.Zero;
 
     public TimeSpan BlockTimeRounded => RoundToNearestMinute(BlockTime);
 
@@ -178,7 +183,35 @@ public class TechLog
 
     public double FlightTimeDecimal => Math.Round(FlightTimeRounded.TotalHours, 2);
 
+    private static bool TryGetDuration(string? startValue, string? endValue, out TimeSpan duration)
+    {
+        duration = TimeSpan.Zero;
 
+        if (!TryParseDateTime(startValue, out var start) || !TryParseDateTime(endValue, out var end))
+        {
+            return false;
+        }
+
+        if (end < start)
+        {
+            return false;
+        }
+
+        duration = end - start;
+        return true;
+    }
+
+    private static bool TryParseDateTime(string? value, out DateTime result)
+    {
+        result = default;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        return DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out result);
+    }
 
     private static TimeSpan RoundToNearestMinute(TimeSpan value)
     {

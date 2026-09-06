@@ -20,7 +20,7 @@ public partial class TechLogsPageView : UserControl
 
         AttachedToVisualTree += (_, _) =>
         {
-            if (DataContext is LogsPageViewModel vm)
+            if (DataContext is TechLogsPageViewModel vm)
             {
                 vm.PickExportFilePathAsync = PickExportFilePathAsync;
             }
@@ -49,7 +49,7 @@ public partial class TechLogsPageView : UserControl
         var fromDate = (DataContext as TechLogsPageViewModel)?.FromDate ?? DateTime.Now.AddMonths(-1);
         var toDate = (DataContext as TechLogsPageViewModel)?.ToDate ?? DateTime.Now;
 
-        var suggestedName = $"FlightLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        var suggestedName = $"TechLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
 
         var options = new FilePickerSaveOptions
         {

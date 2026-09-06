@@ -9,7 +9,7 @@
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="BAC.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="2057:{476753CB-3764-410B-8D19-AD72CEE9E253} " Type="16"/>
+    <ROW Property="ProductCode" Value="2057:{D12670D7-992C-46A9-A3D0-24E2F11ACE56} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="BACApp"/>
     <ROW Property="ProductVersion" Value="0.9.0" Options="32"/>
