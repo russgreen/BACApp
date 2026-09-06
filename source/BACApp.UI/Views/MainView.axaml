@@ -117,7 +117,7 @@
               </StackPanel> 
               </Button>
 
-             <!-- -->
+             <!-- 
 
             <Button Command="{Binding GoToInvoicesCommand}" 
                     IsEnabled="{Binding IsInvoicesEnabled}"
@@ -137,7 +137,7 @@
                 <TextBlock Text="Members"/>
               </StackPanel> 
            </Button>
-
+-->
 
         </StackPanel>
       </SplitView.Pane>
