@@ -1,0 +1,163 @@
+﻿using BACApp.Core.DTO;
+using BACApp.Core.Extensions;
+using BACApp.Core.Models;
+using BACApp.Core.Services;
+using BACApp.UI.Enums;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.ObjectiveC;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace BACApp.UI.ViewModels;
+
+internal partial class TechLogsPageViewModel : PageViewModel
+{
+    private readonly ILogger<TechLogsPageViewModel> _logger;
+    private readonly IAuthService _authService;
+    private readonly IAircraftService _aircraftService;
+    private readonly IFlightLogsService _flightLogsService;
+    private readonly ITechlogService _techlogService;
+    private readonly ICsvExportService _csvExportService;
+
+    private CancellationTokenSource? _flightLogsCts;
+
+    [ObservableProperty]
+    private List<Aircraft> _allAircraftList;
+
+    [ObservableProperty]
+    private Aircraft _selectedAircraft;
+
+    [ObservableProperty]
+    private DateTime _fromDate;
+
+    [ObservableProperty]
+    private DateTime _toDate;
+
+    [ObservableProperty]
+    private ObservableCollection<TechLog> _filteredTechLogs;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasLogsSelected))]
+    private ObservableCollection<TechLog> _selectedTechLogs;
+
+    public bool HasLogsSelected => SelectedTechLogs != null && SelectedTechLogs.Count > 0;
+
+    public Func<Task<string?>>? PickExportFilePathAsync { get; set; }
+
+    public TechLogsPageViewModel(ILogger<TechLogsPageViewModel>logger,
+        IAuthService authService,
+        IAircraftService aircraftService,
+        IFlightLogsService flightLogsService,
+        ITechlogService techlogService,
+        ICsvExportService csvExportService) 
+        : base(ApplicationPageNames.TechLogs)
+    {
+        _logger = logger;
+        _authService = authService;
+        _aircraftService = aircraftService;
+        _flightLogsService = flightLogsService;
+        _techlogService = techlogService;
+        _csvExportService = csvExportService;
+
+        FromDate = DateTime.Now.AddMonths(-1);
+        ToDate = DateTime.Now;
+
+        SelectedTechLogs = new ObservableCollection<TechLog>();
+        FilteredTechLogs = new ObservableCollection<TechLog>();
+
+        // Defer async work; do not block constructor
+        LoadAsync().ConfigureAwait(false);
+    }
+
+    [RelayCommand]
+    private async Task ExportLogsAsync()
+    {
+        // Example default export location. You can replace this with a SaveFile dialog from the View if desired.
+        //TODO handle output in a cross platform way
+        var picker = PickExportFilePathAsync;
+        if (picker is null)
+        {
+            _logger.LogWarning("Export requested but no file picker delegate is configured.");
+            return;
+        }
+
+        var fullPath = await picker();
+        if (string.IsNullOrWhiteSpace(fullPath))
+        {
+            return;
+        }
+
+        //var aircraftReg = SelectedAircraft?.Registration ?? "unknown";
+        //var fileName = $"FlightLogs_{aircraftReg}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        //var fullPath = Path.Combine(preferredDir, fileName);
+
+        _csvExportService.Export(SelectedTechLogs, fullPath);
+    }
+
+
+    private async Task LoadAsync(CancellationToken ct = default)
+    {
+        if (_authService.UserCompany is null)
+        {
+            return;
+        }
+
+        AllAircraftList = _aircraftService.AllCompanyAircraft
+            .OrderBy(a => a.Registration)
+            .ToList();
+
+        if (AllAircraftList != null && AllAircraftList.Count > 0)
+        {
+            SelectedAircraft = AllAircraftList.First();
+            await ReloadFlightLogsAsync(ct);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ReloadFlightLogsAsync(CancellationToken ct)
+    {
+        if (_authService.UserCompany is null || SelectedAircraft is null)
+        {
+            FilteredTechLogs = new ObservableCollection<TechLog>();
+            return;
+        }
+
+        var from = DateOnly.FromDateTime(FromDate);
+        var to = DateOnly.FromDateTime(ToDate);
+
+        if (from > to)
+        {
+            (from, to) = (to, from);
+        }
+
+        try
+        {
+            var logs = await _techlogService.GetTechLogsAsync(
+                SelectedAircraft.Registration, from, to, ct);
+
+            var sorted = logs
+                .OrderByDescending(x => x.TechLogDate)
+                .ToList();
+
+            FilteredTechLogs = new ObservableCollection<TechLog>(sorted);
+        }
+        catch (OperationCanceledException)
+        {
+            // ignored
+        }
+        catch (JsonException)
+        {
+            FilteredTechLogs = new ObservableCollection<TechLog>();
+        }
+    }
+
+}

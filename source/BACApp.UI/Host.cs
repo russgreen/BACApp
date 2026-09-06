@@ -64,6 +64,7 @@ internal static class Host
                     _ when type == typeof(LoginPageViewModel) => x.GetRequiredService<LoginPageViewModel>(),
                     _ when type == typeof(CalendarPageViewModel) => x.GetRequiredService<CalendarPageViewModel>(),
                     _ when type == typeof(LogsPageViewModel) => x.GetRequiredService<LogsPageViewModel>(),
+                    _ when type == typeof(TechLogsPageViewModel) => x.GetRequiredService<TechLogsPageViewModel>(),
                     _ when type == typeof(LogsAirframePageViewModel) => x.GetRequiredService<LogsAirframePageViewModel>(),
                     _ when type == typeof(ReportsPageViewModel) => x.GetRequiredService<ReportsPageViewModel>(),
                     _ when type == typeof(ReportsPage2ViewModel) => x.GetRequiredService<ReportsPage2ViewModel>(),
@@ -86,12 +87,12 @@ internal static class Host
                 services.AddTransient<ICsvExportService, CsvExportService>();
                 services.AddTransient<IMemberService, MemberService>();
                 services.AddTransient<IInvoiceService, InvoiceService>();
-
                 services.AddTransient<LoginPageViewModel>();
 
                 services.AddTransient<CalendarPageViewModel>();
                 services.AddTransient<LogsPageViewModel>();
                 services.AddTransient<LogsAirframePageViewModel>();
+                services.AddTransient<TechLogsPageViewModel>();
 
                 services.AddTransient<ReportsPageViewModel>();
                 services.AddTransient<ReportsPage2ViewModel>();
