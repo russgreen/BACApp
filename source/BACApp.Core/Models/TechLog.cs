@@ -17,6 +17,21 @@ public class TechLog
     [JsonPropertyName("tech_log_date")]
     public string? TechLogDate { get; set; }
 
+    [JsonPropertyName("flight_date")]
+    public string? Flight_Date { get; set; }
+
+    [JsonPropertyName("brakes_off_time")]
+    public string? Brakes_Off_Time { get; set; }
+
+    [JsonPropertyName("take_off_time")]
+    public string? Take_Off_Time { get; set; }
+
+    [JsonPropertyName("landing_time")]
+    public string? Landing_Time { get; set; }
+
+    [JsonPropertyName("brakes_on_time")]
+    public string? Brakes_On_Time { get; set; }
+
     [JsonPropertyName("pic_id")]
     public int? PicId { get; set; }
 
@@ -45,7 +60,7 @@ public class TechLog
     public string? InitialsPicPreFlight { get; set; }
 
     [JsonPropertyName("flight_duration")]
-    public string? FlightDuration { get; set; }
+    public string? Flight_Duration { get; set; }
 
     [JsonPropertyName("flight_type")]
     public string? FlightType { get; set; }
@@ -143,4 +158,32 @@ public class TechLog
 
     [JsonPropertyName("company_id")]
     public int? CompanyId { get; set; }
+
+    public DateTime FlightDate => DateTime.Parse(Flight_Date ?? string.Empty);
+
+    public DateTime BrakesOffTime => DateTime.Parse(Brakes_Off_Time ?? string.Empty);
+    public DateTime TakeOffTime => DateTime.Parse(Take_Off_Time ?? string.Empty);
+    public DateTime LandingTime => DateTime.Parse(Landing_Time ?? string.Empty);
+    public DateTime BrakesOnTime => DateTime.Parse(Brakes_On_Time ?? string.Empty);
+
+    public TimeSpan BlockTime => BrakesOnTime - BrakesOffTime;
+
+    public TimeSpan FlightTime => LandingTime - TakeOffTime;
+
+    public TimeSpan BlockTimeRounded => RoundToNearestMinute(BlockTime);
+
+    public TimeSpan FlightTimeRounded => RoundToNearestMinute(FlightTime);
+
+    public double BlockTimeDecimal => Math.Round(BlockTimeRounded.TotalHours, 2);
+
+    public double FlightTimeDecimal => Math.Round(FlightTimeRounded.TotalHours, 2);
+
+
+
+    private static TimeSpan RoundToNearestMinute(TimeSpan value)
+    {
+        // Add 30 seconds and truncate to minute boundary
+        var adjusted = value + TimeSpan.FromSeconds(30);
+        return TimeSpan.FromMinutes(Math.Floor(adjusted.TotalMinutes));
+    }
 }

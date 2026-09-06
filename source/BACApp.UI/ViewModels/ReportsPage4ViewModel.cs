@@ -325,11 +325,14 @@ out double[] currentYear)
         var now = DateTime.Now;
         var last12Start = FromDate;
 
-        // last month we want to show a cumulative point for (inclusive)
-        var latestAllowedMonthStart = new DateTime(
-            Math.Min(ToDate.Year, now.Year),
-            (ToDate.Year < now.Year) ? ToDate.Month : Math.Min(ToDate.Month, now.Month),
-            1);
+        // For a selected year-end that extends into the future, show actual data only up to the
+        // current month. For a historical year-end, keep the selected end-month boundary.
+        var latestAllowedMonthStart = ToDate.Year > now.Year
+            ? new DateTime(now.Year, now.Month, 1)
+            : new DateTime(
+                Math.Min(ToDate.Year, now.Year),
+                (ToDate.Year < now.Year) ? ToDate.Month : Math.Min(ToDate.Month, now.Month),
+                1);
 
         var accumulateThroughIndex =
             (latestAllowedMonthStart.Year - last12Start.Year) * 12 +
@@ -340,13 +343,15 @@ out double[] currentYear)
 
         currentYear = new double?[12];
 
-        // current year cumulative: stop (null) after accumulateThroughIndex
+        // Do not draw cumulative values for future months. The current-year line should stop at
+        // the last actual month in the current period so the projection line is based on real data
+        // and not artificially flattened by future months.
         double running = 0;
         for (var i = 0; i < 12; i++)
         {
             if (i > accumulateThroughIndex)
             {
-                currentYear[i] = null; // causes the line to stop instead of dropping to 0
+                currentYear[i] = null;
                 continue;
             }
 
@@ -363,53 +368,68 @@ out double[] currentYear)
             throw new ArgumentException("Expected 12 months of data.", nameof(cumulative));
         }
 
-        // Fit y = a + b*x using least squares over non-null points.
-        // Mimics Excel trendline behavior on a category axis (x = 1..N).
-        double sumX = 0, sumY = 0, sumXX = 0, sumXY = 0;
-        var n = 0;
-
-        var lastNonNullIndex = -1;
-
+        var validPoints = new List<(int Index, double Value)>();
         for (var i = 0; i < cumulative.Length; i++)
         {
-            var y = cumulative[i];
-            if (!y.HasValue)
+            if (cumulative[i].HasValue)
             {
-                continue;
+                validPoints.Add((i, cumulative[i].Value));
             }
-
-            // Excel category axis uses 1-based x positions.
-            var x = (double)(i + 1);
-
-            n++;
-            lastNonNullIndex = i;
-
-            sumX += x;
-            sumY += y.Value;
-            sumXX += x * x;
-            sumXY += x * y.Value;
         }
 
-        if (n < 2)
+        var trend = new double?[12];
+        if (validPoints.Count == 0)
         {
-            return new double?[12];
+            return trend;
         }
 
+        if (validPoints.Count == 1)
+        {
+            var only = validPoints[0];
+            for (var i = only.Index; i < trend.Length; i++)
+            {
+                trend[i] = only.Value;
+            }
+            return trend;
+        }
+
+        double sumX = 0, sumY = 0, sumXX = 0, sumXY = 0;
+        foreach (var point in validPoints)
+        {
+            var x = (double)(point.Index + 1);
+            sumX += x;
+            sumY += point.Value;
+            sumXX += x * x;
+            sumXY += x * point.Value;
+        }
+
+        var n = validPoints.Count;
         var denom = (n * sumXX) - (sumX * sumX);
         if (Math.Abs(denom) < 1e-9)
         {
-            return new double?[12];
+            var lastValue = validPoints[^1].Value;
+            for (var i = validPoints[^1].Index; i < trend.Length; i++)
+            {
+                trend[i] = lastValue;
+            }
+            return trend;
         }
 
-        var b = ((n * sumXY) - (sumX * sumY)) / denom; // slope
-        var a = (sumY - (b * sumX)) / n;               // intercept
+        var b = ((n * sumXY) - (sumX * sumY)) / denom;
+        var a = (sumY - (b * sumX)) / n;
 
-        var trend = new double?[12];
+        var firstValidIndex = validPoints[0].Index;
+        var lastValidIndex = validPoints[^1].Index;
 
         for (var i = 0; i < 12; i++)
         {
-            // Preserve null gaps inside the known-data region; project after the last known point.
-            if (i <= lastNonNullIndex && !cumulative[i].HasValue)
+            if (i < firstValidIndex)
+            {
+                trend[i] = null;
+                continue;
+            }
+
+            if (i <= lastValidIndex && !cumulative[i].HasValue)
             {
                 trend[i] = null;
                 continue;
@@ -417,7 +437,6 @@ out double[] currentYear)
 
             var x = (double)(i + 1);
             var y = a + (b * x);
-
             trend[i] = y;
         }
 

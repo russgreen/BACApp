@@ -57,6 +57,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\TechLogsPageView.axaml.cs">
+	    <DependentUpon>TechLogsPageView.axaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\MembersListView.axaml.cs">
 	    <DependentUpon>MembersListView.axaml</DependentUpon>
 	  </Compile>

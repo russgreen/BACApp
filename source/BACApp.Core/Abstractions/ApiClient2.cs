@@ -41,10 +41,13 @@ public class ApiClient2 : IApiClient
         {
             response.EnsureSuccessStatusCode();
 
-            await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            _logger.LogDebug("Raw JSON: {Json}", json);
+            //await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
             var tStream = sw.Elapsed;
 
-            var result = await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct).ConfigureAwait(false);
+            var result = JsonSerializer.Deserialize<T>(json, _jsonOptions);
+            //var result = await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct).ConfigureAwait(false);
             var tJson = sw.Elapsed;
 
             System.Diagnostics.Debug.WriteLine(
@@ -90,10 +93,15 @@ public class ApiClient2 : IApiClient
         {
             response.EnsureSuccessStatusCode();
 
-            await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+            _logger.LogDebug("Raw JSON: {Json}", json);
+
+            //await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
             var tStream = sw.Elapsed;
 
-            var result = await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct).ConfigureAwait(false);
+            //var result = await JsonSerializer.DeserializeAsync<T>(stream, _jsonOptions, ct).ConfigureAwait(false);
+            var result = JsonSerializer.Deserialize<T>(json, _jsonOptions);
             var tJson = sw.Elapsed;
 
             System.Diagnostics.Debug.WriteLine(
