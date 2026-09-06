@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "falloutVersion": "10.4.0.15",
+  "targets": [
+    {
+      "name": "Clean",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [],
+      "triggers": []
+    },
+    {
+      "name": "Compile",
+      "description": null,
+      "declaredIn": "Build",
+      "default": true,
+      "listed": true,
+      "dependsOn": [
+        "Clean"
+      ],
+      "after": [
+        "Clean"
+      ],
+      "triggeredBy": [],
+      "triggers": [
+        "Publish",
+        "PublishIos"
+      ]
+    },
+    {
+      "name": "Installer",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Sign"
+      ],
+      "triggers": []
+    },
+    {
+      "name": "MacBundle",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Publish"
+      ],
+      "triggers": [
+        "MacSign"
+      ]
+    },
+    {
+      "name": "MacDmg",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "MacSign"
+      ],
+      "triggers": [
+        "MacNotarize"
+      ]
+    },
+    {
+      "name": "MacNotarize",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "MacDmg"
+      ],
+      "triggers": []
+    },
+    {
+      "name": "MacSign",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "MacBundle"
+      ],
+      "triggers": [
+        "MacDmg"
+      ]
+    },
+    {
+      "name": "Publish",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Compile"
+      ],
+      "triggers": [
+        "MacBundle",
+        "Sign"
+      ]
+    },
+    {
+      "name": "PublishIos",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Compile"
+      ],
+      "triggers": []
+    },
+    {
+      "name": "Sign",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Publish"
+      ],
+      "triggers": [
+        "Installer"
+      ]
+    }
+  ]
+}

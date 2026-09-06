@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using static Fallout.Common.IO.PathConstruction;
 
 partial class Build
@@ -80,10 +81,11 @@ partial class Build
 
                     // Write Info.plist
                     var infoPlistPath = contentsDir / "Info.plist";
+                    var version = GetVersionFromBuildProps() ?? "0.0.0";
                     File.WriteAllText(infoPlistPath, BuildInfoPlist(
                         bundleId: "com.russellgreen.bacapp", // change if you have an official id
                         appName: MacAppName,
-                        version: Solution.BACApp_Desktop.GetProperty("VersionPrefix") ?? "0.0.0",
+                        version: version,
                         executableName: MacExeName
                     ));
 
@@ -157,4 +159,23 @@ $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 </dict>
 </plist>
 ";
+
+    static string GetVersionFromBuildProps()
+    {
+        try
+        {
+            var propsPath = RootDirectory / "Directory.Build.props";
+            if (!File.Exists(propsPath))
+                return null;
+
+            var doc = XDocument.Load((string)propsPath);
+            var versionElement = doc.Descendants("VersionPrefix").FirstOrDefault();
+            return versionElement?.Value;
+        }
+        catch (Exception ex)
+        {
+            Log.Warning("Failed to read version from Directory.Build.props: {Error}", ex.Message);
+            return null;
+        }
+    }
 }
