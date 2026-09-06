@@ -14,13 +14,13 @@
         <StackPanel Spacing="4">
           <TextBlock Text="Username" />
           <TextBox Text="{Binding Username, Mode=TwoWay}"
-                   Watermark="Enter email address" />
+                   PlaceholderText="Enter email address" />
         </StackPanel>
 
         <StackPanel Spacing="4">
           <TextBlock Text="Password" />
           <TextBox Text="{Binding Password, Mode=TwoWay}"
-                   Watermark="Enter password"
+                   PlaceholderText="Enter password"
                    PasswordChar="*" />
         </StackPanel>
 
